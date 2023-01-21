@@ -2,7 +2,6 @@ import React from 'react';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { CiFacebook } from 'react-icons/ci';
 import { BsCheck2Circle }  from 'react-icons/bs';
-import { Navbar, Hero } from '../../components';
 import './home.css';
 
 function index() {

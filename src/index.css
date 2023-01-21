@@ -28,6 +28,7 @@ code {
     --border-radius: 5px;
     --white: #fff;
     --danger: #e9261f;
+    --color-white: #fff;
 }
 
 * {
