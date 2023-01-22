@@ -31,10 +31,7 @@ function index() {
                     >Signup</Link>
                   <Link to="/login" className="btn btn-secondary"
                     >Login</Link>
-                  <a href="" className="get-started"
-                    >View documentation
-                    <img src="../assets/images/icons/file-dark.svg" alt=""
-                  /></a>
+                
                 </div>
               </div>
               <div className="sec-2">
