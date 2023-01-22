@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import './classrooms.css';
+
 import Layout from '../../../components/Layout/Layout';
 import './classrooms.css';
-import { AddClassModal } from '../../../components';
+import { AddClassModal, DeleteModal } from '../../../components';
 
 import { AiOutlineCopy } from 'react-icons/ai';
+
+import { toast } from 'react-toastify';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { getClasses } from '../../../services/classroom';
+import { getClasses, deleteClass } from '../../../services/classroom';
 import BeatLoader from "react-spinners/BeatLoader";
 
 const rows: any = [
@@ -42,11 +46,18 @@ const override = {
 
 function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
+    const [deleteModal, setShowDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
+    }
+
+    const toggleDeleteModal = () => {
+        setShowDeleteModal(!deleteModal);
     }
 
     const handleGetClasses = ()  => {
@@ -61,6 +72,32 @@ function Index() {
         }).catch(err => {
             console.log('error: ', err);
             setLoading(false);
+        })
+    }
+
+    const handleDeleteClass = () => {
+        console.log('DELETE CLASS');
+        console.log(deleteId)
+        deleteClass(deleteId).then((res: any) => {
+            if(res.ok) {
+                toggleDeleteModal();
+                handleGetClasses();
+                toast.success(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+          
+            }else {
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+            }
+        }).catch(err => {
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
         })
     }
 
@@ -124,7 +161,10 @@ function Index() {
                                                         <a className="see"><AiOutlineCopy size={14}/></a>
                                                         </Tippy>
                                                         <Tippy content="Delete Class"  animation="fade">
-                                                        <a className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
+                                                            <a onClick={() => {
+                                                                setDeleteId(data._id);
+                                                                toggleDeleteModal();
+                                                            }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
                                                         </Tippy>
                                                     </div>
                                                 </td>
@@ -139,6 +179,7 @@ function Index() {
                     </div>
 
                     {showAddModal &&  <AddClassModal onClassAdded={handleClassAdded} onClose={toggleAddModal} />}
+                    {deleteModal && <DeleteModal onAccept={handleDeleteClass} onCancel={toggleDeleteModal} />}
         </Layout>
     );
 }
