@@ -57,6 +57,10 @@
 .right {
     background-color: var(--color-white);
     width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .right .logo-box {
@@ -150,12 +154,4 @@
 }
 
 
-@media screen and (max-width: 540px) {
-    .input-with-icon-form-group input,
-    .input-with-link-form-group input {
-      border: none;
-      outline: none;
-      width: 90%;
-    }
-}
 
