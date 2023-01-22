@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import './AuthLayout.css';
 
-
 function AuthLayout({ title, children } : any) {
+    const navigate = useNavigate();
+
     return (
         <div>
             <div className="login-container">
@@ -15,7 +17,7 @@ function AuthLayout({ title, children } : any) {
             </div>
             <div className="right">
                 <div className="logo-box">
-                     <img src={require('../../../../assets/images/logo/logo.png')} alt="" />
+                     <img onClick={() => navigate('/')} src={require('../../../../assets/images/logo/logo.png')} alt="" />
                 </div>
                 
                 { children }
