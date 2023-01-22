@@ -15,6 +15,9 @@ import 'tippy.js/dist/tippy.css';
 import { getClasses, deleteClass } from '../../../services/classroom';
 import BeatLoader from "react-spinners/BeatLoader";
 
+import { convertDate } from '../../../utils/date';
+import moment from 'moment';
+
 const rows: any = [
     {
         label: '#',
@@ -152,13 +155,20 @@ function Index() {
                                                 <td className="flex-start">{'http://localhost:3000/'}{data._id}</td>
                                                 
                                                 <td className="flex-start">
-                                                    <p>{data.createdAt}</p>
+                                                    <p>{moment(new Date(data.createdAt)).format('MMMM d, YYYY')}</p>
                                                 </td>
 
                                                 <td className="flex-center">
                                                     <div className="action">
                                                         <Tippy content="Copy Class Url"  animation="fade">
-                                                        <a className="see"><AiOutlineCopy size={14}/></a>
+                                                        <a className="see"><AiOutlineCopy onClick={() => {
+                                                            navigator.clipboard.writeText(`http://localhost:3000/${data._id}`);
+                                                            
+                                                            toast.success("Copied To Clipboard", {
+                                                                pauseOnHover: false,
+                                                                closeOnClick: true,
+                                                            })
+                                                        }} size={14}/></a>
                                                         </Tippy>
                                                         <Tippy content="Delete Class"  animation="fade">
                                                             <a onClick={() => {
