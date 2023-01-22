@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AddClassModal.css';
 import * as Yup from 'yup';
 import Form from '../../form/components/Form/Form';
@@ -7,20 +7,50 @@ import Button from '../../form/components/Button/Button';
 import ErrorMessage from '../../form/components/ErrorMessage/ErrorMessage';
 import { ImCancelCircle } from 'react-icons/im';
 
+import { toast } from 'react-toastify';
+
+import { createClass, getClasses, deleteClass } from '../../../services/classroom';
+
 const initialValues= {
-    classname: '',
+    name: '',
 }
 
 
-function AddClassModal({ onClose } : any) {
+function AddClassModal({ onClose, onClassAdded } : any) {
     const [error, setError] = useState(null);
+
     const validationSchema = Yup.object().shape({
-        classname: Yup.string().required('Class Name is required'),
+        name: Yup.string().required('Class Name is required'),
     })
 
-    const handleAddClass = () => {
+    const handleAddClass = (values: any) => {
+        console.log('CLASS NAME: ', values);
+
+        createClass(values).then((res: any) => {
+            if(res.ok) {
+                toast.success(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+                onClassAdded();
+            }else {
+                console.log(res)
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+            }
+        }).catch(err => {   
+            console.log('ERROR CREATING: ', err);
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        })
 
     }
+
+
     
     return (
         <div>
@@ -39,7 +69,7 @@ function AddClassModal({ onClose } : any) {
                     validationSchema={validationSchema}
                 >
 
-                        <FormField  name="classname" type="general" placeholder="Classroom Name"/>
+                        <FormField  name="name" type="general" placeholder="Classroom Name"/>
 
                         <Button isOutLined={true} isFullWidth={false} title="CREATE CLASSROOM"/>
                         </Form>

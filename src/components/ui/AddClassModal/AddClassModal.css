@@ -71,3 +71,10 @@
         width: 90vw;
     }
 }
+
+
+@media screen and (min-width: 1044px) and (max-width: 1116px) {
+    .modal-container {
+        width: 60vw;
+    }
+}

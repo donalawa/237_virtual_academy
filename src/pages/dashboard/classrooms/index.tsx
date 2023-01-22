@@ -3,29 +3,29 @@ import Layout from '../../../components/Layout/Layout';
 import './classrooms.css';
 import { AddClassModal } from '../../../components';
 
+import { AiOutlineCopy } from 'react-icons/ai';
+
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+
+import { getClasses } from '../../../services/classroom';
+import BeatLoader from "react-spinners/BeatLoader";
+
 const rows: any = [
     {
-        label: 'Id',
+        label: '#',
         name: 'num'
     },
     {
-        label: 'Subject',
+        label: 'Name',
         name: 'name'
     },
     {
-        label: 'Status',
-        name: 'action'
-    },
-    {
-        label: 'User',
+        label: 'Class Url',
         name: 'name'
     },
     {
-        label: 'Recipients',
-        name: 'name'
-    },
-    {
-        label: 'Date',
+        label: 'Created Date',
         name: 'name'
     },
     {
@@ -33,12 +33,45 @@ const rows: any = [
         name: 'action'
     }
 ]
+
+
+const override = {
+    marginTop: '20px'
+  };
+
+
 function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
+    const [classes, setClasses] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
     }
+
+    const handleGetClasses = ()  => {
+        setLoading(true);
+
+        getClasses().then((res: any) => {
+            console.log('RESPONSE GET: ', res);
+            if(res.ok) {
+                setClasses(res.data.data);
+            }
+            setLoading(false);
+        }).catch(err => {
+            console.log('error: ', err);
+            setLoading(false);
+        })
+    }
+
+    const handleClassAdded = ()  => {
+        handleGetClasses();
+        toggleAddModal();
+    }
+
+    useEffect(() => {
+        handleGetClasses();
+    },[]);
 
     return (
         <Layout title="Class Rooms">
@@ -47,7 +80,7 @@ function Index() {
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>You have : 10 classrooms</h1>
+                                        <h1>You have : {classes.length} Classroom</h1>
                                     </div>
                                     {/* <form className="search">
                                         <input type="search" name="" id="" placeholder="Find ..." />
@@ -56,123 +89,46 @@ function Index() {
                                     <button onClick={toggleAddModal} className="btn btn-primary btn-add">Add Classroom  <i className="fas fa-plus"></i></button>
                                 </div>
                                 <div className="table-con">
+                                <div style={{textAlign: 'center',}}>
+                                    <BeatLoader
+                                            color="#623d91" 
+                                            loading={loading}
+                                            cssOverride={override}
+                                    />
+                                </div>
                                     <table>
                                         <thead>
                                             <tr>
-                                                {rows.map((row: any) => <th className={row.name}>{row.label}</th>)}
+                                                {rows.map((row: any, index: any) => <th key={index} className={row.name}>{row.label}</th>)}
                                                 
                                             </tr>
                                         </thead>
-
+                                 
                                         <tbody>
-                                            <tr>
-                                                <td className="flex-center">32</td>
+                                          {classes.map((data: any, index: any) => <tr>
+                                                <td className="flex-center">{index + 1}</td>
                                                 <td className="flex-start">
-                                                    <p>TalkWithLead Proposal Response</p>
+                                                    <p>{data.name}</p>
                                                 </td>
-                                                <td className="flex-center">
-                                                    <div className="sent pill">Sent</div>
+                                       
+                                
+                                                <td className="flex-start">{'http://localhost:3000/'}{data._id}</td>
+                                                
+                                                <td className="flex-start">
+                                                    <p>{data.createdAt}</p>
                                                 </td>
-                                                <td className="flex-start">Fon Noel Nfebe</td>
-                                                <td className="flex-start">["randy@talkwithlead.com"]</td>
-                                                <td className="flex-start">2 years ago</td>
+
                                                 <td className="flex-center">
                                                     <div className="action">
-                                                        <a href="" className="see"><i className="fa fa-eye" aria-hidden="true"></i></a>
-                                                        <a href="" className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
+                                                        <Tippy content="Copy Class Url"  animation="fade">
+                                                        <a className="see"><AiOutlineCopy size={14}/></a>
+                                                        </Tippy>
+                                                        <Tippy content="Delete Class"  animation="fade">
+                                                        <a className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
+                                                        </Tippy>
                                                     </div>
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="flex-center">32</td>
-                                                <td className="flex-start">
-                                                    <p>TalkWithLead Proposal Response</p>
-                                                </td>
-                                                <td className="flex-center">
-                                                    <div className="not-sent pill">Not Sent</div>
-                                                </td>
-                                                <td className="flex-start">Fon Noel Nfebe</td>
-                                                <td className="flex-start">["randy@talkwithlead.com"]</td>
-                                                <td className="flex-start">2 years ago</td>
-                                                <td className="flex-center">
-                                                    <div className="action">
-                                                        <a href="" className="see"><i className="fa fa-eye" aria-hidden="true"></i></a>
-                                                        <a href="" className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="flex-center">32</td>
-                                                <td className="flex-start">
-                                                    <p>TalkWithLead Proposal Response</p>
-                                                </td>
-                                                <td className="flex-center">
-                                                    <div className="sent pill">Sent</div>
-                                                </td>
-                                                <td className="flex-start">Fon Noel Nfebe</td>
-                                                <td className="flex-start">["randy@talkwithlead.com"]</td>
-                                                <td className="flex-start">2 years ago</td>
-                                                <td className="flex-center">
-                                                    <div className="action">
-                                                        <a href="" className="see"><i className="fa fa-eye" aria-hidden="true"></i></a>
-                                                        <a href="" className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="flex-center">32</td>
-                                                <td className="flex-start">
-                                                    <p>TalkWithLead Proposal Response</p>
-                                                </td>
-                                                <td className="flex-center">
-                                                    <div className="not-sent pill">Not Sent</div>
-                                                </td>
-                                                <td className="flex-start">Fon Noel Nfebe</td>
-                                                <td className="flex-start">["randy@talkwithlead.com"]</td>
-                                                <td className="flex-start">2 years ago</td>
-                                                <td className="flex-center">
-                                                    <div className="action">
-                                                        <a href="" className="see"><i className="fa fa-eye" aria-hidden="true"></i></a>
-                                                        <a href="" className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="flex-center">32</td>
-                                                <td className="flex-start">
-                                                    <p>TalkWithLead Proposal Response</p>
-                                                </td>
-                                                <td className="flex-center">
-                                                    <div className="sent pill">Sent</div>
-                                                </td>
-                                                <td className="flex-start">Fon Noel Nfebe</td>
-                                                <td className="flex-start">["randy@talkwithlead.com"]</td>
-                                                <td className="flex-start">2 years ago</td>
-                                                <td className="flex-center">
-                                                    <div className="action">
-                                                        <a href="" className="see"><i className="fa fa-eye" aria-hidden="true"></i></a>
-                                                        <a href="" className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="flex-center">32</td>
-                                                <td className="flex-start">
-                                                    <p>TalkWithLead Proposal Response</p>
-                                                </td>
-                                                <td className="flex-center">
-                                                    <div className="not-sent pill">Not Sent</div>
-                                                </td>
-                                                <td className="flex-start">Fon Noel Nfebe</td>
-                                                <td className="flex-start">["randy@talkwithlead.com"]</td>
-                                                <td className="flex-start">2 years ago</td>
-                                                <td className="flex-center">
-                                                    <div className="action">
-                                                        <a href="" className="see"><i className="fa fa-eye" aria-hidden="true"></i></a>
-                                                        <a href="" className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            </tr> )}
                                         </tbody>
                                     </table>
                                 </div>
@@ -182,7 +138,7 @@ function Index() {
                         </div>
                     </div>
 
-                    {showAddModal &&  <AddClassModal onClose={toggleAddModal} />}
+                    {showAddModal &&  <AddClassModal onClassAdded={handleClassAdded} onClose={toggleAddModal} />}
         </Layout>
     );
 }
