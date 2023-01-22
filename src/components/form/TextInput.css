@@ -28,3 +28,12 @@
   padding-left: 1rem;
   color: var(--primary-color);
 }
+
+
+
+@media screen and (max-width: 540px) {
+  form {
+    width: 90% !important;
+  }
+  
+}
