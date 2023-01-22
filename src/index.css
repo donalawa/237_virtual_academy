@@ -31,19 +31,7 @@ code {
     --danger: #e9261f;
     --color-white: #fff;
 
-    /* --primary-color: #FFA500;
-    --primary-dark: #df9100; */
-    --primary-light: #FFF9EE;
-    --green: #219653;
-    --blue: #2F80ED;
-    --text: #1B1B1B;
-    --gray: #EAE7E4;
-    --text-light: #9FA2B4;
-    --light-bg: #ECF0F5;
-    --dark-bg: #323232;
-    --light-gray: #F2F0EE;
-    --border-color: #DFE0EB;
-    --icon-color: #828282;
+
 }
 
 * {

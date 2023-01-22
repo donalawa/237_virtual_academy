@@ -28,10 +28,11 @@ section {
   }
 }
 .page {
-  width: 100%;
+  width: 85%;
   height: fit-content;
   background: url("../../assets/images/bg/Desktop-1.svg");
   background-size: cover;
+  margin: 0 auto;
 }
 .hero {
   margin-top: 100px;
