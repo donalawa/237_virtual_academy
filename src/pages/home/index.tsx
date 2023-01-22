@@ -1,10 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { CiFacebook } from 'react-icons/ci';
 import { BsCheck2Circle }  from 'react-icons/bs';
 import './home.css';
+import { Link } from "react-router-dom";
 
 function index() {
+
     return (
         <div className="landing-page">
         <div className="page">
@@ -24,10 +27,10 @@ function index() {
                   Our Distance Learning Solutions provides you with all the tools you need to succeed in your studies from anywhere. Join live sessions, access course content and assessments, and communicate with your classmates and teacher."
                 </p>
                 <div className="hero-btns">
-                  <a href="/register" className="btn btn-primary"
-                    >Get Started Now</a>
-                  <a href="/login" className="btn btn-secondary"
-                    >Login</a>
+                  <Link to="/register" className="btn btn-primary"
+                    >Signup</Link>
+                  <Link to="/login" className="btn btn-secondary"
+                    >Login</Link>
                   <a href="" className="get-started"
                     >View documentation
                     <img src="../assets/images/icons/file-dark.svg" alt=""
@@ -81,9 +84,9 @@ function index() {
           <div className="con">
             <h1>What are you waiting for?</h1>
             <div className="btn-flex">
-              <a href="/register" className="btn btn-white"
-                >Get started here</a>
-              <a href="/login" className="btn btn-secondary">Login</a>
+              <Link to="/register"  className="btn btn-white"
+                >Register here</Link>
+              <Link to="/login" className="btn btn-secondary">Login</Link>
             </div>
             <div className="checks">
               <div className="check">

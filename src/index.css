@@ -21,6 +21,7 @@ code {
     --primary-dark: #3b2557;
     --primary-light: #623d91;
     --secondary-color: #1A2C42;
+    --orange-dark: #df9100;
     --bg-light: #f8f8f8;
     --border-color: #D4D8DF;
     --text: #000;
@@ -29,6 +30,20 @@ code {
     --white: #fff;
     --danger: #e9261f;
     --color-white: #fff;
+
+    /* --primary-color: #FFA500;
+    --primary-dark: #df9100; */
+    --primary-light: #FFF9EE;
+    --green: #219653;
+    --blue: #2F80ED;
+    --text: #1B1B1B;
+    --gray: #EAE7E4;
+    --text-light: #9FA2B4;
+    --light-bg: #ECF0F5;
+    --dark-bg: #323232;
+    --light-gray: #F2F0EE;
+    --border-color: #DFE0EB;
+    --icon-color: #828282;
 }
 
 * {
