@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import './signup.css';
 import { Link } from 'react-router-dom';
-import Form from '../../components/auth/components/Form/Form';
-import FormField from '../../components/auth/components/FormField/FormField';
-import Button from '../../components/auth/components/Button/Button';
+import Form from '../../components/form/components/Form/Form';
+import FormField from '../../components/form/components/FormField/FormField';
+import Button from '../../components/form/components/Button/Button';
 import * as Yup from 'yup';
-import AuthLayout from '../../components/auth/components/Layout/AuthLayout';
+import AuthLayout from '../../components/form/components/Layout/AuthLayout';
 
 import { registerUser } from '../../services/auth';
 import { toast } from 'react-toastify';

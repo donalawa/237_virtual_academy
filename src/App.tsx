@@ -5,7 +5,7 @@ import { HomePage, LoginPage, SignupPage, DashboardLanding, CourseContentPage, C
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Protected from './components/auth/Protected';
+import Protected from './components/form/Protected';
 
 function App() {
 

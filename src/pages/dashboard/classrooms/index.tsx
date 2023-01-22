@@ -1,8 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../../../components/Layout/Layout';
 import './classrooms.css';
+import { AddClassModal } from '../../../components';
 
+const rows: any = [
+    {
+        label: 'Id',
+        name: 'num'
+    },
+    {
+        label: 'Subject',
+        name: 'name'
+    },
+    {
+        label: 'Status',
+        name: 'action'
+    },
+    {
+        label: 'User',
+        name: 'name'
+    },
+    {
+        label: 'Recipients',
+        name: 'name'
+    },
+    {
+        label: 'Date',
+        name: 'name'
+    },
+    {
+        label: 'Action',
+        name: 'action'
+    }
+]
 function Index() {
+    const [ showAddModal, setShoowAddModal ] = useState(false);
+
+    const toggleAddModal = () => {
+        setShoowAddModal(!showAddModal);
+    }
+
     return (
         <Layout title="Class Rooms">
               <div className="section">
@@ -16,19 +53,14 @@ function Index() {
                                         <input type="search" name="" id="" placeholder="Find ..." />
                                         <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
                                     </form> */}
-                                    <button className="btn btn-primary btn-add">Add Classroom  <i className="fas fa-plus"></i></button>
+                                    <button onClick={toggleAddModal} className="btn btn-primary btn-add">Add Classroom  <i className="fas fa-plus"></i></button>
                                 </div>
                                 <div className="table-con">
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th className="num">Id</th>
-                                                <th className="name">Subject</th>
-                                                <th className="action">status</th>
-                                                <th className="name">User</th>
-                                                <th className="name">Recipients</th>
-                                                <th className="name">Date</th>
-                                                <th className="action">Action</th>
+                                                {rows.map((row: any) => <th className={row.name}>{row.label}</th>)}
+                                                
                                             </tr>
                                         </thead>
 
@@ -149,6 +181,8 @@ function Index() {
                             </div>
                         </div>
                     </div>
+
+                    {showAddModal &&  <AddClassModal onClose={toggleAddModal} />}
         </Layout>
     );
 }
