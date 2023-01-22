@@ -31,7 +31,7 @@ function Index() {
                                                 <th className="action">Action</th>
                                             </tr>
                                         </thead>
-                                        
+
                                         <tbody>
                                             <tr>
                                                 <td className="flex-center">32</td>
