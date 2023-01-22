@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './Layout.css';
 import { removeToken } from '../../utils/storage';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 
-function Layout({ children } : any) {
+function Layout({ title, children } : any) {
     const navigate = useNavigate();
     
     const [showNav, setShowNav] = useState(true);
@@ -28,25 +28,33 @@ function Layout({ children } : any) {
             <div className="menu">
                 <div className="sub-menu">
                     <div className="title">MAIN NAVIGATION</div>
-                    <a className="link active" href="create-post.html">
+                    <NavLink className="link" to="/dashboard">
                     <i className="fa fa-file" aria-hidden="true"></i>
-                        <span>Manage Classrooms</span>
-                    </a>
+                        <span>Dashboard</span>
+                    </NavLink>
+
+                    
             
-                    <a className="link" href="">
+                    <NavLink className="link" to="/class-rooms">
+                    <i className="fa fa-file" aria-hidden="true"></i>
+                        <span>Classrooms</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/course-contents">
                     <i className="fa fa-file" aria-hidden="true"></i>
                         <span>Course Content</span>
-                    </a>
+                    </NavLink>
 
-                    <a className="link" href="">
+
+                    <NavLink className="link" to="/assignments">
                     <i className="fa fa-file" aria-hidden="true"></i>
                         <span>Assignments</span>
-                    </a>
+                    </NavLink>
 
-                    <a className="link" href="">
+                    <NavLink className="link" to="/assessments">
                     <i className="fa fa-file" aria-hidden="true"></i>
                         <span>Assessment</span>
-                    </a>
+                    </NavLink>
                     
                 </div>
                 <div className="sub-menu">
@@ -89,11 +97,29 @@ function Layout({ children } : any) {
                     <a onClick={handleLogout} className="logout-link"><i className="fas fa-door-open"></i> Logout</a>
                 </div>
             </div>
-            { children }
+            
+            <div className="content">
+                    <div className="con">
+                        <div className="page-title">
+                            <p>{title}</p>
+                            <div className="crumb">
+                                <NavLink to="/dashboard" className="crumb-item">Dashboard</NavLink>
+                                <span>{'>'}</span>
+                                <a className="crumb-item">Home</a>
+                            </div>
+                        </div>
+
+                        <div className="section">
+                            { children }
+                        </div>
+
+                    </div>
+                </div>
+
             <footer className={`${!showNav ? 'expand' : ''}`}>
                 <div className="con">
-                    <p>Copyright &copy; 2017 <a href="../index.html">ProbeWrite</a> All rights reserved</p>
-                    <p>Version 2.5</p>
+                    <p>Copyright &copy; 2023 <a href="../index.html">237 Virtual Academy</a> All rights reserved</p>
+                    <p>Version 1.0</p>
                 </div>
             </footer>
         </div>

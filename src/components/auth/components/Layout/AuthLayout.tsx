@@ -17,6 +17,7 @@ function AuthLayout({ title, children } : any) {
                 <div className="logo-box">
                      <img src={require('../../../../assets/images/logo/logo.png')} alt="" />
                 </div>
+                
                 { children }
             </div>
         </div>

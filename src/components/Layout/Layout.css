@@ -169,6 +169,7 @@ section {
     display: flex;
     align-items: center;
     z-index: 3;
+    background-color: var(--light-bg);
 }
 
 .dashboard-grid .main>header.expand,
@@ -224,6 +225,7 @@ section {
     }
     .dashboard-grid .sidebar.show {
         left: 0;
+        background-color: var(--primary-color) !important;
     }
     .dashboard-grid .main {
         width: 100vw;
@@ -255,6 +257,7 @@ section {
     }
     .dashboard-grid .sidebar.show {
         left: 0;
+        background-color: var(--primary-color) !important;
     }
     .dashboard-grid .main {
         width: 100vw;
@@ -619,7 +622,7 @@ section {
 .sidebar .sub-menu .title {
     font-size: 16px;
     text-transform: uppercase;
-    color: var(--primary-color);
+    color: var(--orange-color);
     margin-left: 1rem;
     margin-bottom: 1rem;
 }
@@ -1892,6 +1895,10 @@ form .flex .login-remember img {
     padding: 0 .3rem;
     margin-right: 1rem;
     background-color: #fff;
+    font-size: 16px;
+}
+
+.data-table .top .btn-add {
     font-size: 16px;
 }
 
