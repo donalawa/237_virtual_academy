@@ -1,8 +1,10 @@
 .con {
   margin: 0 auto;
+  
 }
 section {
   padding: 3em 0;
+  
 }
 @media only screen and (max-width: 767px) {
   .con {
@@ -27,8 +29,24 @@ section {
     width: 1400px;
   }
 }
+
+@media screen and (min-width: 550px) {
+  .page {
+    width: 85%;
+    margin: 0 auto;
+  }
+}
+.landing-page {
+  background-color: #fff;
+}
+
+.home-desc {
+  font-weight: normal !important;
+  line-height: 1.4;
+}
+
 .page {
-  width: 85%;
+
   height: fit-content;
   background: url("../../assets/images/bg/Desktop-1.svg");
   background-size: cover;

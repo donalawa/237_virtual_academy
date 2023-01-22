@@ -11,6 +11,7 @@ function index() {
 
     return (
         <div className="landing-page">
+          <p>.</p>
         <div className="page">
           <div className="hero">
             <div className="con">
@@ -24,7 +25,7 @@ function index() {
                 <h1>
                     Revolutionize your education with 237 Virtual Academy.
                 </h1>
-                <p>
+                <p className="home-desc">
                   Our Distance Learning Solutions provides you with all the tools you need to succeed in your studies from anywhere. Join live sessions, access course content and assessments, and communicate with your classmates and teacher."
                 </p>
                 <div className="hero-btns">
