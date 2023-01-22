@@ -475,6 +475,12 @@ section {
     margin: 0 auto;
     margin-bottom: .5rem;
     border-radius: 50%;
+    object-fit: cover;
+}
+
+.logout-link {
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .user-menu-top p {
@@ -804,6 +810,7 @@ section {
     text-decoration: none;
     font-size: 18px;
     transition-duration: .3s;
+
 }
 
 .crumb span i {
@@ -819,9 +826,6 @@ section {
     color: var(--primary-color);
 }
 
-.crumb a:last-child:hover {
-    text-decoration: underline;
-}
 
 .crumb span {
     display: block;

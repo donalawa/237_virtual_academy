@@ -12,27 +12,27 @@ function index() {
                             <div className="crumb">
                                 <a href="index.html" className="crumb-item">Dashboard</a>
                                 <span></span>
-                                <a href="" className="crumb-item">Home</a>
+                                <a className="crumb-item">Home</a>
                             </div>
                         </div>
 
                         <div className="section">
                             <div className="flex-4">
                                 <a href="" className="stat-card">
-                                    <div className="stat-name">Total of Posts</div>
-                                    <div className="stat-value">60</div>
+                                    <div className="stat-name">Total Classrooms</div>
+                                    <div className="stat-value">0</div>
                                 </a>
                                 <a href="" className="stat-card">
-                                    <div className="stat-name">Pages</div>
-                                    <div className="stat-value">16</div>
+                                    <div className="stat-name">Total Course Content</div>
+                                    <div className="stat-value">0</div>
                                 </a>
                                 <a href="" className="stat-card">
-                                    <div className="stat-name">Users</div>
-                                    <div className="stat-value">43</div>
+                                    <div className="stat-name">Total Live Sessions</div>
+                                    <div className="stat-value">0</div>
                                 </a>
                                 <a href="" className="stat-card">
-                                    <div className="stat-name">Mail</div>
-                                    <div className="stat-value">64</div>
+                                    <div className="stat-name">Total Questions</div>
+                                    <div className="stat-value">0</div>
                                 </a>
                             </div>
                         </div>

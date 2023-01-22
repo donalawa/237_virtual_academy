@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import './signup.css';
 import { Link } from 'react-router-dom';
 import Form from '../../components/auth/components/Form/Form';
@@ -8,6 +9,9 @@ import Button from '../../components/auth/components/Button/Button';
 import * as Yup from 'yup';
 import AuthLayout from '../../components/auth/components/Layout/AuthLayout';
 
+import { registerUser } from '../../services/auth';
+import { toast } from 'react-toastify';
+
 const initialValues= {
     username: '',
     email: '',
@@ -15,7 +19,9 @@ const initialValues= {
     confirm_password: ''
 }
 
-function index() {
+const Index = () => {
+    const navigate = useNavigate();
+
     const validationSchema = Yup.object().shape({
         username: Yup.string().required('Name field is required'),
         email: Yup.string().email('Enter a valid email').required('Email field is required'),
@@ -25,7 +31,46 @@ function index() {
 
     const handleRegister = (values : any) => {
         console.log('VALUES: ', values);
+
+        if(values.password != values.confirm_password) {
+            toast.error("Passwords Must Match", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+
+            return;
+        }
+
+        registerUser(values).then((res: any) => {
+            // console.log('REGISTERED USER');
+            // console.log(res);
+            if(res.ok) {
+                toast.success("User Registered", {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                  })
+                setTimeout(() => {
+                    navigate('/login');
+                },2000)
+            }else {
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+            }
+        }).catch(err => {
+            console.log('ERROR REGISTRATION', err);
+            toast.error("Resgistration Failed", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        })
     }
+
+    useEffect(() => {
+        console.log('ran')
+    },[]);
+
 
     return (
         <AuthLayout title="Create Account">
@@ -45,7 +90,7 @@ function index() {
 
                         <FormField  name="confirm_password" type="password" placeholder="Confirm password"/>
 
-                        <Button title="Login"/>
+                        <Button title="Register"/>
                         </Form>
                 </form>
                 <p className="u-padding-bottom-small label-link">
@@ -56,4 +101,4 @@ function index() {
     );
 }
 
-export default index;
+export default Index;

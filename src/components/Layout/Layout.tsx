@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Layout.css';
+import { removeToken } from '../../utils/storage';
+import { useNavigate } from "react-router-dom";
+
 
 function Layout({ children } : any) {
+    const navigate = useNavigate();
+    
+    const [showNav, setShowNav] = useState(true);
+    const [showUserMenu, setShowUserMenu] = useState(false);
+
+    const handleLogout = () => {
+        removeToken();
+        navigate('/');
+    }
+
+    const toggleNav = () => {
+        setShowNav(!showNav);
+    }
+
     return (
         <div className="dashboard-grid">
-        <div className="sidebar">
+        <div className={`sidebar ${!showNav ? 'show' : ''}`}>
             <div className="logo">
                 <a href="index.html"><img src={require('../../assets/images/logo/logo-light.png')} alt=" " /></a>
             </div>
@@ -16,98 +33,64 @@ function Layout({ children } : any) {
                         <span>Manage Classrooms</span>
                     </a>
             
-                    <div className="link-con">
-                        <label className="link">
-                            <span>
-                                <i className="fa fa-user" aria-hidden="true"></i>
-                                <span>Users</span>
-                            </span>
-                            <i className="fa fa-caret-down" aria-hidden="true"></i>
-                        </label>
-                        <input type="checkbox" name="menu-1" id="menu-1" />
-                        <div className="link-sub">
-                            <a className="link" href="">
-                                <i className="fa fa-user" aria-hidden="true"></i>
-                                <span>User</span>
-                            </a>
-                            <a className="link" href="">
-                                <i className="fa fa-user" aria-hidden="true"></i>
-                                <span>User</span>
-                            </a>
-                            <a className="link" href="">
-                                <i className="fa fa-user" aria-hidden="true"></i>
-                                <span>User</span>
-                            </a>
-                        </div>
-                    </div>
                     <a className="link" href="">
-                        <i className="fa fa-envelope" aria-hidden="true"></i>
-                        <span>Mail</span>
+                    <i className="fa fa-file" aria-hidden="true"></i>
+                        <span>Course Content</span>
                     </a>
+
+                    <a className="link" href="">
+                    <i className="fa fa-file" aria-hidden="true"></i>
+                        <span>Assignments</span>
+                    </a>
+
+                    <a className="link" href="">
+                    <i className="fa fa-file" aria-hidden="true"></i>
+                        <span>Assessment</span>
+                    </a>
+                    
                 </div>
                 <div className="sub-menu">
                     <div className="title">LABELS</div>
                     <a className="link label" href="">
+                        <i className="fa fa-file" aria-hidden="true"></i>
                         {/* <img src="./assets/images/icons/label.svg" alt=""> */}
                         <span>Admin</span>
-                    </a>
-                    <a className="link label" href="">
-                        {/* <img src="./assets/images/icons/label.svg" alt=""> */}
-                        <span>Editor</span>
-                    </a>
-                    <a className="link label" href="">
-                        {/* <img src="./assets/images/icons/label.svg" alt=""> */}
-                        <span>Publisher</span>
-                    </a>
-                    <a className="link label" href="">
-                        {/* <img src="./assets/images/icons/label.svg" alt=""> */}
-                        <span>Author</span>
                     </a>
                 </div>
             </div>
         </div>
-        <div className="main">
-            <header>
+        <div className={`main ${!showNav ? 'expand' : ''}`}>
+            <header className={`${!showNav ? 'expand' : ''}`}>
                 <div className="con">
-                    <div className="nav-toggler-btn">
+                    <div className="nav-toggler-btn" onClick={toggleNav}>
                         <i className="fa fa-bars" aria-hidden="true"></i>
                     </div>
                     <span>
-                        <form action="" className="search">
-                            <input type="search" name="" id="" placeholder="Find ..." />
-                            <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
-                        </form>
-                        <div className="search-btn">
-                            <i className="fa fa-search" aria-hidden="true"></i>
-                        </div>
-                        <a href="" className="link notify">
-                            <i className="fa fa-envelope" aria-hidden="true"></i>
-                        </a>
                         <a href="" className="link notify">
                             <i className="fa fa-bell" aria-hidden="true"></i>
                         </a>
                         <div className="divider"></div>
-                        <div className="profile-btn">
-                            <div className="name">Fon Noel Nfebe</div>
+                        <div className="profile-btn" onClick={() => setShowUserMenu(!showUserMenu)}>
+                            <div className="name">Hello Admin</div>
                             {/* <img src="./assets/images/users/user-1.png" alt=""> */}
                         </div>
                     </span>
                 </div>
             </header>
-            <div className="user-menu">
+            <div className={`user-menu ${showUserMenu ? 'show' : ''}`}>
                 <div className="user-menu-top">
-                    <i className="fa fa-times"></i>
-                    {/* <img src="./assets/images/users/user-1.png" alt=""> */}
+                    <i className="fa fa-times" onClick={() => setShowUserMenu(!showUserMenu)}></i>
+                    <img src={require("../../assets/images/users/avatar.jpg")} alt="" />
                     <p>Fon Noel Nfebe</p>
                     <span>Admin User</span>
                 </div>
                 <div className="user-menu-footer">
                     <a href="../404.html"><i className="fas fa-cog"></i> Settings</a>
-                    <a href=""><i className="fas fa-door-open"></i> Logout</a>
+                    <a onClick={handleLogout} className="logout-link"><i className="fas fa-door-open"></i> Logout</a>
                 </div>
             </div>
             { children }
-            <footer>
+            <footer className={`${!showNav ? 'expand' : ''}`}>
                 <div className="con">
                     <p>Copyright &copy; 2017 <a href="../index.html">ProbeWrite</a> All rights reserved</p>
                     <p>Version 2.5</p>

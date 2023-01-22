@@ -1,9 +1,15 @@
 import api from "./apiClient";
 
 const registerUser = (data: any) => {
-    return api.post('/signup/user', data);
+    return api.post('/user/signup', data);
 }
 
-export  default {
-    registerUser
+const loginUser = (data: any) => {
+    return api.post('/user/login', data);
 }
+
+export {
+    registerUser,
+    loginUser
+}
+

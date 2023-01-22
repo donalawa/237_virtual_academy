@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { CiFacebook } from 'react-icons/ci';
 import { BsCheck2Circle }  from 'react-icons/bs';
 import './home.css';
 import { Link } from "react-router-dom";
+
 
 function index() {
 

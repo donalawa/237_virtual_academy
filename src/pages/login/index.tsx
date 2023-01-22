@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import './login.css';
 import Form from '../../components/auth/components/Form/Form';
 import FormField from '../../components/auth/components/FormField/FormField';
@@ -7,27 +9,60 @@ import * as Yup from 'yup';
 import AuthLayout from '../../components/auth/components/Layout/AuthLayout';
 import { Link } from 'react-router-dom';
 import ErrorMessage from '../../components/auth/components/ErrorMessage/ErrorMessage';
+import { loginUser } from '../../services/auth';
+import { storeToken, getToken } from '../../utils/storage';
+import { toast } from 'react-toastify';
 
 const initialValues= {
     email: '',
     password: ''
 }
 
-function index() {
+function Index() {
+    const navigate = useNavigate();
+
+    const [error, setError] = useState(null);
     const validationSchema = Yup.object().shape({
         email: Yup.string().email('Enter a valid email').required('Email field is required'),
         password: Yup.string().min(4, 'Password must be above 4 characters').required('Password Required')
     })
 
-    const handleLogin = () => {
+    const handleLogin = (values: any) => {
+        loginUser(values).then((res: any) => {
+            setError(null);
+            if(res.ok) {
+                console.log(res);
+                storeToken(res.data.accessToken);
+                navigate('/dashboard');
 
+                toast.success("Logged In Succesfuly", {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+                
+            }else {
+                console.log(res);
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+                setError(res.data.message);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+
+    if(getToken() != null) {
+        return <Navigate to="/dashboard" replace/>
     }
 
     return (
         <AuthLayout title="Welcome Back">
             <form action="" className="auth-form">
                 <p>Login</p>
-                {/* <ErrorMessage error="Login Authentication Error" visible={true} /> */}
+                {error && <ErrorMessage error={error} visible={true} />}
                 <Form 
                     initialValues={initialValues}
                     onSubmit={handleLogin}
@@ -48,4 +83,4 @@ function index() {
     );
 }
 
-export default index;
+export default Index;
