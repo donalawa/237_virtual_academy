@@ -15,7 +15,6 @@ import 'tippy.js/dist/tippy.css';
 import { getClasses, deleteClass } from '../../../services/classroom';
 import BeatLoader from "react-spinners/BeatLoader";
 
-import { convertDate } from '../../../utils/date';
 import moment from 'moment';
 
 const rows: any = [

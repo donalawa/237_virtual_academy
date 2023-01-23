@@ -20,7 +20,7 @@
 .input-with-link-form-group input {
   border: none;
   outline: none;
-  width: 90%;
+  width: 100%;
   /* background-color: red; */
 }
 
@@ -32,8 +32,8 @@
 
 
 @media screen and (max-width: 540px) {
-  form {
+  /* form {
     width: 90% !important;
-  }
+  } */
   
 }
