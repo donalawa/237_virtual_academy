@@ -19,6 +19,7 @@ const initialValues= {
 function AddClassModal({ onClose, onClassAdded } : any) {
     const [error, setError] = useState(null);
 
+
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Class Name is required'),
     })

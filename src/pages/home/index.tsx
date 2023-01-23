@@ -5,7 +5,7 @@ import { CiFacebook } from 'react-icons/ci';
 import { BsCheck2Circle }  from 'react-icons/bs';
 import './home.css';
 import { Link } from "react-router-dom";
-
+import { IoLanguageOutline } from 'react-icons/io5';
 
 function index() {
 
@@ -40,6 +40,10 @@ function index() {
                 <img src={require('../../assets/images/illustrtions/landing-1.png')} alt="" />
               </div>
             </div>
+            <select value="en" id="" className="language">
+                  <option value="en">🏴󠁧󠁢󠁥󠁮󠁧󠁿 EN</option>
+                  <option value="fr">🇫🇷 FR</option>
+              </select>
           </div>
 
           <section>

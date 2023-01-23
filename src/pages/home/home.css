@@ -54,6 +54,16 @@ section {
 }
 .hero {
   margin-top: 100px;
+  position: relative;
+}
+
+.language {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 1px solid var(--primary-color) !important;
+  color: var(--primary-color);
+  height: 30px;
 }
 .hero .con {
   display: flex;

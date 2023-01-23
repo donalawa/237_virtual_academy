@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './Layout.css';
 import { removeToken } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
-
+import {SiGoogleclassroom} from 'react-icons/si';
+import { MdOutlineContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
 
 function Layout({ title, children } : any) {
     const navigate = useNavigate();
@@ -29,30 +30,30 @@ function Layout({ title, children } : any) {
                 <div className="sub-menu">
                     <div className="title">MAIN NAVIGATION</div>
                     <NavLink className="link" to="/dashboard">
-                    <i className="fa fa-file" aria-hidden="true"></i>
+                    <i><MdDashboard size={20}/></i>
                         <span>Dashboard</span>
                     </NavLink>
 
                     
             
                     <NavLink className="link" to="/class-rooms">
-                    <i className="fa fa-file" aria-hidden="true"></i>
+                    <i><SiGoogleclassroom size={20}/></i>
                         <span>Classrooms</span>
                     </NavLink>
 
                     <NavLink className="link" to="/course-contents">
-                    <i className="fa fa-file" aria-hidden="true"></i>
+                    <i><MdOutlineContentPaste size={20}/></i>
                         <span>Course Content</span>
                     </NavLink>
 
 
                     <NavLink className="link" to="/assignments">
-                    <i className="fa fa-file" aria-hidden="true"></i>
+                    <i><MdAssignmentLate size={20}/></i>
                         <span>Assignments</span>
                     </NavLink>
 
                     <NavLink className="link" to="/assessments">
-                    <i className="fa fa-file" aria-hidden="true"></i>
+                    <i><MdAssessment size={20}/></i>
                         <span>Assessment</span>
                     </NavLink>
                     
@@ -74,6 +75,11 @@ function Layout({ title, children } : any) {
                         <i className="fa fa-bars" aria-hidden="true"></i>
                     </div>
                     <span>
+                        <select value="en" id="" className="language-dashboard">
+                            <option value="en">🏴󠁧󠁢󠁥󠁮󠁧󠁿 EN</option>
+                            <option value="fr">🇫🇷 FR</option>
+                        </select>
+                        <div className="divider"></div>
                         <a href="" className="link notify">
                             <i className="fa fa-bell" aria-hidden="true"></i>
                         </a>
@@ -89,11 +95,11 @@ function Layout({ title, children } : any) {
                 <div className="user-menu-top">
                     <i className="fa fa-times" onClick={() => setShowUserMenu(!showUserMenu)}></i>
                     <img src={require("../../assets/images/users/avatar.jpg")} alt="" />
-                    <p>Fon Noel Nfebe</p>
+                    <p>Odin</p>
                     <span>Admin User</span>
                 </div>
                 <div className="user-menu-footer">
-                    <a href="../404.html"><i className="fas fa-cog"></i> Settings</a>
+                    <a><i className="fas fa-cog"></i> Settings</a>
                     <a onClick={handleLogout} className="logout-link"><i className="fas fa-door-open"></i> Logout</a>
                 </div>
             </div>
@@ -118,7 +124,7 @@ function Layout({ title, children } : any) {
 
             <footer className={`${!showNav ? 'expand' : ''}`}>
                 <div className="con">
-                    <p>Copyright &copy; 2023 <a href="../index.html">237 Virtual Academy</a> All rights reserved</p>
+                    <p>Copyright &copy; 2023 <a>237 Virtual Academy</a> All rights reserved</p>
                     <p>Version 1.0</p>
                 </div>
             </footer>

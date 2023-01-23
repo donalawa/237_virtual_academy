@@ -21,6 +21,11 @@ body {
     margin: 0 auto;
 }
 
+.language-dashboard {
+    border: 1px solid #202020 !important;
+    color: #202020;
+    height: 30px;
+}
 section {
     padding: 3em 0;
 }
