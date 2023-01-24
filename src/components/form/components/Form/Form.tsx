@@ -7,6 +7,7 @@ function Form({ initialValues, onSubmit, validationSchema, children} : any) {
               initialValues={initialValues}
               onSubmit={onSubmit}
               validationSchema={validationSchema}
+              enableReinitialize
             >
                 {() => (
                     <>

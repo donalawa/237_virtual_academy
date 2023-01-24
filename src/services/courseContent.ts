@@ -9,7 +9,7 @@ const getCourseContents = () => {
 }
 
 const deleteCourseContent = (id: any) => {
-    return api.delete(`/class/${id}`)
+    return api.delete(`/course-content/${id}`)
 }
 
 

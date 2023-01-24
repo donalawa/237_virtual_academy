@@ -3,9 +3,10 @@ import './course-content.css';
 
 import Layout from '../../../components/Layout/Layout';
 
-import { AddCourseContentModal, DeleteModal } from '../../../components';
+import { AddCourseContentModal, EditCourseContentModal, DeleteModal } from '../../../components';
 
 import { AiOutlineCopy } from 'react-icons/ai';
+import {  BsPencilSquare } from 'react-icons/bs';
 
 import { toast } from 'react-toastify';
 
@@ -13,7 +14,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
-import { createCourseContent, getCourseContents } from '../../../services/courseContent';
+import { deleteCourseContent, getCourseContents } from '../../../services/courseContent';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -30,6 +31,18 @@ const rows: any = [
     },
     {
         label: 'Description',
+        name: 'name'
+    },
+    {
+        label: 'Expectation',
+        name: 'name'
+    },
+    {
+        label: 'Class Name',
+        name: 'name'
+    },
+    {
+        label: 'Publish Date',
         name: 'name'
     },
     {
@@ -51,10 +64,12 @@ const override = {
 
 function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false); 
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const [contents, setContents] = useState([]);
 
+    const [editData, setEditData] = useState(null);
 
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -63,15 +78,18 @@ function Index() {
         setShoowAddModal(!showAddModal);
     }
 
+    const toggleEditModal = () => {
+        setShowEditModal(!showEditModal);
+    }
+
     const toggleDeleteModal = () => {
         setShowDeleteModal(!deleteModal);
     }
 
     const handleGetClasses = ()  => {
-        setLoading(true);
+
 
         getClasses().then((res: any) => {
-            console.log('RESPONSE GET: ', res);
             if(res.ok) {
                 setClasses(res.data.data);
             }
@@ -80,10 +98,10 @@ function Index() {
         })
     }
 
-    const handleDeleteClass = () => {
-        console.log('DELETE CLASS');
+    const handleDeleteCourseContent = () => {
+        console.log('DELETE COURSE CONTENT');
         console.log(deleteId)
-        deleteClass(deleteId).then((res: any) => {
+        deleteCourseContent(deleteId).then((res: any) => {
             if(res.ok) {
                 toggleDeleteModal();
                 handleGetClasses();
@@ -165,30 +183,29 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {contents.map((data: any, index: any) => <tr>
+                                {contents?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
                                         <p>{data.title}</p>
                                     </td>
                             
                     
-                                    <td className="flex-start">{data.description}</td>
+                                    <td className="flex-start">{data?.description}</td>
+                                    <td className="flex-start">{data?.expectation}</td>
+                                    <td className="flex-start">{data?.classroom_id?.name}</td>
+                                    <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
                                     
                                     <td className="flex-start">
-                                        <p>{moment(new Date(data.createdAt)).format('MMMM d, YYYY')}</p>
+                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
                                     </td>
 
                                     <td className="flex-center">
                                         <div className="action">
                                             <Tippy content="Copy Class Url"  animation="fade">
-                                            <a className="see"><AiOutlineCopy onClick={() => {
-                                                navigator.clipboard.writeText(`http://localhost:3000/${data._id}`);
-                                                
-                                                toast.success("Copied To Clipboard", {
-                                                    pauseOnHover: false,
-                                                    closeOnClick: true,
-                                                })
-                                            }} size={14}/></a>
+                                            <a onClick={() => {
+                                                setEditData(data);
+                                                toggleEditModal();
+                                            }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
                                             </Tippy>
                                             <Tippy content="Delete Class"  animation="fade">
                                                 <a onClick={() => {
@@ -208,7 +225,8 @@ function Index() {
         </div>
 
         {showAddModal &&  <AddCourseContentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
-        {deleteModal && <DeleteModal onAccept={handleDeleteClass} onCancel={toggleDeleteModal} />}
+        {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
+        {deleteModal && <DeleteModal onAccept={handleDeleteCourseContent} onCancel={toggleDeleteModal} />}
         </Layout>
     );
 }
