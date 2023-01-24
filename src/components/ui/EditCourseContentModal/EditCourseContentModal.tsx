@@ -288,7 +288,6 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
 
     }
 
-
     useEffect(() => {
         handleGetClasses();
     },[])
@@ -306,7 +305,7 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
 
                 {error && <ErrorMessage error={error} visible={true} />}
                 <Form 
-                    initialValues={initialValues}
+                    initialValues={{ title: 'Hello'}}
                     onSubmit={handleAddCourseContent}
                     validationSchema={validationSchema}
                 >

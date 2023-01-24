@@ -8,6 +8,10 @@ const getCourseContents = () => {
     return api.get('/course-contents');
 }
 
+const getClassCourseContents = (classId: string) => {
+    return api.get(`/course-contents/class/${classId}`);
+}
+
 const deleteCourseContent = (id: any) => {
     return api.delete(`/course-content/${id}`)
 }
@@ -16,6 +20,7 @@ const deleteCourseContent = (id: any) => {
 export {
     createCourseContent,
     getCourseContents,
+    getClassCourseContents,
     deleteCourseContent
 }
 

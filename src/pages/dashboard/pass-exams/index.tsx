@@ -1,13 +1,12 @@
 import React, { useState, useEffect }  from 'react';
-import './assignment.css';
+import './pass-exams.css';
 
 import Layout from '../../../components/Layout/Layout';
 
 import { AddCourseContentModal, EditCourseContentModal, DeleteModal } from '../../../components';
 
-import { AiFillEye } from 'react-icons/ai';
+import { AiOutlineCopy } from 'react-icons/ai';
 import {  BsPencilSquare } from 'react-icons/bs';
-import { IoMdCloudDownload } from 'react-icons/io';
 
 import { toast } from 'react-toastify';
 
@@ -15,7 +14,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
-import { deleteCourseContent, getCourseContents, getClassCourseContents } from '../../../services/courseContent';
+import { deleteCourseContent, getCourseContents } from '../../../services/courseContent';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -27,15 +26,27 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Student Name',
+        label: 'Title',
         name: 'name'
     },
     {
-        label: 'Comment',
+        label: 'Description',
         name: 'name'
     },
     {
-        label: 'Submitted Date',
+        label: 'Expectation',
+        name: 'name'
+    },
+    {
+        label: 'Class Name',
+        name: 'name'
+    },
+    {
+        label: 'Publish Date',
+        name: 'name'
+    },
+    {
+        label: 'Created Date',
         name: 'name'
     },
     {
@@ -56,18 +67,27 @@ function Index() {
     const [showEditModal, setShowEditModal] = useState(false); 
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
-    const [classes, setClasses] = useState([]);
     const [contents, setContents] = useState([]);
-    const [solutions, setSolutions] = useState([]);
-    const [seletedClass, setSelectedClass] = useState('all');
-    const [seletedContent, setSelectedContent] = useState('all');
+
+    const [editData, setEditData] = useState(null);
+
+    const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const toggleAddModal = () => {
+        setShoowAddModal(!showAddModal);
+    }
+
+    const toggleEditModal = () => {
+        setShowEditModal(!showEditModal);
+    }
 
     const toggleDeleteModal = () => {
         setShowDeleteModal(!deleteModal);
     }
 
     const handleGetClasses = ()  => {
+
 
         getClasses().then((res: any) => {
             if(res.ok) {
@@ -104,59 +124,47 @@ function Index() {
         })
     }
 
+    const handleContentAdded = ()  => {
+        handleGetContent();
+        toggleAddModal();
+    }
 
-    const handleGetContent = (classId: any) => {
-        // setLoading(true);
-        if(classId == 'all') {
-            setSelectedClass('all');
-            setContents([]);
-            return;
-        }
-        setSelectedClass(classId)
 
-        getClassCourseContents(classId).then((res: any) => {
-            console.log("CLASSS COURSE CONTENT RES: ",res);
-            // setLoading(false);
+    const handleGetContent = () => {
+        setLoading(true);
+        getCourseContents().then((res: any) => {
+            console.log("COURSE CONTENT RES: ",res);
+            setLoading(false);
             setContents(res.data.data);
         }).catch((err: any) => {
             console.log('Error: ', err);
-            // setLoading(false);
+            setLoading(false);
         })
-    }
-
-    const handleGetAssignmentSubs = (contentId: any) => {
-        console.log('GET SUBS');
-        console.log('CONTENT ID: ', contentId)
-
-        if(contentId == 'all') {
-            setSelectedContent('all');
-            return;
-        }
-        setSelectedContent(contentId);
     }
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
+        handleGetContent();
         handleGetClasses();
     },[]);
 
     return (
-        <Layout title="Assignment Submissions">
+        <Layout title="Pass Exams">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                            <select value={seletedClass} onChange={(e: any) => handleGetContent(e.target.value)} className="select-field">
-                                <option  value="all">Select Class</option>
+                            <select name="" id="" className="select-field">
+                                <option value="all">All</option>
                                 {classes.map((classData: any, index: any) => <option key={index} value={classData._id}>{classData.name}</option>)}
                             </select>
-                            <select value={seletedContent} onChange={(e: any) => handleGetAssignmentSubs(e.target.value)}  className="select-field">
-                                <option value="all">Select Course Content</option>
-                                {contents.map((contentData: any, index: any) => <option key={index} value={contentData._id}>{contentData.title}</option>)}
-                            </select>
                         </div>
-                
+                        {/* <form className="search">
+                            <input type="search" name="" id="" placeholder="Find ..." />
+                            <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
+                        </form> */}
+                        <button onClick={toggleAddModal} className="btn btn-primary btn-add">Add Content  <i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -175,7 +183,7 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {solutions?.map((data: any, index: any) => <tr>
+                                {contents?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
                                         <p>{data.title}</p>
@@ -193,8 +201,17 @@ function Index() {
 
                                     <td className="flex-center">
                                         <div className="action">
-                                            <Tippy content="Download  Submissions"  animation="fade">
-                                            <a onClick={() => null} className="see"><IoMdCloudDownload onClick={() => null} size={16}/></a>
+                                            <Tippy content="Copy Class Url"  animation="fade">
+                                            <a onClick={() => {
+                                                setEditData(data);
+                                                toggleEditModal();
+                                            }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
+                                            </Tippy>
+                                            <Tippy content="Delete Class"  animation="fade">
+                                                <a onClick={() => {
+                                                    setDeleteId(data._id);
+                                                    toggleDeleteModal();
+                                                }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
                                             </Tippy>
                                         </div>
                                     </td>
@@ -207,6 +224,8 @@ function Index() {
             </div>
         </div>
 
+        {showAddModal &&  <AddCourseContentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
+        {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
         {deleteModal && <DeleteModal onAccept={handleDeleteCourseContent} onCancel={toggleDeleteModal} />}
         </Layout>
     );

@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik } from 'formik';
 
 function Form({ initialValues, onSubmit, validationSchema, children} : any) {
+    useEffect(() => {
+        console.log('INITIAL', initialValues);
+    },[]);
+
     return (
         <Formik 
               initialValues={initialValues}

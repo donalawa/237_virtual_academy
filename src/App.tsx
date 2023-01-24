@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import logo from './logo.svg';
-import { HomePage, LoginPage, SignupPage, DashboardLanding, CourseContentPage, CalassroomsPage, AssignmentPage, AssessmentPage } from './pages';
+import { HomePage, LoginPage, SignupPage, DashboardLanding, CourseContentPage, CalassroomsPage, AssignmentPage, AssessmentPage, PassExamsPage } from './pages';
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,6 +24,7 @@ function App() {
             <Route path="/course-contents" element={(<Protected > <CourseContentPage  /> </Protected>)} />
             <Route path="/assignments" element={(<Protected > <AssignmentPage  /> </Protected>)} />
             <Route path="/assessments" element={(<Protected > <AssessmentPage  /> </Protected>)} />
+            <Route path="/pass-exams" element={(<Protected > <PassExamsPage  /> </Protected>)} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />
