@@ -1,11 +1,11 @@
 import api from "./apiClient";
 
 const createCourseContent = (data: any) => {
-    return api.post('/create-class', data);
+    return api.post('/course-content', data);
 }
 
-const getCourseContents = (courseId: any) => {
-    return api.get('/classes');
+const getCourseContents = () => {
+    return api.get('/course-contents');
 }
 
 const deleteCourseContent = (id: any) => {

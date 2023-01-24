@@ -13,6 +13,8 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
+import { createCourseContent, getCourseContents } from '../../../services/courseContent';
+
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
@@ -23,11 +25,11 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Name',
+        label: 'Title',
         name: 'name'
     },
     {
-        label: 'Class Url',
+        label: 'Description',
         name: 'name'
     },
     {
@@ -51,6 +53,8 @@ function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+    const [contents, setContents] = useState([]);
+
 
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -71,10 +75,8 @@ function Index() {
             if(res.ok) {
                 setClasses(res.data.data);
             }
-            setLoading(false);
         }).catch(err => {
             console.log('error: ', err);
-            setLoading(false);
         })
     }
 
@@ -104,12 +106,27 @@ function Index() {
         })
     }
 
-    const handleClassAdded = ()  => {
-        handleGetClasses();
+    const handleContentAdded = ()  => {
+        handleGetContent();
         toggleAddModal();
     }
 
+
+    const handleGetContent = () => {
+        setLoading(true);
+        getCourseContents().then((res: any) => {
+            console.log("COURSE CONTENT RES: ",res);
+            setLoading(false);
+            setContents(res.data.data);
+        }).catch((err: any) => {
+            console.log('Error: ', err);
+            setLoading(false);
+        })
+    }
+
     useEffect(() => {
+        console.log('USER EFFECT RAN')
+        handleGetContent();
         handleGetClasses();
     },[]);
 
@@ -122,7 +139,7 @@ function Index() {
                         <div className="span">
                             <select name="" id="" className="select-field">
                                 <option value="all">All</option>
-                                <option value="math">Math Class IUGET</option>
+                                {classes.map((classData: any, index: any) => <option key={index} value={classData._id}>{classData.name}</option>)}
                             </select>
                         </div>
                         {/* <form className="search">
@@ -148,14 +165,14 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {classes.map((data: any, index: any) => <tr>
+                                {contents.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data.name}</p>
+                                        <p>{data.title}</p>
                                     </td>
                             
                     
-                                    <td className="flex-start">{'http://localhost:3000/'}{data._id}</td>
+                                    <td className="flex-start">{data.description}</td>
                                     
                                     <td className="flex-start">
                                         <p>{moment(new Date(data.createdAt)).format('MMMM d, YYYY')}</p>
@@ -186,12 +203,11 @@ function Index() {
                         </table>
                     </div>
 
-
                 </div>
             </div>
         </div>
 
-        {showAddModal &&  <AddCourseContentModal onClassAdded={handleClassAdded} onClose={toggleAddModal} />}
+        {showAddModal &&  <AddCourseContentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         {deleteModal && <DeleteModal onAccept={handleDeleteClass} onCancel={toggleDeleteModal} />}
         </Layout>
     );

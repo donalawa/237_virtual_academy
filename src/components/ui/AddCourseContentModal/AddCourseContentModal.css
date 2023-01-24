@@ -1,6 +1,6 @@
 .modal-container {
     position: absolute !important;
-    top: 55%;
+    top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10000000000000;
@@ -10,13 +10,23 @@
     border-radius: 8px;
     max-width: 700px;
     animation: fadein .4s;
+    height: fit-content;
 }
 
 .video-container {
     width: 200px;
     height: 150px;
+    position: relative;
+    margin-bottom: 10px;
 }
 
+.delete-icon-video {
+    position: absolute;
+    top: 25px;
+    right: 5px;
+    z-index: 10000;
+    cursor: pointer;
+}
 .upload-content-container {
     display: flex;
     gap: 10px;

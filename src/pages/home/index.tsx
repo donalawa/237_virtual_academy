@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { CiFacebook } from 'react-icons/ci';
@@ -7,8 +7,20 @@ import './home.css';
 import { Link } from "react-router-dom";
 import { IoLanguageOutline } from 'react-icons/io5';
 
-function index() {
+import { useTranslation } from 'react-i18next';
 
+function Index() {
+    const { t, i18n } = useTranslation();
+    let [lang, setLang] = useState('en');
+
+    const handleTrans = () => {
+      i18n.changeLanguage(lang);
+    };
+
+    
+    useEffect(() => {
+      handleTrans();
+    },[lang])
     return (
         <div className="landing-page">
           <p>.</p>
@@ -16,23 +28,23 @@ function index() {
           <div className="hero">
             <div className="con">
               <div className="sec-1">
-                <h5>Welcome To</h5>
+                <h5>{t('home_welcome')}</h5>
                 <img
                   className="logo"
                   src={require('../../assets/images/logo/logo.png')}
                   alt=""
                 />
                 <h1>
-                    Revolutionize your education with 237 Virtual Academy.
+                    {t('home_title')}
                 </h1>
                 <p className="home-desc">
-                  Our Distance Learning Solutions provides you with all the tools you need to succeed in your studies from anywhere. Join live sessions, access course content and assessments, and communicate with your classmates and teacher."
+                  {t('home_descriptioon')}
                 </p>
                 <div className="hero-btns">
                   <Link to="/register" className="btn btn-primary"
-                    >Signup</Link>
+                    >{t('register_text')}</Link>
                   <Link to="/login" className="btn btn-secondary"
-                    >Login</Link>
+                    >{t('login_text')}</Link>
                 
                 </div>
               </div>
@@ -40,7 +52,7 @@ function index() {
                 <img src={require('../../assets/images/illustrtions/landing-1.png')} alt="" />
               </div>
             </div>
-            <select value="en" id="" className="language">
+            <select value={lang} onChange={(e: any) => setLang(e.target.value)} id="" className="language">
                   <option value="en">🏴󠁧󠁢󠁥󠁮󠁧󠁿 EN</option>
                   <option value="fr">🇫🇷 FR</option>
               </select>
@@ -130,4 +142,4 @@ function index() {
     );
 }
 
-export default index;
+export default Index;
