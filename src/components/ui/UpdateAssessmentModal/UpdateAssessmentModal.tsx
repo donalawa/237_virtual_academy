@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './AssessmentModal.css';
+import './UpdateAssessmentModal.css';
 import * as Yup from 'yup';
 import Form from '../../form/components/Form/Form';
 import FormField from '../../form/components/FormField/FormField';
@@ -42,25 +42,31 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
     const [selectedClassroom, setSelectedClassroom] = useState(null);
     // Exam Content
 
+    const [questionPdfUrl, setQuestionPdfUrl] = useState('');
+    const [pdfProgress, setPdfProgress] = useState<any>(0);
+    const [isUploadingQestionPdf, setIsUploadingQuestionPdf] = useState(false);
+
 
     // ASSIGNMENT
-    const [isUploadingAssessmentVideo,  setIsUploadingAssessmentVideo] = useState(false);
-    const [assessmentVideoProgress, setAssessmentVideoProgress] = useState(0);
-    const [assessmentVideoUrl, setAssessmentVideoUrl] = useState('');
+    const [isUploadingAnswerVideo,  setIsUploadingAnswerVideo] = useState(false);
+    const [answerVideoProgress, setAnswerVideoProgress] = useState(0);
+    const [answerVideoUrl, setAnswerVideoUrl] = useState('');
 
-    const [assessmentPdfUrl, setAssessmentPdfUrl] = useState('');
-    const [assessmentPdfProgress,  setAssessmentPdfProgress] = useState(0);
-    const [isUploadingAssessmentPdf, setIsUploadingAssessmentPdf] = useState(false);
+    const [answerPdfUrl, setAnswerPdfUrl] = useState('');
+    const [answerPdfProgress,  setAnswerPdfProgress] = useState(0);
+    const [isUploadingAnswerPdf, setIsUploadingAnswerPdf] = useState(false);
 
-    const [showAssessmentVideoPreview, setShowAssessmentVideoPreview] = useState(false);
+    const [showAnswerVideoPreview, setShowAnswerVideoPreview] = useState(false);
 
     // END OF ASSIGNEMTN
     const storage = getStorage(firebaseApp);
     
 
     // good
-    const assessmentPdfFileRef: any = useRef(null);
-    const assessmentVideoFileRef: any = useRef(null);
+    const questionPdfFileRef: any = useRef(null);
+
+    const assignPdfFileRef: any = useRef(null);
+    const assignVideoFileRef: any = useRef(null);
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Accessment title is required'),
@@ -80,8 +86,38 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
     }
 
 
+
+      const handleQuestionPdfFileSelect = () => {
+        questionPdfFileRef.current.click();
+      };
+
+      const uploadQuestionPdf = (e: any) => {
+        setIsUploadingQuestionPdf(true);
+        const pdfFile: any = e.target.files[0];
+        const storageRef = ref(storage, `pdf-content/${Date.now()}-${pdfFile.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, pdfFile);
+
+        console.log(e.target.files[0]);   
+    
+      uploadTask.on('state_changed', (snapshot: any)=>{
+          const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+          setPdfProgress(+uploadProgress);
+
+      }, (error: any) => {
+          console.log(error);
+      },()=> {
+           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setQuestionPdfUrl(downloadURL);
+              console.log('URL', questionPdfUrl);
+              console.log('PDF  URL: ', downloadURL);
+              setIsUploadingQuestionPdf(false);
+          });
+      })
+    }
+
     const deleteVideo = () =>  {
-        const deleteRef = ref(storage, assessmentVideoUrl);
+        const deleteRef = ref(storage, answerVideoUrl);
         deleteObject(deleteRef).then((res: any) => {
             console.log('RES DELETED', res);
         }).catch((err: any) => {
@@ -89,8 +125,8 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
         })
     }
 
-    const uploadAssessmentVideo = (e: any) => {
-        setIsUploadingAssessmentVideo(true);
+    const uploadAnswerVideo = (e: any) => {
+        setIsUploadingAnswerVideo(true);
         const videoFile: any = e.target.files[0];
         const storageRef = ref(storage, `videos/${Date.now()}-${videoFile.name}`);
         const uploadTask = uploadBytesResumable(storageRef, videoFile);
@@ -100,23 +136,23 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
       uploadTask.on('state_changed', (snapshot: any)=>{
           const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-          setAssessmentVideoProgress(+uploadProgress);
+          setAnswerVideoProgress(+uploadProgress);
 
       }, (error: any) => {
           console.log(error);
       },()=> {
            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setAssessmentVideoUrl(downloadURL);
-              console.log('URL', assessmentVideoUrl);
+              setAnswerVideoUrl(downloadURL);
+              console.log('URL', answerVideoUrl);
               console.log('VIDEO  URL: ', downloadURL);
-              setShowAssessmentVideoPreview(true);
-              setIsUploadingAssessmentVideo(false);
+              setShowAnswerVideoPreview(true);
+              setIsUploadingAnswerVideo(false);
           });
       })
     }
 
     const uploadAnswerPdf = (e: any) => {
-        setIsUploadingAssessmentPdf(true);
+        setIsUploadingAnswerPdf(true);
       const pdfFile: any = e.target.files[0];
       const storageRef = ref(storage, `pdf-content/${Date.now()}-${pdfFile.name}`);
       const uploadTask = uploadBytesResumable(storageRef, pdfFile);
@@ -126,15 +162,16 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
     uploadTask.on('state_changed', (snapshot: any)=>{
         const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-        setAssessmentPdfProgress(+uploadProgress);
+        setAnswerPdfProgress(+uploadProgress);
 
     }, (error: any) => {
         console.log(error);
     },()=> {
          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setAssessmentPdfUrl(downloadURL);
+            setAnswerPdfUrl(downloadURL);
+            console.log('URL', questionPdfUrl);
             console.log('PDF  URL: ', downloadURL);
-            setIsUploadingAssessmentPdf(false);
+            setIsUploadingAnswerPdf(false);
         });
     })
   }
@@ -145,19 +182,25 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
         let data = {
             ...values,
             class_room_id: selectedClassroom,
-            questions_file: assessmentPdfUrl,
-            video_solution_url: assessmentVideoUrl
+            questions_file: questionPdfUrl,
+            answers_file: answerPdfUrl,
+            video_solution_url: answerVideoUrl
         }
 
         console.log('CONTENT', data);
 
-        if(data.class_room_id == null || data.class_room_id == 'all') {
-            setError('You have to select a clasroom for Assessment');
+        if(questionPdfUrl.length < 2) {
+            setError('Select a Questions File');
             return;
         }
 
-        if(assessmentVideoUrl.length < 2 && assessmentPdfUrl.length < 2) {
-            setError('Select Assessment Video Or Assessment Pdf');
+        if(answerVideoUrl.length < 2 && answerPdfUrl.length < 2) {
+            setError('Selecte Video Solutions Or Pdf Solutions');
+            return;
+        }
+
+        if(data.class_room_id == null || data.class_room_id == 'all') {
+            setError('You have to select a clasroom for content');
             return;
         }
 
@@ -197,7 +240,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
         <div>
             <div  className='modal-container'>
                 <div className='modal-head'>
-                    <p className="modal-title">Add Assessment</p>
+                    <p className="modal-title">Update Assessment</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
@@ -222,59 +265,86 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                             {classes.map((classData: any, key: any) => <option key={key} value={classData._id}>{classData.name}</option>)}
                         </select>
 
-                
-               
-                        
                         <div className='upload-content-container'>
-                            <div className="content-upload-left">
-                            {!showAssessmentVideoPreview && <div className="form-field-upload">
-                                    <p className="label-text">Upload Assessment Video: </p>
-                                    <div className="file-drop-upload" onClick={() => assessmentVideoFileRef.current.click()}>
-                                    {!isUploadingAssessmentVideo && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                    {isUploadingAssessmentVideo &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                                    <BeatLoader
-                                            color="#623d91" 
-                                            loading={isUploadingAssessmentVideo}
-                                            cssOverride={override}
-                                        />
-                                        <p style={{fontSize: '14px'}}>Uploading Video</p>
-                                    
-                                            <ProgressBar bgcolor={'#6a1b9a'} completed={assessmentVideoProgress}/>
-                                        
-                                    </div>}
-                                    {!isUploadingAssessmentVideo && <input ref={assessmentVideoFileRef} onChange={uploadAssessmentVideo} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="video/mp4,video/x-m4v,video/*"/>}
-                                    </div>
-                                
-                                </div>}
-                                {showAssessmentVideoPreview && <div className="video-container">
-                                    <div className="delete-icon-video">
-                                         <FaTrashAlt color='red' />
-                                    </div>
-                                    <video controls width="100%" height={'100%'} src={assessmentVideoUrl}></video>
-                                </div>}
-                            </div>
+                            
 
-                          {assessmentPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
-                            <p className="label-text">Upload Assessment Pdf: </p>
-                            <div className="file-drop-upload" onClick={() => assessmentPdfFileRef.current.click()}>
-                            {!isUploadingAssessmentPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                <input ref={assessmentPdfFileRef} onChange={uploadAnswerPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
-                                {isUploadingAssessmentPdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                      {questionPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
+                            <p className="label-text">Upload Assesssment Pdf Content: </p>
+                            <div className="file-drop-upload" onClick={handleQuestionPdfFileSelect}>
+                            {!isUploadingQestionPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
+                                <input ref={questionPdfFileRef} onChange={uploadQuestionPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
+                                {isUploadingQestionPdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                               <BeatLoader
                                     color="#623d91" 
-                                    loading={isUploadingAssessmentPdf}
+                                    loading={isUploadingQestionPdf}
                                     cssOverride={override}
                                 />
                                 <p style={{fontSize: '14px'}}>Uploading Content</p>
                             
-                                    <ProgressBar bgcolor={'#6a1b9a'} completed={assessmentPdfProgress}/>
+                                    <ProgressBar bgcolor={'#6a1b9a'} completed={pdfProgress}/>
+                                
+                              </div>}
+                            </div>
+                        </div>}
+
+                        {questionPdfUrl.length > 2 &&
+                            <div className="form-field-upload content-upload-right">
+                            <p className="label-text" style={{textAlign: 'center'}}>Done</p>
+                            </div>
+                        }
+                        </div>
+               
+                        
+                        <div className='upload-content-container'>
+                            <div className="content-upload-left">
+                            {!showAnswerVideoPreview && <div className="form-field-upload">
+                                    <p className="label-text">Upload Assessment Video Answer: </p>
+                                    <div className="file-drop-upload" onClick={() => assignVideoFileRef.current.click()}>
+                                    {!isUploadingAnswerVideo && <FaCloudUploadAlt size={35} color="#FFA500" />}
+                                    {isUploadingAnswerVideo &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                    <BeatLoader
+                                            color="#623d91" 
+                                            loading={isUploadingAnswerVideo}
+                                            cssOverride={override}
+                                        />
+                                        <p style={{fontSize: '14px'}}>Uploading Video</p>
+                                    
+                                            <ProgressBar bgcolor={'#6a1b9a'} completed={answerVideoProgress}/>
+                                        
+                                    </div>}
+                                    {!isUploadingAnswerVideo && <input ref={assignVideoFileRef} onChange={uploadAnswerVideo} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="video/mp4,video/x-m4v,video/*"/>}
+                                    </div>
+                                
+                                </div>}
+                                {showAnswerVideoPreview && <div className="video-container">
+                                    <div className="delete-icon-video">
+                                         <FaTrashAlt color='red' />
+                                    </div>
+                                    <video controls width="100%" height={'100%'} src={answerVideoUrl}></video>
+                                </div>}
+                            </div>
+
+                          {answerPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
+                            <p className="label-text">Upload Assessment Pdf Answer: </p>
+                            <div className="file-drop-upload" onClick={() => assignPdfFileRef.current.click()}>
+                            {!isUploadingAnswerPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
+                                <input ref={assignPdfFileRef} onChange={uploadAnswerPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
+                                {isUploadingAnswerPdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                              <BeatLoader
+                                    color="#623d91" 
+                                    loading={isUploadingAnswerPdf}
+                                    cssOverride={override}
+                                />
+                                <p style={{fontSize: '14px'}}>Uploading Content</p>
+                            
+                                    <ProgressBar bgcolor={'#6a1b9a'} completed={answerPdfProgress}/>
                                 
                               </div>}
                         
                             </div>
                         </div>}
 
-                        {assessmentPdfUrl.length > 2 &&
+                        {answerPdfUrl.length > 2 &&
                             <div className="form-field-upload content-upload-right">
                             <p className="label-text" style={{textAlign: 'center'}}>Done</p>
                             </div>

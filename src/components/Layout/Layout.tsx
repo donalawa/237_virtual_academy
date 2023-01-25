@@ -57,10 +57,16 @@ function Layout({ title, children } : any) {
                         <span>Assessment</span>
                     </NavLink>
 
+                    <NavLink className="link" to="/assessment-submissions">
+                    <i><MdAssessment size={20}/></i>
+                        <span>Assessment Submissions</span>
+                    </NavLink>
+
                     <NavLink className="link" to="/pass-exams">
                     <i><MdAssessment size={20}/></i>
                         <span>Pass Exams</span>
                     </NavLink>
+                    
                     
                 </div>
                 <div className="sub-menu">

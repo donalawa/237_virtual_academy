@@ -7,3 +7,4 @@ export { default as CalassroomsPage } from './dashboard/classrooms/index';
 export { default as AssignmentPage } from './dashboard/assignments/index';
 export { default as AssessmentPage } from './dashboard/assessment/index';
 export { default as PassExamsPage } from './dashboard/pass-exams/index';
+export { default as AssessmentSubmissionsPage } from './dashboard/assessment-submissions/index';

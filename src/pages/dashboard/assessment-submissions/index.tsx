@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from 'react';
-import './assessment.css';
+import './assessment-submissions.css';
 
 import Layout from '../../../components/Layout/Layout';
 
@@ -63,31 +63,12 @@ const override = {
 
 
 function Index() {
-    const [ showAddModal, setShoowAddModal ] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false); 
-    const [deleteModal, setShowDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const [contents, setContents] = useState([]);
-
-    const [editData, setEditData] = useState(null);
+    const [submissions, setSubmissions] = useState([]);
 
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const toggleAddModal = () => {
-        setShoowAddModal(!showAddModal);
-    }
-
-    const toggleEditModal = () => {
-        setShowEditModal(!showEditModal);
-    }
-
-    const toggleDeleteModal = () => {
-        setShowDeleteModal(!deleteModal);
-    }
-
     const handleGetClasses = ()  => {
-
 
         getClasses().then((res: any) => {
             if(res.ok) {
@@ -98,44 +79,13 @@ function Index() {
         })
     }
 
-    const handleDeleteCourseExamContent = () => {
-        console.log('DELETE COURSE CONTENT');
-        console.log(deleteId)
-        deletePassExamContent(deleteId).then((res: any) => {
-            if(res.ok) {
-                toggleDeleteModal();
-                handleGetClasses();
-                toast.success(res.data.message, {
-                    pauseOnHover: false,
-                    closeOnClick: true,
-                })
-          
-            }else {
-                toast.error(res.data.message, {
-                    pauseOnHover: false,
-                    closeOnClick: true,
-                })
-            }
-        }).catch(err => {
-            toast.error("ERROR", {
-                pauseOnHover: false,
-                closeOnClick: true,
-            })
-        })
-    }
-
-    const handleContentAdded = ()  => {
-        handleGetContent();
-        toggleAddModal();
-    }
-
 
     const handleGetContent = () => {
         setLoading(true);
         getPassExamContents().then((res: any) => {
-            console.log("PASSS EXAM CONTENT RES: ",res);
+            console.log("ASSESSMENT SUBMISSIONS: ",res);
             setLoading(false);
-            setContents(res.data.data);
+            setSubmissions(res.data.data);
         }).catch((err: any) => {
             console.log('Error: ', err);
             setLoading(false);
@@ -149,7 +99,7 @@ function Index() {
     },[]);
 
     return (
-        <Layout title="Assessments">
+        <Layout title="Assessment Submissions">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -160,11 +110,7 @@ function Index() {
                                 {classes.map((classData: any, index: any) => <option key={index} value={classData._id}>{classData.name}</option>)}
                             </select>
                         </div>
-                        {/* <form className="search">
-                            <input type="search" name="" id="" placeholder="Find ..." />
-                            <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
-                        </form> */}
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add">Create Assessment  <i className="fas fa-plus"></i></button>
+                     
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -183,7 +129,7 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {contents?.map((data: any, index: any) => <tr>
+                                {submissions?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
                                         <p>{data.title}</p>
@@ -203,16 +149,10 @@ function Index() {
                                         <div className="action">
                                             <Tippy content="Download Video Solution"  animation="fade">
                                             <a onClick={() => {
-                                                setEditData(data);
-                                                toggleEditModal();
-                                            }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
+                               
+                                            }} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
                                             </Tippy>
-                                            <Tippy content="Delete Class"  animation="fade">
-                                                <a onClick={() => {
-                                                    setDeleteId(data._id);
-                                                    toggleDeleteModal();
-                                                }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
-                                            </Tippy>
+                                         
                                         </div>
                                     </td>
                                 </tr> )}
@@ -223,10 +163,6 @@ function Index() {
                 </div>
             </div>
         </div>
-
-        {showAddModal &&  <AssessmentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
-        {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
-        {deleteModal && <DeleteModal onAccept={handleDeleteCourseExamContent} onCancel={toggleDeleteModal} />}
         </Layout>
     );
 }
