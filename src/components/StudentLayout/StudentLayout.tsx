@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import './Layout.css';
+import './StudentLayout.css';
 import { removeToken } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
 import { MdOutlineContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
-import { Navigate } from "react-router";
 
-import { getUser, isTeacher } from '../../utils/storage';
+import { getUser } from '../../utils/storage';
 
-function Layout({ title, children } : any) {
+function StudentLayout({ title, children } : any) {
     const { t, i18n } = useTranslation();
     let [lang, setLang] = useState<any>(null);
 
@@ -64,69 +63,44 @@ function Layout({ title, children } : any) {
         setUser(usr);
     }, [])
 
-
-    if(!isTeacher()) {
-        console.log('TEACHER');
-        return <Navigate to="/" replace/>
-    }
-
     return (
         <div className="dashboard-grid">
-        <div className={`sidebar ${!showNav ? 'show' : ''}`}>
+        <div className={`sidebar student ${!showNav ? 'show' : ''}`}>
             <div className="logo" style={{cursor: 'pointer'}}>
                 <a onClick={() => navigate('/')}><img src={require('../../assets/images/logo/logo-light.png')} alt=" " /></a>
             </div>
             <div className="menu">
                 <div className="sub-menu">
                     <div className="title">MAIN NAVIGATION</div>
-                    <NavLink className="link" to="/dashboard">
+                    <NavLink className="link" to="/students">
                     <i><MdDashboard size={20}/></i>
                         <span>Dashboard</span>
                     </NavLink>
 
-                    
-            
-                    <NavLink className="link" to="/class-rooms">
-                    <i><SiGoogleclassroom size={20}/></i>
-                        <span>Classrooms</span>
-                    </NavLink>
 
-                    <NavLink className="link" to="/course-contents">
-                    <i><MdOutlineContentPaste size={20}/></i>
-                        <span>Course Content</span>
-                    </NavLink>
-
-
-                    <NavLink className="link" to="/assignments">
+                    <NavLink className="link" to="/">
                     <i><MdAssignmentLate size={20}/></i>
                         <span>Assignments</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/assessments">
+                    <NavLink className="link" to="/">
                     <i><MdAssessment size={20}/></i>
-                        <span>Assessment</span>
+                        <span>Assessments</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/assessment-submissions">
+                    <NavLink className="link" to="/">
                     <i><MdAssessment size={20}/></i>
                         <span>Assessment Submissions</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/pass-exams">
+                    <NavLink className="link" to="/">
                     <i><MdAssessment size={20}/></i>
                         <span>Pass Exams</span>
                     </NavLink>
                     
                     
                 </div>
-                <div className="sub-menu">
-                    <div className="title">LABELS</div>
-                    <a className="link label" href="">
-                        <i className="fa fa-file" aria-hidden="true"></i>
-                        {/* <img src="./assets/images/icons/label.svg" alt=""> */}
-                        <span>Admin</span>
-                    </a>
-                </div>
+    
             </div>
         </div>
         <div className={`main ${!showNav ? 'expand' : ''}`}>
@@ -146,32 +120,32 @@ function Layout({ title, children } : any) {
                         </a>
                         <div className="divider"></div>
                         <div className="profile-btn" onClick={() => setShowUserMenu(!showUserMenu)}>
-                            <div className="name">Hello Admin</div>
+                            <div className="name">Hello</div>
                             {/* <img src="./assets/images/users/user-1.png" alt=""> */}
                         </div>
                     </span>
                 </div>
             </header>
-            
+
             <div className={`user-menu ${showUserMenu ? 'show' : ''}`}>
                 <div className="user-menu-top">
                     <i className="fa fa-times" onClick={() => setShowUserMenu(!showUserMenu)}></i>
                     <img src={require("../../assets/images/users/avatar.jpg")} alt="" />
                     <p>{user?.username}</p>
-                    <span>Teacher</span>
+                    <span>Student</span>
                 </div>
                 <div className="user-menu-footer">
                     <a><i className="fas fa-cog"></i> Settings</a>
                     <a onClick={handleLogout} className="logout-link"><i className="fas fa-door-open"></i> Logout</a>
                 </div>
             </div>
-            
+
             <div className="content">
                     <div className="con">
                         <div className="page-title">
                             <p>{title}</p>
                             <div className="crumb">
-                                <NavLink to="/dashboard" className="crumb-item">Dashboard</NavLink>
+                                <NavLink to="/" className="crumb-item">Students</NavLink>
                                 <span>{'>'}</span>
                                 <a className="crumb-item">Home</a>
                             </div>
@@ -195,4 +169,4 @@ function Layout({ title, children } : any) {
     );
 }
 
-export default Layout;
+export default StudentLayout;

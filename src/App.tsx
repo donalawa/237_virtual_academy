@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import logo from './logo.svg';
-import { HomePage, LoginPage, SignupPage, DashboardLanding, CourseContentPage, CalassroomsPage, AssignmentPage, AssessmentPage, AssessmentSubmissionsPage, PassExamsPage } from './pages';
+import { HomePage, LoginPage, SignupPage, DashboardLanding, CourseContentPage, CalassroomsPage, AssignmentPage, AssessmentPage, AssessmentSubmissionsPage, PassExamsPage, StudentsLandingPage } from './pages';
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -45,6 +45,7 @@ function App() {
     <div className="App">
       {/* <HomePage /> */}
       {/* <LoginPage /> */}
+
       <BrowserRouter>
         <Routes>
             <Route path="/" element={(<HomePage />)} />
@@ -57,6 +58,9 @@ function App() {
             <Route path="/assessments" element={(<Protected > <AssessmentPage  /> </Protected>)} />
             <Route path="/assessment-submissions" element={(<Protected > <AssessmentSubmissionsPage  /> </Protected>)} />
             <Route path="/pass-exams" element={(<Protected > <PassExamsPage  /> </Protected>)} />
+
+            <Route path="/students" element={(<Protected > <StudentsLandingPage /> </Protected>)} />
+
         </Routes>
       </BrowserRouter>
       <ToastContainer />

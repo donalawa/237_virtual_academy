@@ -1,10 +1,11 @@
 import React, { useState, useEffect }  from 'react';
-import './assessment-submissions.css';
+import './landing.css';
 
-import Layout from '../../../components/Layout/Layout';
+import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 
-import { AssessmentModal, EditCourseContentModal, DeleteModal, PassExammodal  } from '../../../components';
-import { IoMdCloudDownload } from 'react-icons/io';
+import { AddCourseContentModal, EditCourseContentModal, DeleteModal } from '../../../components';
+
+import { AiOutlineCopy } from 'react-icons/ai';
 import {  BsPencilSquare } from 'react-icons/bs';
 
 import { toast } from 'react-toastify';
@@ -14,7 +15,6 @@ import 'tippy.js/dist/tippy.css';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
 import { deleteCourseContent, getCourseContents } from '../../../services/courseContent';
-import { getPassExamContents, deletePassExamContent } from '../../../services/passExams';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -30,19 +30,19 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Student Name',
+        label: 'Description',
         name: 'name'
     },
     {
-        label: 'Question File',
+        label: 'Expectation',
         name: 'name'
     },
     {
-        label: 'Answer Pdf',
+        label: 'Class Name',
         name: 'name'
     },
     {
-        label: 'Submited Date',
+        label: 'Publish Date',
         name: 'name'
     },
     {
@@ -63,12 +63,31 @@ const override = {
 
 
 function Index() {
-    const [submissions, setSubmissions] = useState([]);
+    const [ showAddModal, setShoowAddModal ] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false); 
+    const [deleteModal, setShowDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [contents, setContents] = useState([]);
+
+    const [editData, setEditData] = useState(null);
 
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const toggleAddModal = () => {
+        setShoowAddModal(!showAddModal);
+    }
+
+    const toggleEditModal = () => {
+        setShowEditModal(!showEditModal);
+    }
+
+    const toggleDeleteModal = () => {
+        setShowDeleteModal(!deleteModal);
+    }
+
     const handleGetClasses = ()  => {
+
 
         getClasses().then((res: any) => {
             if(res.ok) {
@@ -79,13 +98,44 @@ function Index() {
         })
     }
 
+    const handleDeleteCourseContent = () => {
+        console.log('DELETE COURSE CONTENT');
+        console.log(deleteId)
+        deleteCourseContent(deleteId).then((res: any) => {
+            if(res.ok) {
+                toggleDeleteModal();
+                handleGetClasses();
+                toast.success(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+          
+            }else {
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+            }
+        }).catch(err => {
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        })
+    }
+
+    const handleContentAdded = ()  => {
+        handleGetContent();
+        toggleAddModal();
+    }
+
 
     const handleGetContent = () => {
         setLoading(true);
-        getPassExamContents().then((res: any) => {
-            console.log("ASSESSMENT SUBMISSIONS: ",res);
+        getCourseContents().then((res: any) => {
+            console.log("COURSE CONTENT RES: ",res);
             setLoading(false);
-            setSubmissions(res.data.data);
+            setContents(res.data.data);
         }).catch((err: any) => {
             console.log('Error: ', err);
             setLoading(false);
@@ -99,7 +149,7 @@ function Index() {
     },[]);
 
     return (
-        <Layout title="Assessment Submissions">
+        <StudentLayout title="Course Content">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -110,7 +160,11 @@ function Index() {
                                 {classes.map((classData: any, index: any) => <option key={index} value={classData._id}>{classData.name}</option>)}
                             </select>
                         </div>
-                     
+                        {/* <form className="search">
+                            <input type="search" name="" id="" placeholder="Find ..." />
+                            <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
+                        </form> */}
+                        <button onClick={toggleAddModal} className="btn btn-primary btn-add">Add Content  <i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -129,16 +183,16 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {submissions?.map((data: any, index: any) => <tr>
+                                {contents?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
                                         <p>{data.title}</p>
                                     </td>
                             
                     
-                                    <td className="flex-start"><a href={data?.questions_file} target="_blank" download>Question File</a></td>
-                                    <td className="flex-start"><a href={data?.answers_file} target="_blank" download>Answers File</a></td>
-                                    <td className="flex-start"><a href={data?.video_solution_url} target="_blank" download>Video File</a></td>
+                                    <td className="flex-start">{data?.description}</td>
+                                    <td className="flex-start">{data?.expectation}</td>
+                                    <td className="flex-start">{data?.classroom_id?.name}</td>
                                     <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
                                     
                                     <td className="flex-start">
@@ -147,12 +201,18 @@ function Index() {
 
                                     <td className="flex-center">
                                         <div className="action">
-                                            <Tippy content="Download Video Solution"  animation="fade">
+                                            <Tippy content="Copy Class Url"  animation="fade">
                                             <a onClick={() => {
-                               
-                                            }} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                                setEditData(data);
+                                                toggleEditModal();
+                                            }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
                                             </Tippy>
-                                         
+                                            <Tippy content="Delete Class"  animation="fade">
+                                                <a onClick={() => {
+                                                    setDeleteId(data._id);
+                                                    toggleDeleteModal();
+                                                }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
+                                            </Tippy>
                                         </div>
                                     </td>
                                 </tr> )}
@@ -163,7 +223,11 @@ function Index() {
                 </div>
             </div>
         </div>
-        </Layout>
+
+        {showAddModal &&  <AddCourseContentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
+        {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
+        {deleteModal && <DeleteModal onAccept={handleDeleteCourseContent} onCancel={toggleDeleteModal} />}
+        </StudentLayout>
     );
 }
 

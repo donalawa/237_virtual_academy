@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import './signup.css';
 import { Link } from 'react-router-dom';
 import Form from '../../components/form/components/Form/Form';
@@ -8,10 +9,15 @@ import FormField from '../../components/form/components/FormField/FormField';
 import Button from '../../components/form/components/Button/Button';
 import * as Yup from 'yup';
 import AuthLayout from '../../components/form/components/Layout/AuthLayout';
+import { RiKeyboardLine } from 'react-icons/ri';
+import { IoIosPeople } from 'react-icons/io';
 
 import { registerUser } from '../../services/auth';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+
+import { storeToken, getToken } from '../../utils/storage';
+import ErrorMessage from '../../components/form/components/ErrorMessage/ErrorMessage';
 
 const initialValues= {
     username: '',
@@ -23,7 +29,8 @@ const initialValues= {
 const Index = () => {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
-
+    const [error, setError] = useState<any>(null);
+    const [accountType, setAccountType] = useState('none');
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(`${t('username_required_error')}`),
         email: Yup.string().email(`${t('email_valid_error')}`).required(`${t('email_required_error')}`),
@@ -43,9 +50,25 @@ const Index = () => {
             return;
         }
 
-        registerUser(values).then((res: any) => {
+        if(accountType == 'none') {
+            setError('Please Select Account Type')
+            toast.error(`Please Select Account Type'`, {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+            return;
+        }
+
+        let data = {
+            ...values,
+            account_type: accountType
+        }
+ 
+        registerUser(data).then((res: any) => {
             // console.log('REGISTERED USER');
             // console.log(res);
+         
+
             if(res.ok) {
                 toast.success(`${t('registered_successfully')}`, {
                     pauseOnHover: false,
@@ -74,10 +97,15 @@ const Index = () => {
     },[]);
 
 
+    if(getToken() != null) {
+        return <Navigate to="/dashboard" replace/>
+    }
+
     return (
         <AuthLayout subTitle={`${t('create_account_sub')}`} title={`${t('create_account_title')}`} >
             <form action="" className="auth-form">
                 <p>{`${t('register_form_titlle')}`}</p>
+                {error && <ErrorMessage error={error} visible={true} />}
                 <Form 
                     initialValues={initialValues}
                     onSubmit={handleRegister}
@@ -87,7 +115,14 @@ const Index = () => {
                         <FormField  name="username" type="text" placeholder={`${t('username_label')}`}/>
 
                         <FormField  name="email" type="email" placeholder="Email"/>
-
+                        <div className="input-with-icon-form-group">
+                        <i className="text-primary"><IoIosPeople size={20}/></i>
+                        <select value={accountType} onChange={(e: any) => setAccountType(e.target.value)} id="" className="select-account-type">
+                            <option value="none">Select Account Type</option>
+                            <option value="student">Student</option>
+                            <option value="teacher">Teacher</option>
+                        </select>
+                        </div>
                         <FormField  name="password" type="password" placeholder={`${t('password_label')}`}/>
 
                         <FormField  name="confirm_password" type="password" placeholder={`${t('c_password_label')}`}/>
