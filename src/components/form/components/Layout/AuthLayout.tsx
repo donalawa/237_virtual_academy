@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import './AuthLayout.css';
 
-function AuthLayout({ title, children } : any) {
+function AuthLayout({ title, subTitle, children } : any) {
     const navigate = useNavigate();
 
     return (
@@ -11,7 +11,7 @@ function AuthLayout({ title, children } : any) {
             <div className="left">
                 <div className="login-welcome-message">
                   <p>{title}</p>
-                  <p>Nice to see you</p>
+                  <p>{subTitle}</p>
                   <img src={require('../../../../assets/images/auth/banner.png')} alt="" />
                 </div>
             </div>

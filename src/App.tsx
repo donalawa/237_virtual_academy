@@ -6,10 +6,41 @@ import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Protected from './components/form/Protected';
-
+import { useTranslation } from 'react-i18next';
 
 function App() {
+  const { t, i18n } = useTranslation();
+  let [lang, setLang] = useState<any>(null);
 
+  const handleTrans = () => {
+    i18n.changeLanguage(lang);
+  };
+
+  const handleLangInit = () => {
+    let lng = localStorage.getItem('locale');
+    console.log("locale", lng);
+    if(lng == null) {
+      localStorage.setItem('locale', 'fr')
+      setLang('fr');
+    }else {
+      setLang(lng);
+    }
+  }
+
+  const changeLang = () => {
+    if(lang != null) {
+      localStorage.setItem('locale', lang)
+      handleTrans();
+    }
+  }
+  
+  useEffect(() => {
+    handleLangInit();
+  },[])
+
+  useEffect(() => {
+    changeLang()
+  }, [lang]);
   return (
     <div className="App">
       {/* <HomePage /> */}

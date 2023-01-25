@@ -29,7 +29,11 @@ i18n
          features_one: "Join live class sessions",
          features_two: "Access past exams and their solutions",
          features_three: "Access recorded versions of class sessions",
-         copywright_text: "© 2023 237 Virtual Academy. All rights reserved"
+         copywright_text: "© 2023 237 Virtual Academy. All rights reserved",
+         login_title: "Login",
+         account_text: "Don't have an account?",
+         welcome_back_text: "Welcome Back",
+         welcome_back_sub: "Nice to see you"
         }
       },
 
@@ -51,7 +55,11 @@ i18n
             features_one: "Rejoignez des sessions de cours en direct",
             features_two: "Accéder aux examens passés et à leurs solutions",
             features_three: "Accéder aux versions enregistrées des sessions de cours",
-            copywright_text: "© 2023 237 Académie virtuelle. Tous les droits sont réservés"
+            copywright_text: "© 2023 237 Académie virtuelle. Tous les droits sont réservés",
+            login_title: "Connexion",
+            account_text: "Vous n'avez pas de compte ?",
+            welcome_back_text: "Content de te revoir",
+            welcome_back_sub: "Ravi de vous voir"
         }
       },
     }

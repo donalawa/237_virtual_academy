@@ -12,6 +12,7 @@ import ErrorMessage from '../../components/form/components/ErrorMessage/ErrorMes
 import { loginUser } from '../../services/auth';
 import { storeToken, getToken } from '../../utils/storage';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const initialValues= {
     email: '',
@@ -20,6 +21,7 @@ const initialValues= {
 
 function Index() {
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
 
     const [error, setError] = useState(null);
     const validationSchema = Yup.object().shape({
@@ -59,9 +61,9 @@ function Index() {
     }
 
     return (
-        <AuthLayout title="Welcome Back">
+        <AuthLayout title={t('welcome_back_text')} subTitle={t('welcome_back_sub')}>
             <form action="" className="auth-form">
-                <p>Login</p>
+                <p>{t('login_title')}</p>
                 {error && <ErrorMessage error={error} visible={true} />}
                 <Form 
                     initialValues={initialValues}
@@ -73,11 +75,11 @@ function Index() {
 
                         <FormField  name="password" type="password" placeholder="Password"/>
 
-                        <Button title="Login"/>
+                        <Button title={t('login_text')}/>
                         </Form>
                 </form>
                 <p className="u-padding-bottom-small label-link">
-                    Don't have an account? <Link to="/register" className="text-primary">Sign up</Link>
+                    {t('welcome_back_text')} <Link to="/register" className="text-primary">{t('register_text')}</Link>
                 </p>
             </AuthLayout>
     );
