@@ -3,8 +3,8 @@ import './pass-exams.css';
 
 import Layout from '../../../components/Layout/Layout';
 
-import { AddCourseContentModal, EditCourseContentModal, DeleteModal } from '../../../components';
-
+import { AddCourseContentModal, EditCourseContentModal, DeleteModal, PassExammodal  } from '../../../components';
+import { IoMdCloudDownload } from 'react-icons/io';
 import { AiOutlineCopy } from 'react-icons/ai';
 import {  BsPencilSquare } from 'react-icons/bs';
 
@@ -15,6 +15,7 @@ import 'tippy.js/dist/tippy.css';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
 import { deleteCourseContent, getCourseContents } from '../../../services/courseContent';
+import { getPassExamContents, deletePassExamContent } from '../../../services/passExams';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -30,15 +31,15 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Description',
+        label: 'Question File',
         name: 'name'
     },
     {
-        label: 'Expectation',
+        label: 'Answer Pdf',
         name: 'name'
     },
     {
-        label: 'Class Name',
+        label: 'Answer Video',
         name: 'name'
     },
     {
@@ -98,10 +99,10 @@ function Index() {
         })
     }
 
-    const handleDeleteCourseContent = () => {
+    const handleDeleteCourseExamContent = () => {
         console.log('DELETE COURSE CONTENT');
         console.log(deleteId)
-        deleteCourseContent(deleteId).then((res: any) => {
+        deletePassExamContent(deleteId).then((res: any) => {
             if(res.ok) {
                 toggleDeleteModal();
                 handleGetClasses();
@@ -132,8 +133,8 @@ function Index() {
 
     const handleGetContent = () => {
         setLoading(true);
-        getCourseContents().then((res: any) => {
-            console.log("COURSE CONTENT RES: ",res);
+        getPassExamContents().then((res: any) => {
+            console.log("PASSS EXAM CONTENT RES: ",res);
             setLoading(false);
             setContents(res.data.data);
         }).catch((err: any) => {
@@ -190,9 +191,9 @@ function Index() {
                                     </td>
                             
                     
-                                    <td className="flex-start">{data?.description}</td>
-                                    <td className="flex-start">{data?.expectation}</td>
-                                    <td className="flex-start">{data?.classroom_id?.name}</td>
+                                    <td className="flex-start"><a href={data?.questions_file} target="_blank" download>Question File</a></td>
+                                    <td className="flex-start"><a href={data?.answers_file} target="_blank" download>Answers File</a></td>
+                                    <td className="flex-start"><a href={data?.video_solution_url} target="_blank" download>Video File</a></td>
                                     <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
                                     
                                     <td className="flex-start">
@@ -201,7 +202,7 @@ function Index() {
 
                                     <td className="flex-center">
                                         <div className="action">
-                                            <Tippy content="Copy Class Url"  animation="fade">
+                                            <Tippy content="Download Video Solution"  animation="fade">
                                             <a onClick={() => {
                                                 setEditData(data);
                                                 toggleEditModal();
@@ -224,9 +225,9 @@ function Index() {
             </div>
         </div>
 
-        {showAddModal &&  <AddCourseContentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
+        {showAddModal &&  <PassExammodal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
-        {deleteModal && <DeleteModal onAccept={handleDeleteCourseContent} onCancel={toggleDeleteModal} />}
+        {deleteModal && <DeleteModal onAccept={handleDeleteCourseExamContent} onCancel={toggleDeleteModal} />}
         </Layout>
     );
 }
