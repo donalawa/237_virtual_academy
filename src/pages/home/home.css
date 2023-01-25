@@ -36,6 +36,14 @@ section {
     margin: 0 auto;
   }
 }
+
+@media screen and (max-width: 550px) {
+  .hero {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
 .landing-page {
   background-color: #fff;
 }
