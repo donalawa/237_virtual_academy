@@ -11,16 +11,39 @@ import { useTranslation } from 'react-i18next';
 
 function Index() {
     const { t, i18n } = useTranslation();
-    let [lang, setLang] = useState('en');
+    let [lang, setLang] = useState<any>(null);
 
     const handleTrans = () => {
       i18n.changeLanguage(lang);
     };
 
+    const handleLangInit = () => {
+      let lng = localStorage.getItem('locale');
+      console.log("locale", lng);
+      if(lng == null) {
+        localStorage.setItem('locale', 'fr')
+        setLang('fr');
+      }else {
+        setLang(lng);
+      }
+    }
+
+    const changeLang = () => {
+      if(lang != null) {
+        localStorage.setItem('locale', lang)
+        handleTrans();
+      }
+    }
     
     useEffect(() => {
-      handleTrans();
-    },[lang])
+      handleLangInit();
+    },[])
+
+    useEffect(() => {
+      changeLang()
+    }, [lang]);
+
+
     return (
         <div className="landing-page">
           <p>.</p>
@@ -62,27 +85,27 @@ function Index() {
             <div className="how-it-works">
               <div className="con">
                 <div className="sec-1">
-                  <h1>How It Works</h1>
+                  <h1>{t('how_it_works')}</h1>
                   <ul>
                     <li>
                       <AiOutlineUserAdd size={22} />
                       <div className="text">
-                        <h5>Create your account</h5>
-                        <p>Create an account and login to get started</p>
+                        <h5>{t('step_one_title')}</h5>
+                        <p>{t('step_one_description')}</p>
                       </div>
                     </li>
                     <li>
                     <AiOutlineUserAdd size={22} />
                       <div className="text">
-                      <h5>Create your account</h5>
-                        <p>Create an account and login to get started</p>
+                      <h5>{t('step_two_title')}</h5>
+                        <p>{t('step_two_description')}</p>
                       </div>
                     </li>
                     <li>
                     <AiOutlineUserAdd size={22} />
                       <div className="text">
-                      <h5>Create your account</h5>
-                        <p>Create an account and login to get started</p>
+                      <h5>{t('step_three_title')}</h5>
+                        <p>{t('step_three_description')}</p>
                       </div>
                     </li>
                   </ul>
@@ -97,24 +120,24 @@ function Index() {
     
         <section className="waiting">
           <div className="con">
-            <h1>What are you waiting for?</h1>
+            <h1>{t('waiting_question')}</h1>
             <div className="btn-flex">
               <Link to="/register"  className="btn btn-white"
-                >Register here</Link>
-              <Link to="/login" className="btn btn-secondary">Login</Link>
+                >{t('register_text')}</Link>
+              <Link to="/login" className="btn btn-secondary">{t('login_text')}</Link>
             </div>
             <div className="checks">
               <div className="check">
                 <BsCheck2Circle size={20}/>
-                <span>Join live class sessions</span>
+                <span>{t('features_one')}</span>
               </div>
               <div className="check">
                  <BsCheck2Circle size={20}/>
-                <span>Access past exams and their solutions</span>
+                <span>{t('features_two')}</span>
               </div>
               <div className="check">
                  <BsCheck2Circle size={20}/>
-                <span>Access recorded versions of class sessions</span>
+                <span>{t('features_three')}</span>
               </div>
             </div>
           </div>
@@ -122,7 +145,7 @@ function Index() {
     
         <section className="footer">
           <div className="con">
-            <p>© 2023 237 Virtual Academy. All rights reserved</p>
+            <p>{t('copywright_text')}</p>
             <div className="social">
               <ul>
                 <li>

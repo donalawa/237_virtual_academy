@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Layout.css';
 import { removeToken } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
 import { MdOutlineContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
+import { useTranslation } from 'react-i18next';
+
+import { getUser } from '../../utils/storage';
 
 function Layout({ title, children } : any) {
+    const { t, i18n } = useTranslation();
+    let [lang, setLang] = useState<any>(null);
+
     const navigate = useNavigate();
-    
+    const [user, setUser] = useState<any>(null);
+
     const [showNav, setShowNav] = useState(true);
     const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -20,11 +27,47 @@ function Layout({ title, children } : any) {
         setShowNav(!showNav);
     }
 
+    const handleTrans = () => {
+        i18n.changeLanguage(lang);
+      };
+  
+      const handleLangInit = () => {
+        let lng = localStorage.getItem('locale');
+        console.log("locale", lng);
+        if(lng == null) {
+          localStorage.setItem('locale', 'fr')
+          setLang('fr');
+        }else {
+          setLang(lng);
+        }
+      }
+  
+      const changeLang = () => {
+        if(lang != null) {
+          localStorage.setItem('locale', lang)
+          handleTrans();
+        }
+      }
+      
+      useEffect(() => {
+        handleLangInit();
+      },[])
+  
+      useEffect(() => {
+        changeLang()
+      }, [lang]);
+
+    useEffect(() => {
+        console.log("USER", getUser());
+        let usr = getUser();
+        setUser(usr);
+    }, [])
+
     return (
         <div className="dashboard-grid">
         <div className={`sidebar ${!showNav ? 'show' : ''}`}>
-            <div className="logo">
-                <a href="index.html"><img src={require('../../assets/images/logo/logo-light.png')} alt=" " /></a>
+            <div className="logo" style={{cursor: 'pointer'}}>
+                <a onClick={() => navigate('/')}><img src={require('../../assets/images/logo/logo-light.png')} alt=" " /></a>
             </div>
             <div className="menu">
                 <div className="sub-menu">
@@ -86,7 +129,7 @@ function Layout({ title, children } : any) {
                         <i className="fa fa-bars" aria-hidden="true"></i>
                     </div>
                     <span>
-                        <select value="en" id="" className="language-dashboard">
+                        <select value={lang} onChange={(e: any) => setLang(e.target.value)} id="" className="language-dashboard">
                             <option value="en">🏴󠁧󠁢󠁥󠁮󠁧󠁿 EN</option>
                             <option value="fr">🇫🇷 FR</option>
                         </select>
@@ -102,12 +145,13 @@ function Layout({ title, children } : any) {
                     </span>
                 </div>
             </header>
+            
             <div className={`user-menu ${showUserMenu ? 'show' : ''}`}>
                 <div className="user-menu-top">
                     <i className="fa fa-times" onClick={() => setShowUserMenu(!showUserMenu)}></i>
                     <img src={require("../../assets/images/users/avatar.jpg")} alt="" />
-                    <p>Odin</p>
-                    <span>Admin User</span>
+                    <p>{user?.username}</p>
+                    <span>Teacher</span>
                 </div>
                 <div className="user-menu-footer">
                     <a><i className="fas fa-cog"></i> Settings</a>
