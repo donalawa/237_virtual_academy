@@ -23,10 +23,10 @@ function Index() {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
 
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<any>(null);
     const validationSchema = Yup.object().shape({
-        email: Yup.string().email('Enter a valid email').required('Email field is required'),
-        password: Yup.string().min(4, 'Password must be above 4 characters').required('Password Required')
+        email: Yup.string().email(`${t('email_valid_error')}`).required(`${t('email_required_error')}`),
+        password: Yup.string().min(4, `${t('password_length_error')}`).required(`${t('password_required_error')}`)
     })
 
     const handleLogin = (values: any) => {
@@ -37,18 +37,18 @@ function Index() {
                 storeToken(res.data.accessToken);
                 navigate('/dashboard');
 
-                toast.success("Logged In Succesfuly", {
+                toast.success(`${t('login_success_text')}`, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
                 
             }else {
                 console.log(res);
-                toast.error(res.data.message, {
+                toast.error(`${t('login_error_text')}`, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
-                setError(res.data.message);
+                setError(`${t('login_error_text')}`);
             }
         }).catch(err => {
             console.log(err);
@@ -73,7 +73,7 @@ function Index() {
 
                         <FormField  name="email" type="email" placeholder="Email"/>
 
-                        <FormField  name="password" type="password" placeholder="Password"/>
+                        <FormField  name="password" type="password" placeholder={t('password_label')}/>
 
                         <Button title={t('login_text')}/>
                         </Form>

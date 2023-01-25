@@ -11,6 +11,7 @@ import AuthLayout from '../../components/form/components/Layout/AuthLayout';
 
 import { registerUser } from '../../services/auth';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const initialValues= {
     username: '',
@@ -21,19 +22,20 @@ const initialValues= {
 
 const Index = () => {
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required('Name field is required'),
-        email: Yup.string().email('Enter a valid email').required('Email field is required'),
-        password: Yup.string().min(4, 'Password must be above 4 characters').required('Password Required'),
-        confirm_password: Yup.string().min(4, 'Password must be above 4 characters').required('Confirm Password Required'),
+        username: Yup.string().required(`${t('username_required_error')}`),
+        email: Yup.string().email(`${t('email_valid_error')}`).required(`${t('email_required_error')}`),
+        password: Yup.string().min(4, `${t('password_length_error')}`).required(`${t('password_required_error')}`),
+        confirm_password: Yup.string().min(4, `${t('password_length_error')}`).required(`${t('c_password_required_error')}`)
     })
 
     const handleRegister = (values : any) => {
         console.log('VALUES: ', values);
 
         if(values.password != values.confirm_password) {
-            toast.error("Passwords Must Match", {
+            toast.error(`${t('password_match_error')}`, {
                 pauseOnHover: false,
                 closeOnClick: true,
             })
@@ -45,7 +47,7 @@ const Index = () => {
             // console.log('REGISTERED USER');
             // console.log(res);
             if(res.ok) {
-                toast.success("User Registered", {
+                toast.success(`${t('registered_successfully')}`, {
                     pauseOnHover: false,
                     closeOnClick: true,
                   })
@@ -60,7 +62,7 @@ const Index = () => {
             }
         }).catch(err => {
             console.log('ERROR REGISTRATION', err);
-            toast.error("Resgistration Failed", {
+            toast.error(`${t('register_failed_error')}`, {
                 pauseOnHover: false,
                 closeOnClick: true,
             })
@@ -73,28 +75,28 @@ const Index = () => {
 
 
     return (
-        <AuthLayout title="Create Account">
+        <AuthLayout subTitle={`${t('create_account_sub')}`} title={`${t('create_account_title')}`} >
             <form action="" className="auth-form">
-                <p>Register</p>
+                <p>{`${t('register_form_titlle')}`}</p>
                 <Form 
                     initialValues={initialValues}
                     onSubmit={handleRegister}
                     validationSchema={validationSchema}
                 >
 
-                        <FormField  name="username" type="text" placeholder="Username"/>
+                        <FormField  name="username" type="text" placeholder={`${t('username_label')}`}/>
 
                         <FormField  name="email" type="email" placeholder="Email"/>
 
-                        <FormField  name="password" type="password" placeholder="Password"/>
+                        <FormField  name="password" type="password" placeholder={`${t('password_label')}`}/>
 
-                        <FormField  name="confirm_password" type="password" placeholder="Confirm password"/>
+                        <FormField  name="confirm_password" type="password" placeholder={`${t('c_password_label')}`}/>
 
-                        <Button title="Register"/>
+                        <Button title={`${t('register_text')}`}/>
                         </Form>
                 </form>
                 <p className="u-padding-bottom-small label-link">
-                    Already have an account? <Link to="/login" className="text-primary">Sign in</Link>
+                {`${t('r_account_text')}`}<Link to="/login" className="text-primary">{`${t('login_text')}`}</Link>
                 </p>
             </AuthLayout>
 

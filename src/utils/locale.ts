@@ -33,7 +33,25 @@ i18n
          login_title: "Login",
          account_text: "Don't have an account?",
          welcome_back_text: "Welcome Back",
-         welcome_back_sub: "Nice to see you"
+         welcome_back_sub: "Nice to see you",
+         email_required_error: "Email field is required",
+         email_valid_error: "Enter a valid email",
+         password_length_error: "Password must be above 4 characters",
+         password_required_error: "Password Required",
+         c_password_required_error: "Confirm password is required",
+         login_success_text: "Logged In Succesfuly",
+         login_error_text: "Email or password is wrong",
+         username_required_error: "Username is required",
+         password_match_error: "Passwords Must Match",
+         registered_successfully: "User Registered",
+         register_failed_error: "Resgistration Failed",
+         create_account_title: "Create Account",
+         create_account_sub: "What are you waiting for ?",
+         register_form_titlle: "Register",
+         r_account_text: "Already have an account? ",
+         username_label: "Username",
+         password_label: "Password",
+         c_password_label: "Confirm Password"
         }
       },
 
@@ -59,7 +77,25 @@ i18n
             login_title: "Connexion",
             account_text: "Vous n'avez pas de compte ?",
             welcome_back_text: "Content de te revoir",
-            welcome_back_sub: "Ravi de vous voir"
+            welcome_back_sub: "Ravi de vous voir",
+            email_required_error: "Le champ email est requis",
+            email_valid_error: "Entrez un email valide",
+            password_length_error: "Le mot de passe doit avoir plus de 4 caractères",
+            password_required_error: "Mot de passe requis",
+            c_password_required_error: "Confirmer le mot de passe est requis",
+            login_success_text: "Connexion réussie",
+            login_error_text: "Email ou mot de passe incorrect",
+            username_required_error: "Nom d'utilisateur est nécessaire",
+            password_match_error: "Les mots de passe doivent correspondre",
+            registered_successfully: "Utilisateur enregistré",
+            register_failed_error: "L'enregistrement a échoué",
+            create_account_title: "Créer un compte",
+            create_account_sub: "Qu'est-ce que vous attendez?",
+            register_form_titlle: "S'enregistrer",
+            r_account_text: "Vous avez déjà un compte? ",
+            username_label: "Nom d'utilisateur",
+            password_label: "Mot de passe",
+            c_password_label: "Confirmez le mot de passe"
         }
       },
     }
