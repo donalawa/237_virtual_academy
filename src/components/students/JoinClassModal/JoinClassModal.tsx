@@ -59,7 +59,7 @@ function JoinClassModal({ onClose, onClassAdded } : any) {
     
     return (
         <div>
-            <div  className='add-modal-container'>
+            <div  className='add-modal-container join-modal'>
                 <div className='modal-head'>
                     <p className="modal-title">Enter Class Id</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>

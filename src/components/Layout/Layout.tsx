@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Layout.css';
-import { removeToken } from '../../utils/storage';
+import { isStudent, removeToken } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
 import { MdOutlineContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
@@ -59,11 +59,15 @@ function Layout({ title, children } : any) {
       }, [lang]);
 
     useEffect(() => {
-        console.log("USER", getUser());
         let usr = getUser();
         setUser(usr);
     }, [])
 
+        
+    if(isStudent()) {
+        console.log('STUDENT');
+        return <Navigate to="/students/home" replace/>
+    }
 
     if(!isTeacher()) {
         console.log('TEACHER');

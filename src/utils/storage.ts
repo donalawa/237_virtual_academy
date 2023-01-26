@@ -30,6 +30,13 @@ const isTeacher = () => {
     return user?.role == 'teacher' ? true : false;
 }
 
+const isStudent = () => {
+    const token: any =  getToken();
+    let user:any = jwtDecode(token);
+    console.log('USER IN ISCHECK',  user)
+    return user?.role == 'student' ? true : false;
+}
+
 const removeToken = async ()=> {
     try {
         localStorage.removeItem(key);
@@ -38,5 +45,5 @@ const removeToken = async ()=> {
     }
 }
 
-export { getUser, getToken, removeToken, storeToken, isTeacher }
+export { getUser, getToken, removeToken, storeToken, isTeacher, isStudent }
 

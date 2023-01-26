@@ -4,13 +4,13 @@ import * as Yup from 'yup';
 import { ImCancelCircle } from 'react-icons/im';
 import { Button } from '../..';
 
-function DeleteModal({ onAccept, onCancel } : any) {
+function DeleteModal({ onAccept, onCancel, title = "Are you sure you want to delete ?" } : any) {
 
     return (
         <div>
-            <div  className='modal-container'>
+            <div  className='modal-container modal-delete'>
                 <div className='modal-head'>
-                    <p className="modal-title">Are you sure you want to delete ?</p>
+                    <p className="modal-title">{ title }</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onCancel} size={22} color="#fff"/>
                 </div>
                 <div className='delete modal-content'>

@@ -13,6 +13,10 @@
     overflow: scroll;
 }
 
+.join-modal {
+    top: 60% !important;
+}
+
 @keyframes fadein {
 	from {
 		opacity:0;
@@ -52,6 +56,10 @@
     padding: 20px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+}
+
+.join-modal .modal-head {
+    background-color: var(--secondary-color);
 }
 
 @media screen and  (max-width: 1043px) {

@@ -18,9 +18,10 @@
 }
 
 .btn-outline-primary {
-  border: 2px solid var(--primary-color);
+  border: 2px solid var(--primary-color) !important;
   border-radius: 8px;
   color: var(--primary-color);
+
 }
 
 .btn-white {

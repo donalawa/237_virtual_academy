@@ -3,16 +3,19 @@ import Layout from '../../../components/Layout/Layout';
 
 import { getClasses } from '../../../services/classroom';
 import { getCourseContents } from '../../../services/courseContent';
+import { getAllApplications, acceptApplication, rejectApplication } from '../../../services/applications';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { AiOutlineCopy } from 'react-icons/ai';
+import { RxCross2 } from 'react-icons/rx';
+import { BsCheck2Square } from 'react-icons/bs';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
-
+import { DeleteModal } from '../../../components';
+import { toast } from 'react-toastify';
 
 const rows: any = [
     {
@@ -49,7 +52,13 @@ const override = {
 function Index() {
     const [classes, setClasses] = useState([]);
     const [courseContents, setCourseContents] = useState([]);
+    const [studentsApplicatins, setStudentsApplications] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const [selectedId, setSelectedId] = useState<any>(null);
+    const [showConfirmAcceptModal, setShowConfirmAcceptModal] = useState(false);
+    const [showRejectModal, setShowRejectModal] = useState(false);
+
 
     const handleGetClasses = ()  => {
         getClasses().then((res: any) => {
@@ -67,9 +76,78 @@ function Index() {
         })
     }
 
+    const handleGetStudentsApplications = () => {
+        getAllApplications().then((res: any) => {
+            if(res.ok) {
+                console.log('RESPONSE: ', res);
+                setStudentsApplications(res.data.data);
+            }
+        })
+    }
+
+
+    // Accept
+    const handleSetSelectedId = (id: any, type: any) => {
+        setSelectedId(id);
+        if(type == 'accepted') {
+            toggleAcceptModal();
+        }else {
+            toggleRejectModal();
+        }
+       
+    }
+
+    const toggleAcceptModal = () => {
+        setShowConfirmAcceptModal(!showConfirmAcceptModal);
+    }
+
+    const toggleRejectModal = () => {
+        setShowRejectModal(!showRejectModal);
+    }
+
+    const handleAcceptApplications = async () => {
+        try {
+            toggleAcceptModal();
+            await acceptApplication(selectedId);
+
+            handleGetStudentsApplications();
+
+            toast.success("Application Accepted", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        } catch (error) {
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        }
+    }
+
+    const handleRejectApplications = async () => {
+        try {
+            toggleRejectModal();
+            await rejectApplication(selectedId);
+
+            handleGetStudentsApplications();
+
+            toast.success("Application Rejected", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        } catch (error) {
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        }
+    }
+
+
     useEffect(() => {
         handleGetClasses();
         handleGetCourseContents();
+        handleGetStudentsApplications();
     }, [])
 
     return (
@@ -85,8 +163,8 @@ function Index() {
                         <div className="stat-value">{courseContents.length}</div>
                     </a>
                     <a href="" className="stat-card">
-                        <div className="stat-name">Total Live Sessions</div>
-                        <div className="stat-value">0</div>
+                        <div className="stat-name">Total Applications</div>
+                        <div className="stat-value">{studentsApplicatins?.length}</div>
                     </a>
                     <a href="" className="stat-card">
                         <div className="stat-name">Total Assessments</div>
@@ -121,28 +199,28 @@ function Index() {
                                         </thead>
                                  
                                         <tbody>
-                                          {classes.map((data: any, index: any) => <tr>
+                                          {studentsApplicatins.map((data: any, index: any) => <tr>
                                                 <td className="flex-center">{index + 1}</td>
                                                 <td className="flex-start">
-                                                    <p>{data.name}</p>
+                                                    <p>{data?.student_id?.username}</p>
                                                 </td>
                                        
                                 
-                                                <td className="flex-start">{data._id}</td>
-                                                
-                                                <td className="flex-start">{data._id}</td>
+                                                <td className="flex-start">{data?.class_id?.name}</td>
+
+                                                <td className="flex-start">{data?.status}</td>
                                                 
                                                 <td className="flex-start">
-                                                    <p>{moment(new Date(data.createdAt)).format('MMMM d, YYYY')}</p>
+                                                    <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
                                                 </td>
 
                                                 <td className="flex-center">
                                                     <div className="action">
                                                         <Tippy content="Accept"  animation="fade">
-                                                        <a className="see"><AiOutlineCopy onClick={() => null} size={14}/></a>
+                                                        <a className="see"><BsCheck2Square onClick={() => handleSetSelectedId(data._id, 'accepted')} size={14}/></a>
                                                         </Tippy>
                                                         <Tippy content="Reject"  animation="fade">
-                                                            <a onClick={() => null} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
+                                                            <a onClick={() => handleSetSelectedId(data._id, 'rejected')} className="delete"><RxCross2 size={14} /></a>
                                                         </Tippy>
                                                     </div>
                                                 </td>
@@ -157,6 +235,8 @@ function Index() {
                     </div>
                         
             </div>
+            {showConfirmAcceptModal && <DeleteModal title={'Are you sure you want to accept application ?'} onAccept={handleAcceptApplications} onCancel={toggleAcceptModal} />}
+            {showRejectModal && <DeleteModal title={'Are you sure you want to reject application ?'} onAccept={handleRejectApplications} onCancel={toggleRejectModal} />}
         </Layout>
     );
 }

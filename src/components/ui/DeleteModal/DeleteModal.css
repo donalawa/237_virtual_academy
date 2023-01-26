@@ -13,6 +13,10 @@
     overflow: scroll;
 }
 
+.modal-delete {
+    top: 50% !important;
+}
+
 @keyframes fadein {
 	from {
 		opacity:0;
