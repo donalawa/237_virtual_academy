@@ -11,6 +11,7 @@
     max-width: 700px;
     animation: fadein .4s;
     height: fit-content;
+    overflow: scroll;
 }
 
 .video-container {

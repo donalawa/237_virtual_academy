@@ -20,6 +20,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
 
+
 const rows: any = [
     {
         label: '#',
@@ -30,23 +31,27 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Description',
+        label: 'Classroom',
         name: 'name'
     },
     {
-        label: 'Expectation',
+        label: 'Pdf Content',
         name: 'name'
     },
     {
-        label: 'Class Name',
+        label: 'Video Content',
         name: 'name'
     },
     {
-        label: 'Publish Date',
+        label: 'Assignment File',
         name: 'name'
     },
     {
-        label: 'Created Date',
+        label: 'Assignment Solution',
+        name: 'name'
+    },
+    {
+        label: 'Published Date',
         name: 'name'
     },
     {
@@ -188,16 +193,14 @@ function Index() {
                                     <td className="flex-start">
                                         <p>{data.title}</p>
                                     </td>
-                            
-                    
-                                    <td className="flex-start">{data?.description}</td>
-                                    <td className="flex-start">{data?.expectation}</td>
                                     <td className="flex-start">{data?.classroom_id?.name}</td>
+                    
+                                    <td className="flex-start">{data?.pdf_file_url ? <a href={data?.pdf_file_url} target="_blank" download>Pdf Content</a> : "None"}</td>
+                                    <td className="flex-start">{data?.video_url ? <a href={data?.video_url} target="_blank" download>Video Content</a> : "None"}</td>
+                                    <td className="flex-start">{data?.assignment_file_url ? <a href={data?.assignment_file_url} target="_blank" download>Assignment File</a> : "None"}</td>
+                                    <td className="flex-start">{data?.assignment_solution_url ? <a href={data?.assignment_solution_url} target="_blank" download>Solution File</a> : "Not available"}</td>                           
                                     <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
                                     
-                                    <td className="flex-start">
-                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
-                                    </td>
 
                                     <td className="flex-center">
                                         <div className="action">

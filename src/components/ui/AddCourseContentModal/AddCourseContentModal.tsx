@@ -25,9 +25,8 @@ import 'tippy.js/dist/tippy.css';
 
 const initialValues= {
     title: '',
-    description: '',
-    expectation: '',
-    publish_date: ''
+    publish_date: '',
+    publish_solution_date: ''
 }
 
 const override = {
@@ -53,15 +52,15 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
     // End Content
 
     // ASSIGNMENT
-    const [isUploadingAssignmentVideo,  setIsUploadingAssignmentVideo] = useState(false);
-    const [assignmentVideoProgress, setAssignmentVideoProgress] = useState(0);
-    const [assignmentVideoUrl, setAssignmentVideoUrl] = useState('');
+    const [isUploadingAssignmentSolutionFile,  setIsUploadingAssignmentSolutionFile] = useState(false);
+    const [assignmentSolutionProgress, setAssignmentSolutionProgress] = useState(0);
+    const [assignmentSolutionUrl, setAssignmentSolutionUrl] = useState('');
 
     const [assignmentPdfUrl, setAssignmentPdfUrl] = useState('');
     const [assignmentPdfProgress,  setAssignmentPdfProgress] = useState(0);
     const [isUploadingAssignmentPdf, setIsUploadingAssignmentPdf] = useState(false);
 
-    const [showAssignmentVideoPreview, setShowAssignmentVideoPreview] = useState(false);
+    const [showAssignmentSolutionPreview, setShowAssignmentSolutionPreview] = useState(false);
 
     // END OF ASSIGNEMTN
     const storage = getStorage(firebaseApp);
@@ -70,13 +69,12 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
     const videoFiileRef: any = useRef(null) 
     const pdfFileRef: any = useRef(null);
     const assignPdfFileRef: any = useRef(null);
-    const assignVideoFileRef: any = useRef(null);
+    const assignSolutionFileRef: any = useRef(null);
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Class Name is required'),
-        description: Yup.string(),
-        expectation: Yup.string(),
         publish_date: Yup.string(),
+        publish_solution_date: Yup.string(),
     })
 
     const handleGetClasses = ()  => {
@@ -159,8 +157,8 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
         })
     }
 
-    const uploadAssignmentVideo = (e: any) => {
-        setIsUploadingAssignmentVideo(true);
+    const uploadAssignmentSolution = (e: any) => {
+        setIsUploadingAssignmentSolutionFile(true);
         const videoFile: any = e.target.files[0];
         const storageRef = ref(storage, `videos/${Date.now()}-${videoFile.name}`);
         const uploadTask = uploadBytesResumable(storageRef, videoFile);
@@ -170,17 +168,17 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
       uploadTask.on('state_changed', (snapshot: any)=>{
           const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-          setAssignmentVideoProgress(+uploadProgress);
+          setAssignmentSolutionProgress(+uploadProgress);
 
       }, (error: any) => {
           console.log(error);
       },()=> {
            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setAssignmentVideoUrl(downloadURL);
+              setAssignmentSolutionUrl(downloadURL);
               console.log('URL', videoUrl);
               console.log('VIDEO  URL: ', downloadURL);
-              setShowAssignmentVideoPreview(true);
-              setIsUploadingAssignmentVideo(false);
+              setShowAssignmentSolutionPreview(true);
+              setIsUploadingAssignmentSolutionFile(false);
           });
       })
     }
@@ -219,7 +217,7 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
             video_url: videoUrl,
             pdf_file_url: pdfUrl,
             assignment_file_url: assignmentPdfUrl,
-            assignment_video_url: assignmentVideoUrl
+            assignment_solution_url: assignmentSolutionUrl,
         }
 
         console.log('CONTENT', data);
@@ -286,13 +284,13 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
                     validationSchema={validationSchema}
                 >
                         <p className="label-text">Title: </p>
-                        <FormField  name="title" type="general" placeholder="Classroom Name"/>
+                        <FormField  name="title" type="general" placeholder="Content Title"/>
                         
-                        <p className="label-text">Description (optional): </p>
+                        {/* <p className="label-text">Description (optional): </p>
                         <FormField  name="description" type="general" placeholder="Short Description"/>
 
                         <p className="label-text">Expectation (optional): </p>
-                        <FormField  name="expectation" type="general" placeholder="Expectation"/>
+                        <FormField  name="expectation" type="general" placeholder="Expectation"/> */}
 
                         <p className="label-text">Publish Date: </p>
                         <FormField  name="publish_date" type="date" placeholder="Published Date"/>
@@ -359,35 +357,35 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
                             </div>
                         }
                         </div>
-               
+                        
+                  
                         
                         <div className='upload-content-container'>
                             <div className="content-upload-left">
-                            {!showAssignmentVideoPreview && <div className="form-field-upload">
-                                    <p className="label-text">Upload Assignment Video Content: </p>
-                                    <div className="file-drop-upload" onClick={() => assignVideoFileRef.current.click()}>
-                                    {!isUploadingAssignmentVideo && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                    {isUploadingAssignmentVideo &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                            {assignmentSolutionUrl.length < 2 && <div className="form-field-upload">
+                                    <p className="label-text">Upload Assignment Solution Content: </p>
+                                    <div className="file-drop-upload" onClick={() => assignSolutionFileRef.current.click()}>
+                                    {!isUploadingAssignmentSolutionFile && <FaCloudUploadAlt size={35} color="#FFA500" />}
+                                    {isUploadingAssignmentSolutionFile &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                     <BeatLoader
                                             color="#623d91" 
-                                            loading={isUploadingAssignmentVideo}
+                                            loading={isUploadingAssignmentSolutionFile}
                                             cssOverride={override}
                                         />
-                                        <p style={{fontSize: '14px'}}>Uploading Video</p>
+                                        <p style={{fontSize: '14px'}}>Uploading Solution</p>
                                     
-                                            <ProgressBar bgcolor={'#6a1b9a'} completed={assignmentVideoProgress}/>
+                                            <ProgressBar bgcolor={'#6a1b9a'} completed={assignmentSolutionProgress}/>
                                         
                                     </div>}
-                                    {!isUploadingAssignmentVideo && <input ref={assignVideoFileRef} onChange={uploadAssignmentVideo} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="video/mp4,video/x-m4v,video/*"/>}
+                                    {!isUploadingAssignmentSolutionFile && <input ref={assignSolutionFileRef} onChange={uploadAssignmentSolution} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel,video/mp4,video/x-m4v,video/*"/>}
                                     </div>
                                 
                                 </div>}
-                                {showAssignmentVideoPreview && <div className="video-container">
-                                    <div className="delete-icon-video">
-                                         <FaTrashAlt color='red' />
+                                {assignmentSolutionUrl.length > 2 &&
+                                    <div className="form-field-upload content-upload-right">
+                                    <p className="label-text" style={{textAlign: 'center'}}>Done</p>
                                     </div>
-                                    <video controls width="100%" height={'100%'} src={assignmentVideoUrl}></video>
-                                </div>}
+                                }
                             </div>
 
                           {assignmentPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
@@ -417,7 +415,9 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
                         </div>
                
 
-           
+                        <p className="label-text">Assignment Solution Pulish Date: </p>
+                        <FormField  name="publish_solution_date" type="date" placeholder="Assignment Solution Pulish Date"/>
+
                       
 
                         <Button isOutLined={true} isFullWidth={false} title="CREATE CONTENT"/>

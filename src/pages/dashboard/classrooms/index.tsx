@@ -151,7 +151,7 @@ function Index() {
                                                 </td>
                                        
                                 
-                                                <td className="flex-start">{'http://localhost:3000/students/'}{data._id}</td>
+                                                <td className="flex-start">{data._id}</td>
                                                 
                                                 <td className="flex-start">
                                                     <p>{moment(new Date(data.createdAt)).format('MMMM d, YYYY')}</p>
@@ -161,7 +161,7 @@ function Index() {
                                                     <div className="action">
                                                         <Tippy content="Copy Class Url"  animation="fade">
                                                         <a className="see"><AiOutlineCopy onClick={() => {
-                                                            navigator.clipboard.writeText(`http://localhost:3000/students/${data._id}`);
+                                                            navigator.clipboard.writeText(`${data._id}`);
                                                             
                                                             toast.success("Copied To Clipboard", {
                                                                 pauseOnHover: false,
@@ -184,6 +184,7 @@ function Index() {
 
 
                             </div>
+                        
                         </div>
                     </div>
 

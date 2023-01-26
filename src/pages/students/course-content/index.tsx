@@ -31,14 +31,6 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Description',
-        name: 'name'
-    },
-    {
-        label: 'Expectation',
-        name: 'name'
-    },
-    {
         label: 'Pdf Content',
         name: 'name'
     },
@@ -47,11 +39,11 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Pdf Assignment',
+        label: 'Assignment File',
         name: 'name'
     },
     {
-        label: 'Video Assignment',
+        label: 'Assignment Solution',
         name: 'name'
     },
     {
@@ -209,13 +201,10 @@ function Index() {
                                         <p>{data.title}</p>
                                     </td>
                             
-                    
-                                    <td className="flex-start">{data?.description}</td>
-                                    <td className="flex-start">{data?.expectation}</td>
                                     <td className="flex-start">{data?.pdf_file_url ? <a href={data?.pdf_file_url} target="_blank" download>Pdf Content</a> : "None"}</td>
                                     <td className="flex-start">{data?.video_url ? <a href={data?.video_url} target="_blank" download>Video Content</a> : "None"}</td>
-                                    <td className="flex-start">{data?.assignment_file_url ? <a href={data?.assignment_file_url} target="_blank" download>Pdf Assignment</a> : "None"}</td>
-                                    <td className="flex-start">{data?.assignment_video_url ? <a href={data?.assignment_video_url} target="_blank" download>Assignment Video</a> : "None"}</td>                           
+                                    <td className="flex-start">{data?.assignment_file_url ? <a href={data?.assignment_file_url} target="_blank" download>Assignment File</a> : "None"}</td>
+                                    <td className="flex-start">{data?.assignment_solution_url ? <a href={data?.assignment_solution_url} target="_blank" download>Solution File</a> : "Not yet available"}</td>                           
                                     <td className="flex-start">
                                         <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
                                     </td>
