@@ -12,3 +12,6 @@ export { default as AssessmentSubmissionsPage } from './dashboard/assessment-sub
 
 // STUDENTS
 export { default as StudentsLandingPage } from './students/landing/index';
+export { default as StudentAssignmentPage } from './students/assignments/index';
+export { default as StudentCourseContentPage } from './students/course-content/index';
+

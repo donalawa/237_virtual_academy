@@ -1,0 +1,240 @@
+import React, { useState, useEffect }  from 'react';
+import './coursecontent.css';
+
+import StudentLayout from '../../../components/StudentLayout/StudentLayout';
+
+import { AssessmentModal, EditCourseContentModal, DeleteModal, PassExammodal  } from '../../../components';
+import UploadAssignmentSolutionModal from '../../../components/students/UploadAssignmentSolutionModal/UploadAssignmentSolutionModal';
+import { IoMdCloudDownload } from 'react-icons/io';
+import {  BsPencilSquare } from 'react-icons/bs';
+
+import { toast } from 'react-toastify';
+
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+
+import { getClasses, deleteClass } from '../../../services/classroom';
+import { getPassExamContents, deletePassExamContent } from '../../../services/passExams';
+import { getCourseContent, getAcceptedClasses } from '../../../services/student';
+
+import BeatLoader from "react-spinners/BeatLoader";
+
+import moment from 'moment';
+
+const rows: any = [
+    {
+        label: '#',
+        name: 'num'
+    },
+    {
+        label: 'Title',
+        name: 'name'
+    },
+    {
+        label: 'Description',
+        name: 'name'
+    },
+    {
+        label: 'Expectation',
+        name: 'name'
+    },
+    {
+        label: 'Pdf Content',
+        name: 'name'
+    },
+    {
+        label: 'Video Content',
+        name: 'name'
+    },
+    {
+        label: 'Pdf Assignment',
+        name: 'name'
+    },
+    {
+        label: 'Video Assignment',
+        name: 'name'
+    },
+    {
+        label: 'Created Date',
+        name: 'name'
+    },
+]
+
+const override = {
+    marginTop: '20px'
+  };
+
+
+
+function Index() {
+    // NEW
+    const [selectedClass, setSelectedClass] = useState("all");
+
+    // END
+
+    const [ showAddModal, setShoowAddModal ] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false); 
+    const [deleteModal, setShowDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [contents, setContents] = useState([]);
+
+    const [editData, setEditData] = useState(null);
+
+    const [classes, setClasses] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const toggleAddModal = () => {
+        setShoowAddModal(!showAddModal);
+    }
+
+    const toggleEditModal = () => {
+        setShowEditModal(!showEditModal);
+    }
+
+    const toggleDeleteModal = () => {
+        setShowDeleteModal(!deleteModal);
+    }
+
+    const handleGetValidClasses = ()  => {
+
+        getAcceptedClasses().then((res: any) => {
+            console.log('RES ACCEPTED: ', res);
+
+            if(res.ok) {
+                setClasses(res.data.data);
+            }
+
+        }).catch(err => {
+            console.log('error: ', err);
+        })
+    }
+
+    const handleDeleteCourseExamContent = () => {
+        console.log('DELETE COURSE CONTENT');
+        console.log(deleteId)
+        deletePassExamContent(deleteId).then((res: any) => {
+            if(res.ok) {
+                toggleDeleteModal();
+                handleGetValidClasses();
+                toast.success(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+          
+            }else {
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+            }
+        }).catch(err => {
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        })
+    }
+
+    const handleContentAdded = ()  => {
+        handleGetContent(selectedClass);
+        toggleAddModal();
+    }
+
+
+    const handleGetContent = (classId: any) => {
+        setLoading(true);
+        if(classId == 'all') {
+            // Don't make request
+            setLoading(false);
+            setContents([]);
+            return;
+        }
+
+        getCourseContent(classId).then((res: any) => {
+            console.log("COURSE CONTENT: ",res);
+            setLoading(false);
+            setContents(res.data.data);
+        }).catch((err: any) => {
+            console.log('Error: ', err);
+            setLoading(false);
+        })
+    }
+
+    useEffect(() => {
+        console.log('USER EFFECT RAN')
+        handleGetValidClasses();
+    },[]);
+
+    return (
+        <StudentLayout title="Course Content">
+      <div className="section">
+            <div className="parent-con">
+                <div className="data-table">
+                    <div className="top">
+                        <div className="span">
+                            <select value={selectedClass} onChange={(e) => {
+                                setSelectedClass(e.target.value);
+                                handleGetContent(e.target.value);
+                            }} className="select-field student-select">
+                                <option value="all">Select Classroom</option>
+                                {classes.map((classData: any, index: any) => <option key={index} value={classData?.class_id?._id}>{classData?.class_id?.name}</option>)}
+                            </select>
+                        </div>
+                        {/* <form className="search">
+                            <input type="search" name="" id="" placeholder="Find ..." />
+                            <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
+                        </form> */}
+                        {/* <button onClick={toggleAddModal} className="btn btn-primary btn-add"> Upload Solution <i className="fas fa-plus"></i></button> */}
+                    </div>
+                    <div className="table-con">
+                    <div style={{textAlign: 'center',}}>
+                        <BeatLoader
+                                color="#623d91" 
+                                loading={loading}
+                                cssOverride={override}
+                        />
+                    </div>
+                    <table>
+                            <thead>
+                                <tr>
+                                    {rows.map((row: any, index: any) => <th key={index} className={row.name}>{row.label}</th>)}
+                                    
+                                </tr>
+                            </thead>
+                        
+                            <tbody>
+                                {contents?.map((data: any, index: any) => <tr>
+                                    <td className="flex-center">{index + 1}</td>
+                                    <td className="flex-start">
+                                        <p>{data.title}</p>
+                                    </td>
+                            
+                    
+                                    <td className="flex-start">{data?.description}</td>
+                                    <td className="flex-start">{data?.expectation}</td>
+                                    <td className="flex-start">{data?.pdf_file_url ? <a href={data?.pdf_file_url} target="_blank" download>Pdf Content</a> : "None"}</td>
+                                    <td className="flex-start">{data?.video_url ? <a href={data?.video_url} target="_blank" download>Video Content</a> : "None"}</td>
+                                    <td className="flex-start">{data?.assignment_file_url ? <a href={data?.assignment_file_url} target="_blank" download>Pdf Assignment</a> : "None"}</td>
+                                    <td className="flex-start">{data?.assignment_video_url ? <a href={data?.assignment_video_url} target="_blank" download>Assignment Video</a> : "None"}</td>                           
+                                    <td className="flex-start">
+                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                    </td>
+
+                                 
+                                </tr> )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {showAddModal &&  <UploadAssignmentSolutionModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
+        {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
+        {deleteModal && <DeleteModal onAccept={handleDeleteCourseExamContent} onCancel={toggleDeleteModal} />}
+        </StudentLayout>
+    );
+}
+
+export default Index;

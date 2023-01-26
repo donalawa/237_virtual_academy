@@ -3,7 +3,7 @@ import './StudentLayout.css';
 import { removeToken } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
-import { MdOutlineContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
+import { MdContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 
 import { getUser } from '../../utils/storage';
@@ -72,13 +72,18 @@ function StudentLayout({ title, children } : any) {
             <div className="menu">
                 <div className="sub-menu">
                     <div className="title">MAIN NAVIGATION</div>
-                    <NavLink className="link" to="/students">
+                    <NavLink className="link" to="/students/home">
                     <i><MdDashboard size={20}/></i>
                         <span>Dashboard</span>
                     </NavLink>
 
 
-                    <NavLink className="link" to="/">
+                    <NavLink className="link" to="/students/course-contents">
+                    <i><MdContentPaste size={20}/></i>
+                        <span>Course Content</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/students/assignments">
                     <i><MdAssignmentLate size={20}/></i>
                         <span>Assignments</span>
                     </NavLink>

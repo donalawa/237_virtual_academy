@@ -6,3 +6,7 @@
     border-radius: 2px;
     height: 35px;
 }
+
+.student-button {
+    background-color: var(--secondary-color);
+}

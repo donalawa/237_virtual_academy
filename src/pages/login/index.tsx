@@ -38,7 +38,7 @@ function Index() {
                 if(isTeacher()) {
                     navigate('/dashboard');
                 }else {
-                    navigate('/students')
+                    navigate('/students/home')
                 } 
             
                 toast.success(`${t('login_success_text')}`, {

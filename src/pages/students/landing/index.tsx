@@ -1,20 +1,19 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect } from 'react';
 import './landing.css';
 
+import Layout from '../../../components/Layout/Layout';
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
-
-import { AddCourseContentModal, EditCourseContentModal, DeleteModal } from '../../../components';
+import { AddClassModal, DeleteModal } from '../../../components';
+import JoinClassModal from '../../../components/students/JoinClassModal/JoinClassModal';
 
 import { AiOutlineCopy } from 'react-icons/ai';
-import {  BsPencilSquare } from 'react-icons/bs';
 
 import { toast } from 'react-toastify';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { getClasses, deleteClass } from '../../../services/classroom';
-import { deleteCourseContent, getCourseContents } from '../../../services/courseContent';
+import { getStudentsClasses, joinClass } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -26,33 +25,25 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Title',
+        label: 'Name',
         name: 'name'
     },
     {
-        label: 'Description',
+        label: 'Class ID',
         name: 'name'
     },
     {
-        label: 'Expectation',
+        label: 'Teacher',
         name: 'name'
     },
     {
-        label: 'Class Name',
+        label: 'Status',
         name: 'name'
     },
     {
-        label: 'Publish Date',
+        label: 'Submited Date',
         name: 'name'
     },
-    {
-        label: 'Created Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'action'
-    }
 ]
 
 
@@ -61,172 +52,107 @@ const override = {
   };
 
 
-
 function Index() {
-    const [ showAddModal, setShoowAddModal ] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false); 
-    const [deleteModal, setShowDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const [contents, setContents] = useState([]);
-
-    const [editData, setEditData] = useState(null);
+    const [ showJoinModal, setShowJoinModal ] = useState(false);
 
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const toggleAddModal = () => {
-        setShoowAddModal(!showAddModal);
+        setShowJoinModal(!showJoinModal);
     }
 
-    const toggleEditModal = () => {
-        setShowEditModal(!showEditModal);
-    }
-
-    const toggleDeleteModal = () => {
-        setShowDeleteModal(!deleteModal);
-    }
 
     const handleGetClasses = ()  => {
+        setLoading(true);
 
-
-        getClasses().then((res: any) => {
+        getStudentsClasses().then((res: any) => {
+            console.log('RESPONSE GET: ', res);
             if(res.ok) {
                 setClasses(res.data.data);
             }
+            setLoading(false);
         }).catch(err => {
             console.log('error: ', err);
+            setLoading(false);
         })
     }
 
-    const handleDeleteCourseContent = () => {
-        console.log('DELETE COURSE CONTENT');
-        console.log(deleteId)
-        deleteCourseContent(deleteId).then((res: any) => {
-            if(res.ok) {
-                toggleDeleteModal();
-                handleGetClasses();
-                toast.success(res.data.message, {
-                    pauseOnHover: false,
-                    closeOnClick: true,
-                })
-          
-            }else {
-                toast.error(res.data.message, {
-                    pauseOnHover: false,
-                    closeOnClick: true,
-                })
-            }
-        }).catch(err => {
-            toast.error("ERROR", {
-                pauseOnHover: false,
-                closeOnClick: true,
-            })
-        })
-    }
+ 
 
-    const handleContentAdded = ()  => {
-        handleGetContent();
+    const handleClassAdded = ()  => {
+        handleGetClasses();
         toggleAddModal();
     }
 
-
-    const handleGetContent = () => {
-        setLoading(true);
-        getCourseContents().then((res: any) => {
-            console.log("COURSE CONTENT RES: ",res);
-            setLoading(false);
-            setContents(res.data.data);
-        }).catch((err: any) => {
-            console.log('Error: ', err);
-            setLoading(false);
-        })
-    }
-
     useEffect(() => {
-        console.log('USER EFFECT RAN')
-        handleGetContent();
         handleGetClasses();
     },[]);
 
     return (
-        <StudentLayout title="Course Content">
-      <div className="section">
-            <div className="parent-con">
-                <div className="data-table">
-                    <div className="top">
-                        <div className="span">
-                            <select name="" id="" className="select-field">
-                                <option value="all">All</option>
-                                {classes.map((classData: any, index: any) => <option key={index} value={classData._id}>{classData.name}</option>)}
-                            </select>
+        <StudentLayout title="Class Rooms">
+              <div className="section">
+                        <div className="parent-con">
+                            <div className="data-table">
+                                <div className="top">
+                                    <div className="span">
+                                        <h1>You have : {classes.length} Classroom</h1>
+                                    </div>
+                                    {/* <form className="search">
+                                        <input type="search" name="" id="" placeholder="Find ..." />
+                                        <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
+                                    </form> */}
+                                    <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button">Join Classroom  <i className="fas fa-plus"></i></button>
+                                </div>
+                                <div className="table-con">
+                                <div style={{textAlign: 'center',}}>
+                                    <BeatLoader
+                                            color="#623d91" 
+                                            loading={loading}
+                                            cssOverride={override}
+                                    />
+                                </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                {rows.map((row: any, index: any) => <th key={index} className={row.name}>{row.label}</th>)}
+                                                
+                                            </tr>
+                                        </thead>
+                                 
+                                        <tbody>
+                                          {classes.map((data: any, index: any) => <tr key={index}>
+                                                <td className="flex-center">{index + 1}</td>
+
+                                                <td className="flex-start">
+                                                    <p>{data?.class_id?.name}</p>
+                                                </td>
+
+                                                <td className="flex-start">
+                                                    <p>{data?.class_id?._id}</p>
+                                                </td>
+                                       
+                                
+                                                <td className="flex-start">{data?.teacher_id?.username}</td>
+                                                
+                                                <td className="flex-start">{data?.status}</td>
+
+                                                <td className="flex-start">
+                                                    <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                                </td>
+
+                                    
+                                            </tr> )}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
                         </div>
-                        {/* <form className="search">
-                            <input type="search" name="" id="" placeholder="Find ..." />
-                            <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
-                        </form> */}
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add">Add Content  <i className="fas fa-plus"></i></button>
-                    </div>
-                    <div className="table-con">
-                    <div style={{textAlign: 'center',}}>
-                        <BeatLoader
-                                color="#623d91" 
-                                loading={loading}
-                                cssOverride={override}
-                        />
-                    </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    {rows.map((row: any, index: any) => <th key={index} className={row.name}>{row.label}</th>)}
-                                    
-                                </tr>
-                            </thead>
-                        
-                            <tbody>
-                                {contents?.map((data: any, index: any) => <tr>
-                                    <td className="flex-center">{index + 1}</td>
-                                    <td className="flex-start">
-                                        <p>{data.title}</p>
-                                    </td>
-                            
-                    
-                                    <td className="flex-start">{data?.description}</td>
-                                    <td className="flex-start">{data?.expectation}</td>
-                                    <td className="flex-start">{data?.classroom_id?.name}</td>
-                                    <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
-                                    
-                                    <td className="flex-start">
-                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
-                                    </td>
-
-                                    <td className="flex-center">
-                                        <div className="action">
-                                            <Tippy content="Copy Class Url"  animation="fade">
-                                            <a onClick={() => {
-                                                setEditData(data);
-                                                toggleEditModal();
-                                            }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
-                                            </Tippy>
-                                            <Tippy content="Delete Class"  animation="fade">
-                                                <a onClick={() => {
-                                                    setDeleteId(data._id);
-                                                    toggleDeleteModal();
-                                                }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
-                                            </Tippy>
-                                        </div>
-                                    </td>
-                                </tr> )}
-                            </tbody>
-                        </table>
                     </div>
 
-                </div>
-            </div>
-        </div>
-
-        {showAddModal &&  <AddCourseContentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
-        {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
-        {deleteModal && <DeleteModal onAccept={handleDeleteCourseContent} onCancel={toggleDeleteModal} />}
+                    {showJoinModal &&  <JoinClassModal onClassAdded={handleClassAdded} onClose={toggleAddModal} />}
         </StudentLayout>
     );
 }
