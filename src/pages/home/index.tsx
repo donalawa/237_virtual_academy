@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 function Index() {
     const { t, i18n } = useTranslation();
+    
     let [lang, setLang] = useState<any>(null);
 
     const handleTrans = () => {

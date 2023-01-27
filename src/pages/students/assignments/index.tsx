@@ -15,7 +15,7 @@ import 'tippy.js/dist/tippy.css';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
 import { getPassExamContents, deletePassExamContent } from '../../../services/passExams';
-import { getCourseContent } from '../../../services/student';
+import { getStudentSolutions, getStudentsClasses } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -27,27 +27,23 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Title',
+        label: 'Class Name',
         name: 'name'
     },
     {
-        label: 'Question File',
+        label: 'Course Name',
         name: 'name'
     },
     {
-        label: 'Answer Pdf',
+        label: 'Comment',
         name: 'name'
     },
     {
-        label: 'Answer Video',
+        label: 'Solution File',
         name: 'name'
     },
     {
-        label: 'Publish Date',
-        name: 'name'
-    },
-    {
-        label: 'Created Date',
+        label: 'Submitted Date',
         name: 'name'
     },
     {
@@ -68,7 +64,7 @@ function Index() {
     const [showEditModal, setShowEditModal] = useState(false); 
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
-    const [contents, setContents] = useState([]);
+    const [solutions, setSolutions] = useState([]);
 
     const [editData, setEditData] = useState(null);
 
@@ -90,7 +86,7 @@ function Index() {
     const handleGetClasses = ()  => {
 
 
-        getClasses().then((res: any) => {
+        getStudentsClasses().then((res: any) => {
             if(res.ok) {
                 setClasses(res.data.data);
             }
@@ -126,17 +122,17 @@ function Index() {
     }
 
     const handleContentAdded = ()  => {
-        handleGetContent();
+        handleGetSolutions();
         toggleAddModal();
     }
 
 
-    const handleGetContent = () => {
+    const handleGetSolutions = () => {
         setLoading(true);
-        getPassExamContents().then((res: any) => {
-            console.log("PASSS EXAM CONTENT RES: ",res);
+        getStudentSolutions().then((res: any) => {
+            console.log("STUDENT SOLUTIONS RES: ",res);
             setLoading(false);
-            setContents(res.data.data);
+            setSolutions(res.data.data);
         }).catch((err: any) => {
             console.log('Error: ', err);
             setLoading(false);
@@ -145,12 +141,12 @@ function Index() {
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
-        handleGetContent();
+        handleGetSolutions();
         handleGetClasses();
     },[]);
 
     return (
-        <StudentLayout title="Assignments">
+        <StudentLayout title="Submitted Assignment Solutions">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -184,18 +180,20 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {contents?.map((data: any, index: any) => <tr>
+                                {solutions?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data.title}</p>
+                                        <p>{data?.classroom_id?.name}</p>
                                     </td>
-                            
+                                    <td className="flex-start">
+                                      {data?.course_content_id?.title}
+                                    </td>
+                                    <td className="flex-start">
+                                      {data?.comment}
+                                    </td>
                     
-                                    <td className="flex-start"><a href={data?.questions_file} target="_blank" download>Question File</a></td>
-                                    <td className="flex-start"><a href={data?.answers_file} target="_blank" download>Answers File</a></td>
-                                    <td className="flex-start"><a href={data?.video_solution_url} target="_blank" download>Video File</a></td>
-                                    <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
-                                    
+                                    <td className="flex-start"><a href={data?.document_url} target="_blank" download>Your Solution File</a></td>
+                                
                                     <td className="flex-start">
                                         <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
                                     </td>

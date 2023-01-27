@@ -16,6 +16,7 @@ import 'tippy.js/dist/tippy.css';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
 import { deleteCourseContent, getCourseContents, getClassCourseContents } from '../../../services/courseContent';
+import { getAllStudentSolutions } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -28,6 +29,10 @@ const rows: any = [
     },
     {
         label: 'Student Name',
+        name: 'name'
+    },
+    {
+        label: 'Solution',
         name: 'name'
     },
     {
@@ -52,10 +57,6 @@ const override = {
 
 
 function Index() {
-    const [ showAddModal, setShoowAddModal ] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false); 
-    const [deleteModal, setShowDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
     const [classes, setClasses] = useState([]);
     const [contents, setContents] = useState([]);
     const [solutions, setSolutions] = useState([]);
@@ -63,9 +64,6 @@ function Index() {
     const [seletedContent, setSelectedContent] = useState('all');
     const [loading, setLoading] = useState(false);
 
-    const toggleDeleteModal = () => {
-        setShowDeleteModal(!deleteModal);
-    }
 
     const handleGetClasses = ()  => {
 
@@ -78,44 +76,22 @@ function Index() {
         })
     }
 
-    const handleDeleteCourseContent = () => {
-        console.log('DELETE COURSE CONTENT');
-        console.log(deleteId)
-        deleteCourseContent(deleteId).then((res: any) => {
-            if(res.ok) {
-                toggleDeleteModal();
-                handleGetClasses();
-                toast.success(res.data.message, {
-                    pauseOnHover: false,
-                    closeOnClick: true,
-                })
-          
-            }else {
-                toast.error(res.data.message, {
-                    pauseOnHover: false,
-                    closeOnClick: true,
-                })
-            }
-        }).catch(err => {
-            toast.error("ERROR", {
-                pauseOnHover: false,
-                closeOnClick: true,
-            })
-        })
-    }
-
-
     const handleGetContent = (classId: any) => {
         // setLoading(true);
+        setSolutions([]);
+        setSelectedContent('all')
+
         if(classId == 'all') {
             setSelectedClass('all');
             setContents([]);
+            setSolutions([]);
+            setSelectedContent('all')
             return;
         }
         setSelectedClass(classId)
 
         getClassCourseContents(classId).then((res: any) => {
-            console.log("CLASSS COURSE CONTENT RES: ",res);
+            // console.log("CLASSS COURSE CONTENT RES: ",res);
             // setLoading(false);
             setContents(res.data.data);
         }).catch((err: any) => {
@@ -124,16 +100,32 @@ function Index() {
         })
     }
 
+    const getSolutions = (contentId: any) => {
+        setLoading(true);
+
+        getAllStudentSolutions(contentId).then((res: any) => {
+            // console.log('All Solutions', res)
+            setSolutions(res.data.data)
+            setLoading(false);
+        }).catch(err => {
+            console.log('ERROR')
+            setLoading(false);
+        })
+    }
+
     const handleGetAssignmentSubs = (contentId: any) => {
-        console.log('GET SUBS');
-        console.log('CONTENT ID: ', contentId)
+        // console.log('GET SUBS');
+        // console.log('CONTENT ID: ', contentId)
 
         if(contentId == 'all') {
             setSelectedContent('all');
+            setSolutions([]);
             return;
         }
         setSelectedContent(contentId);
+        getSolutions(contentId);
     }
+
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
@@ -178,15 +170,13 @@ function Index() {
                                 {solutions?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data.title}</p>
+                                        <p>{data?.student_id?.username}</p>
                                     </td>
                             
-                    
-                                    <td className="flex-start">{data?.description}</td>
-                                    <td className="flex-start">{data?.expectation}</td>
-                                    <td className="flex-start">{data?.classroom_id?.name}</td>
-                                    <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
-                                    
+                                    <td className="flex-start"><a href={data?.document_url} target="_blank" download>Solution File</a></td>
+                                    <td className="flex-start">{data?.comment}</td>
+                           
+
                                     <td className="flex-start">
                                         <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
                                     </td>
@@ -194,7 +184,7 @@ function Index() {
                                     <td className="flex-center">
                                         <div className="action">
                                             <Tippy content="Download  Submissions"  animation="fade">
-                                            <a onClick={() => null} className="see"><IoMdCloudDownload onClick={() => null} size={16}/></a>
+                                            <a target="_blank" download href={data?.document_url} className="see"><IoMdCloudDownload size={16}/></a>
                                             </Tippy>
                                         </div>
                                     </td>
@@ -206,8 +196,6 @@ function Index() {
                 </div>
             </div>
         </div>
-
-        {deleteModal && <DeleteModal onAccept={handleDeleteCourseContent} onCancel={toggleDeleteModal} />}
         </Layout>
     );
 }

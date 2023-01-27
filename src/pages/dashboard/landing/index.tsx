@@ -154,19 +154,19 @@ function Index() {
         <Layout title="Dashboard">
             <div>
             <div className="flex-4">
-                    <a href="" className="stat-card">
+                    <a className="stat-card">
                         <div className="stat-name">Total Classrooms</div>
                         <div className="stat-value">{classes.length}</div>
                     </a>
-                    <a href="" className="stat-card">
+                    <a className="stat-card">
                         <div className="stat-name">Total Course Content</div>
                         <div className="stat-value">{courseContents.length}</div>
                     </a>
-                    <a href="" className="stat-card">
+                    <a className="stat-card">
                         <div className="stat-name">Total Applications</div>
                         <div className="stat-value">{studentsApplicatins?.length}</div>
                     </a>
-                    <a href="" className="stat-card">
+                    <a className="stat-card">
                         <div className="stat-name">Total Assessments</div>
                         <div className="stat-value">0</div>
                     </a>
@@ -175,7 +175,7 @@ function Index() {
                 <br />
                 <div className="section">
                         <div className="parent-con">
-                <div className="data-table">
+                            <div className="data-table">
                                 <div className="top">
                                     <div className="span">
                                         <h1>Students Applications</h1>

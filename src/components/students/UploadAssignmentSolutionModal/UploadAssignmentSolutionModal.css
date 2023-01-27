@@ -1,0 +1,8 @@
+
+
+.student-modal  {
+    top: 80% !important;
+}
+.student-modal .modal-head {
+    background-color: var(--secondary-color);
+}
