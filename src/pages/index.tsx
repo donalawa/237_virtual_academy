@@ -9,9 +9,12 @@ export { default as AssessmentPage } from './dashboard/assessment/index';
 export { default as PassExamsPage } from './dashboard/pass-exams/index';
 export { default as AssessmentSubmissionsPage } from './dashboard/assessment-submissions/index';
 
+export { default as LiveSessionPage } from './live-session/index';
+export { default as CreateSessionPage } from './create-live/index';
 
 // STUDENTS
 export { default as StudentsLandingPage } from './students/landing/index';
 export { default as StudentAssignmentPage } from './students/assignments/index';
 export { default as StudentCourseContentPage } from './students/course-content/index';
-
+export { default as JoinLiveSessionPage } from './students/join-live/index';
+export { default as StudentAssessmentPage }  from './students/assessment/index';

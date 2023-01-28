@@ -133,7 +133,7 @@ section {
     display: flex;
 }
 
-.dashboard-grid .sidebar.student  {
+.dashboard-grid .sidebar-student  {
     width: 260px;
     height: 100vh;
     background-color: var(--secondary-color);
@@ -142,9 +142,11 @@ section {
     left: 0;
 }
 
+.student-dashboard-sidebar {
+    background-color:  var(--secondary-color) !important;
+}
 
-
-.dashboard-grid .sidebar.show {
+.dashboard-grid .sidebar-student.show {
     width: 260px;
     height: 100vh;
     background-color: var(--dark-bg);
@@ -152,6 +154,7 @@ section {
     top: 0;
     left: -260px;
 }
+
 
 .dashboard-grid .main {
     width: calc(100% - 260px);
@@ -226,14 +229,15 @@ section {
 }
 
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-    .dashboard-grid .sidebar {
+    .dashboard-grid .sidebar-student {
         left: -300px;
         z-index: 3;
     }
-    .dashboard-grid .sidebar.show {
+    .dashboard-grid .sidebar-student.student-dashboard-sidebar.show {
         left: 0;
-        background-color: var(--primary-color) !important;
+        background-color: var(--secondary-color) !important;
     }
+
     .dashboard-grid .main {
         width: 100vw;
         left: 0;
@@ -258,14 +262,15 @@ section {
     .dashboard-grid .main>header {
         height: 50px;
     }
-    .dashboard-grid .sidebar {
+    .dashboard-grid .sidebar-student {
         left: -300px;
         z-index: 3;
     }
-    .dashboard-grid .sidebar.show {
+    .dashboard-grid .sidebar-student.student-dashboard-sidebar.show {
         left: 0;
-        background-color: var(--primary-color) !important;
+        background-color: var(--secondary-color);
     }
+
     .dashboard-grid .main {
         width: 100vw;
         left: 0;
@@ -596,7 +601,7 @@ section {
 
 /* start of sidebar styles */
 
-.sidebar .logo {
+.sidebar-student .logo {
     width: 100%;
     height: 70px;
     display: flex;
@@ -605,12 +610,12 @@ section {
     padding: 0 1rem;
 }
 
-.sidebar .logo img {
+.sidebar-student .logo img {
     width: 90%;
     margin: 0 auto;
 }
 
-.sidebar .menu {
+.sidebar-student .menu {
     width: 100%;
     height: calc(100vh - 70px);
     overflow-y: scroll;
@@ -618,7 +623,7 @@ section {
     padding-bottom: 5rem;
 }
 
-.sidebar .sub-menu {
+.sidebar-student .sub-menu {
     width: 100%;
     height: fit-content;
     margin-bottom: 2rem;
@@ -626,7 +631,7 @@ section {
     border-bottom: 2px solid #535353;
 }
 
-.sidebar .sub-menu .title {
+.sidebar-student .sub-menu .title {
     font-size: 16px;
     text-transform: uppercase;
     color: var(--orange-color);
@@ -634,12 +639,12 @@ section {
     margin-bottom: 1rem;
 }
 
-.sidebar .sub-menu .link-con {
+.sidebar-student .sub-menu .link-con {
     width: 100%;
     height: fit-content;
 }
 
-.sidebar .sub-menu .link {
+.sidebar-student .sub-menu .link {
     display: flex;
     width: 100%;
     height: 45px;
@@ -652,29 +657,29 @@ section {
     position: relative;
 }
 
-.sidebar .sub-menu .link-con input {
+.sidebar-student .sub-menu .link-con input {
     display: none;
 }
 
-.sidebar .sub-menu .link-con>.link {
+.sidebar-student .sub-menu .link-con>.link {
     margin-bottom: 0;
     justify-content: space-between;
 }
 
-.sidebar .sub-menu .link-con>.link>i {
+.sidebar-student .sub-menu .link-con>.link>i {
     position: relative;
     transform: rotate(-90deg);
 }
 
-.sidebar .sub-menu .link:hover {
+.sidebar-student .sub-menu .link:hover {
     background-color: #fff2d921;
 }
 
-.sidebar .sub-menu .link.active {
+.sidebar-student .sub-menu .link.active {
     background-color: #fff2d921;
 }
 
-.sidebar .sub-menu .link.active::before {
+.sidebar-student .sub-menu .link.active::before {
     content: '';
     display: block;
     width: 5px;
@@ -685,44 +690,44 @@ section {
     top: 0;
 }
 
-.sidebar .sub-menu .link i {
+.sidebar-student .sub-menu .link i {
     margin-right: 1rem;
 }
 
-.sidebar .sub-menu .link.label img {
+.sidebar-student .sub-menu .link.label img {
     width: 20px;
     margin-right: 1rem;
 }
 
-.sidebar .sub-menu .link-sub {
+.sidebar-student .sub-menu .link-sub {
     background-color: #202020;
     height: 0;
     overflow-y: hidden;
 }
 
-.sidebar .sub-menu .link-con input:checked+.link-sub {
+.sidebar-student .sub-menu .link-con input:checked+.link-sub {
     height: fit-content;
     width: 100%;
 }
 
-.sidebar .sub-menu .link-sub .link {
+.sidebar-student .sub-menu .link-sub .link {
     padding: 0 0 0 3rem;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-    .sidebar {
+    .sidebar-student {
         padding-top: 70px;
     }
-    .sidebar .logo {
+    .sidebar-student .logo {
         display: none;
     }
 }
 
 @media screen and (max-width: 767px) {
-    .sidebar {
+    .sidebar-student {
         padding-top: 50px;
     }
-    .sidebar .logo {
+    .sidebar-student .logo {
         display: none;
     }
 }
@@ -730,16 +735,16 @@ section {
 
 /* sidebar scrollbar ******************************* */
 
-.sidebar .menu::-webkit-scrollbar {
+.sidebar-student .menu::-webkit-scrollbar {
     width: .3em;
 }
 
-.sidebar .menu::-webkit-scrollbar-track {
+.sidebar-student .menu::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
-.sidebar .menu::-webkit-scrollbar-thumb {
+.sidebar-student .menu::-webkit-scrollbar-thumb {
     background-color: var(--orange-dark);
 }
 

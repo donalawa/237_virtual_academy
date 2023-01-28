@@ -3,7 +3,7 @@ import './Button.css'
 
 interface Props {
     text: string,
-    type: string,
+    type?: string,
     onClicked: any
 }
 function Button({ text, type = 'primary', onClicked }: Props) {

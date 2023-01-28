@@ -5,3 +5,4 @@ export { default as AddCourseContentModal } from './ui/AddCourseContentModal/Add
 export { default as EditCourseContentModal } from './ui/EditCourseContentModal/EditCourseContentModal';
 export { default as PassExammodal } from './ui/PassExamModal/PassExamModal';
 export { default as AssessmentModal } from './ui/AssessmentModal/AssessmentModal';
+export { default as CreateSessionModal } from './ui/CreateSessionModal/CreateSessionModal';

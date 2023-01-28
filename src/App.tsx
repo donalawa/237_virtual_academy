@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import logo from './logo.svg';
-import { HomePage, LoginPage, SignupPage, DashboardLanding, CourseContentPage, CalassroomsPage, AssignmentPage, AssessmentPage, AssessmentSubmissionsPage, PassExamsPage, StudentsLandingPage, StudentAssignmentPage, StudentCourseContentPage } from './pages';
+import { HomePage, LoginPage, SignupPage, DashboardLanding, CourseContentPage, CalassroomsPage, AssignmentPage, AssessmentPage, AssessmentSubmissionsPage, PassExamsPage, StudentsLandingPage, StudentAssignmentPage, StudentCourseContentPage, LiveSessionPage, CreateSessionPage, JoinLiveSessionPage, StudentAssessmentPage } from './pages';
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -59,9 +59,17 @@ function App() {
             <Route path="/assessment-submissions" element={(<Protected > <AssessmentSubmissionsPage  /> </Protected>)} />
             <Route path="/pass-exams" element={(<Protected > <PassExamsPage  /> </Protected>)} />
 
+            <Route path="/live-session" element={(<Protected > <CreateSessionPage  /> </Protected>)} />
+          
+            <Route path="/live-session/:roomID" element={(<Protected > <LiveSessionPage  /> </Protected>)} />
+
+
             <Route path="/students/home" element={(<Protected > <StudentsLandingPage /> </Protected>)} />
             <Route  path="/students/course-contents" element={(<Protected> <StudentCourseContentPage /> </Protected>)} />
             <Route  path="/students/assignments" element={(<Protected> <StudentAssignmentPage /> </Protected>)} />
+            <Route  path="/students/assessments" element={(<Protected> <StudentAssessmentPage /> </Protected>)} />
+
+            <Route  path="/students/live-session" element={(<Protected> <JoinLiveSessionPage /> </Protected>)} />
 
         </Routes>
       </BrowserRouter>

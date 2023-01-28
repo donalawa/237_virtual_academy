@@ -20,20 +20,22 @@ const getToken = () => {
 
 const getUser = () => {
     const token: any =  getToken();
+    // console.log('STUDENT DATA: ', jwtDecode(token));
+
     return token ? jwtDecode(token) : null;
 }
 
 const isTeacher = () => {
     const token: any =  getToken();
     let user:any = jwtDecode(token);
-    console.log('USER IN ISCHECK',  user)
+    // console.log('USER IN ISCHECK',  user)
     return user?.role == 'teacher' ? true : false;
 }
 
 const isStudent = () => {
     const token: any =  getToken();
     let user:any = jwtDecode(token);
-    console.log('USER IN ISCHECK',  user)
+    // console.log('USER IN ISCHECK',  user)
     return user?.role == 'student' ? true : false;
 }
 

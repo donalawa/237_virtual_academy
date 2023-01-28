@@ -5,6 +5,7 @@ import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
 import { MdContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
+import { GoDeviceCameraVideo } from 'react-icons/go';
 
 import { getUser } from '../../utils/storage';
 
@@ -15,7 +16,7 @@ function StudentLayout({ title, children } : any) {
     const navigate = useNavigate();
     const [user, setUser] = useState<any>(null);
 
-    const [showNav, setShowNav] = useState(true);
+    const [showStudNav,setShowStudNav] = useState(true);
     const [showUserMenu, setShowUserMenu] = useState(false);
 
     const handleLogout = () => {
@@ -24,7 +25,8 @@ function StudentLayout({ title, children } : any) {
     }
 
     const toggleNav = () => {
-        setShowNav(!showNav);
+        console.log('toggle nav')
+        setShowStudNav(!showStudNav);
     }
 
     const handleTrans = () => {
@@ -65,7 +67,7 @@ function StudentLayout({ title, children } : any) {
 
     return (
         <div className="dashboard-grid">
-        <div className={`sidebar student ${!showNav ? 'show' : ''}`}>
+        <div className={`sidebar-student student student-dashboard-sidebar  ${!showStudNav ? 'show' : ''}`}>
             <div className="logo" style={{cursor: 'pointer'}}>
                 <a onClick={() => navigate('/')}><img src={require('../../assets/images/logo/logo-light.png')} alt=" " /></a>
             </div>
@@ -88,7 +90,7 @@ function StudentLayout({ title, children } : any) {
                         <span>Assignments</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/">
+                    <NavLink className="link" to="/students/assessments">
                     <i><MdAssessment size={20}/></i>
                         <span>Assessments</span>
                     </NavLink>
@@ -103,13 +105,17 @@ function StudentLayout({ title, children } : any) {
                         <span>Pass Exams</span>
                     </NavLink>
                     
+                    <NavLink className="link" to="/students/live-session">
+                    <i><GoDeviceCameraVideo size={20}/></i>
+                        <span>Join Live Session</span>
+                    </NavLink>
                     
                 </div>
     
             </div>
         </div>
-        <div className={`main ${!showNav ? 'expand' : ''}`}>
-            <header className={`${!showNav ? 'expand' : ''}`}>
+        <div className={`main ${!showStudNav ? 'expand' : ''}`}>
+            <header className={`${!showStudNav ? 'expand' : ''}`}>
                 <div className="con">
                     <div className="nav-toggler-btn" onClick={toggleNav}>
                         <i className="fa fa-bars" aria-hidden="true"></i>
@@ -163,7 +169,7 @@ function StudentLayout({ title, children } : any) {
                     </div>
                 </div>
 
-            <footer className={`${!showNav ? 'expand' : ''}`}>
+            <footer className={`${!showStudNav ? 'expand' : ''}`}>
                 <div className="con">
                     <p>{t('copywright_text')}</p>
                     <p>Version 1.0</p>

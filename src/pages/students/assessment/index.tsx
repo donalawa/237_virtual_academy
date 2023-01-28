@@ -1,11 +1,10 @@
 import React, { useState, useEffect }  from 'react';
-import './coursecontent.css';
+import './assessment.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 
-import { AssessmentModal, EditCourseContentModal, DeleteModal, PassExammodal  } from '../../../components';
+import { EditCourseContentModal, DeleteModal  } from '../../../components';
 import UploadAssignmentSolutionModal from '../../../components/students/UploadAssignmentSolutionModal/UploadAssignmentSolutionModal';
-import { AiFillEye } from 'react-icons/ai';
 import {  BsPencilSquare } from 'react-icons/bs';
 
 import { toast } from 'react-toastify';
@@ -13,9 +12,8 @@ import { toast } from 'react-toastify';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { getClasses, deleteClass } from '../../../services/classroom';
-import { getPassExamContents, deletePassExamContent } from '../../../services/passExams';
-import { getCourseContent, getAcceptedClasses } from '../../../services/student';
+import { deletePassExamContent } from '../../../services/passExams';
+import { getStudentSolutions, getStudentsClasses } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -27,34 +25,31 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Title',
+        label: 'Class Name',
         name: 'name'
     },
     {
-        label: 'Pdf Content',
+        label: 'Course Name',
         name: 'name'
     },
     {
-        label: 'Video Content',
+        label: 'Comment',
         name: 'name'
     },
     {
-        label: 'Assignment File',
+        label: 'Solution File',
         name: 'name'
     },
     {
-        label: 'Assignment Solution',
-        name: 'name'
-    },
-    {
-        label: 'Created Date',
+        label: 'Submitted Date',
         name: 'name'
     },
     {
         label: 'Action',
-        name: 'name'
-    },
+        name: 'action'
+    }
 ]
+
 
 const override = {
     marginTop: '20px'
@@ -63,16 +58,11 @@ const override = {
 
 
 function Index() {
-    // NEW
-    const [selectedClass, setSelectedClass] = useState("all");
-
-    // END
-
     const [ showAddModal, setShoowAddModal ] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false); 
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
-    const [contents, setContents] = useState([]);
+    const [solutions, setSolutions] = useState([]);
 
     const [editData, setEditData] = useState(null);
 
@@ -91,15 +81,13 @@ function Index() {
         setShowDeleteModal(!deleteModal);
     }
 
-    const handleGetValidClasses = ()  => {
+    const handleGetClasses = ()  => {
 
-        getAcceptedClasses().then((res: any) => {
-            console.log('RES ACCEPTED: ', res);
 
+        getStudentsClasses().then((res: any) => {
             if(res.ok) {
                 setClasses(res.data.data);
             }
-
         }).catch(err => {
             console.log('error: ', err);
         })
@@ -111,7 +99,7 @@ function Index() {
         deletePassExamContent(deleteId).then((res: any) => {
             if(res.ok) {
                 toggleDeleteModal();
-                handleGetValidClasses();
+                handleGetClasses();
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
@@ -132,24 +120,17 @@ function Index() {
     }
 
     const handleContentAdded = ()  => {
-        handleGetContent(selectedClass);
+        handleGetSolutions();
         toggleAddModal();
     }
 
 
-    const handleGetContent = (classId: any) => {
+    const handleGetSolutions = () => {
         setLoading(true);
-        if(classId == 'all') {
-            // Don't make request
+        getStudentSolutions().then((res: any) => {
+            console.log("STUDENT SOLUTIONS RES: ",res);
             setLoading(false);
-            setContents([]);
-            return;
-        }
-
-        getCourseContent(classId).then((res: any) => {
-            console.log("COURSE CONTENT: ",res);
-            setLoading(false);
-            setContents(res.data.data);
+            setSolutions(res.data.data);
         }).catch((err: any) => {
             console.log('Error: ', err);
             setLoading(false);
@@ -158,29 +139,27 @@ function Index() {
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
-        handleGetValidClasses();
+        handleGetSolutions();
+        handleGetClasses();
     },[]);
 
     return (
-        <StudentLayout title="Course Content">
+        <StudentLayout title="Submitted Assessment Solutions">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                            <select value={selectedClass} onChange={(e) => {
-                                setSelectedClass(e.target.value);
-                                handleGetContent(e.target.value);
-                            }} className="select-field student-select">
-                                <option value="all">Select Classroom</option>
-                                {classes.map((classData: any, index: any) => <option key={index} value={classData?.class_id?._id}>{classData?.class_id?.name}</option>)}
+                            <select name="" id="" className="select-field student-select">
+                                <option value="all">All</option>
+                                {classes.map((classData: any, index: any) => <option key={index} value={classData.class_id._id}>{classData.class_id.name}</option>)}
                             </select>
                         </div>
                         {/* <form className="search">
                             <input type="search" name="" id="" placeholder="Find ..." />
                             <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
                         </form> */}
-                        {/* <button onClick={toggleAddModal} className="btn btn-primary btn-add"> Upload Solution <i className="fas fa-plus"></i></button> */}
+                        <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button"> Upload Solution <i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -190,7 +169,7 @@ function Index() {
                                 cssOverride={override}
                         />
                     </div>
-                    <table>
+                        <table>
                             <thead>
                                 <tr>
                                     {rows.map((row: any, index: any) => <th key={index} className={row.name}>{row.label}</th>)}
@@ -199,29 +178,40 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {contents?.map((data: any, index: any) => <tr>
+                                {solutions?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data.title}</p>
+                                        <p>{data?.classroom_id?.name}</p>
                                     </td>
-                            
-                                    <td className="flex-start">{data?.pdf_file_url ? <a href={data?.pdf_file_url} target="_blank" download>Pdf Content</a> : "None"}</td>
-                                    <td className="flex-start">{data?.video_url ? <a href={data?.video_url} target="_blank" download>Video Content</a> : "None"}</td>
-                                    <td className="flex-start">{data?.assignment_file_url ? <a href={data?.assignment_file_url} target="_blank" download>Assignment File</a> : "None"}</td>
-                                    <td className="flex-start">{data?.assignment_solution_url ? <a href={data?.assignment_solution_url} target="_blank" download>Solution File</a> : "Not yet available"}</td>                           
+                                    <td className="flex-start">
+                                      {data?.course_content_id?.title}
+                                    </td>
+                                    <td className="flex-start">
+                                      {data?.comment}
+                                    </td>
+                    
+                                    <td className="flex-start"><a href={data?.document_url} target="_blank" download>Your Solution File</a></td>
+                                
                                     <td className="flex-start">
                                         <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
                                     </td>
+
                                     <td className="flex-center">
                                         <div className="action">
-                                            <Tippy content="View Video Content"  animation="fade">
-                                            <a onClick={() => null} className="see"><AiFillEye onClick={() => null} size={14}/></a>
+                                            <Tippy content="Download Video Solution"  animation="fade">
+                                            <a onClick={() => {
+                                                setEditData(data);
+                                                toggleEditModal();
+                                            }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
                                             </Tippy>
-                                    
+                                            <Tippy content="Delete Class"  animation="fade">
+                                                <a onClick={() => {
+                                                    setDeleteId(data._id);
+                                                    toggleDeleteModal();
+                                                }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
+                                            </Tippy>
                                         </div>
                                     </td>
-
-                                 
                                 </tr> )}
                             </tbody>
                         </table>

@@ -12,9 +12,9 @@ import { toast } from 'react-toastify';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { getClasses, deleteClass } from '../../../services/classroom';
-import { deleteCourseContent, getCourseContents } from '../../../services/courseContent';
+import { getClasses } from '../../../services/classroom';
 import { getPassExamContents, deletePassExamContent } from '../../../services/passExams';
+import { getAssessments } from '../../../services/assessment';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -88,7 +88,6 @@ function Index() {
 
     const handleGetClasses = ()  => {
 
-
         getClasses().then((res: any) => {
             if(res.ok) {
                 setClasses(res.data.data);
@@ -125,15 +124,15 @@ function Index() {
     }
 
     const handleContentAdded = ()  => {
-        handleGetContent();
+        handleGetAssessments();
         toggleAddModal();
     }
 
 
-    const handleGetContent = () => {
+    const handleGetAssessments = () => {
         setLoading(true);
-        getPassExamContents().then((res: any) => {
-            console.log("PASSS EXAM CONTENT RES: ",res);
+        getAssessments().then((res: any) => {
+            console.log("ASSESSMENT CONTENT:  ",res);
             setLoading(false);
             setContents(res.data.data);
         }).catch((err: any) => {
@@ -144,7 +143,7 @@ function Index() {
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
-        handleGetContent();
+        handleGetAssessments();
         handleGetClasses();
     },[]);
 

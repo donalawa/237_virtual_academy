@@ -27,7 +27,8 @@ import 'tippy.js/dist/tippy.css';
 
 const initialValues= {
     title: '',
-    publish_date: ''
+    publish_date: '',
+    publish_answers_date: ''
 }
 
 const override = {
@@ -44,15 +45,15 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
 
 
     // ASSIGNMENT
-    const [isUploadingAssessmentVideo,  setIsUploadingAssessmentVideo] = useState(false);
-    const [assessmentVideoProgress, setAssessmentVideoProgress] = useState(0);
-    const [assessmentVideoUrl, setAssessmentVideoUrl] = useState('');
+    const [isUploadingAssessmentSolutionFile,  setIsUploadingAssessmentSolutionFile] = useState(false);
+    const [assessmentSolutionProgress, setAssessmentVideoProgress] = useState(0);
+    const [assessmentSolutionUrl, setAssessmentSolutionUrl] = useState('');
 
     const [assessmentPdfUrl, setAssessmentPdfUrl] = useState('');
     const [assessmentPdfProgress,  setAssessmentPdfProgress] = useState(0);
     const [isUploadingAssessmentPdf, setIsUploadingAssessmentPdf] = useState(false);
 
-    const [showAssessmentVideoPreview, setShowAssessmentVideoPreview] = useState(false);
+    const [showAssessmentSolutionPreview, setShowAssessmentVideoSolutionPreview] = useState(false);
 
     // END OF ASSIGNEMTN
     const storage = getStorage(firebaseApp);
@@ -60,11 +61,12 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
 
     // good
     const assessmentPdfFileRef: any = useRef(null);
-    const assessmentVideoFileRef: any = useRef(null);
+    const assessmentSolutionFileRef: any = useRef(null);
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Accessment title is required'),
         publish_date: Yup.string().required('Please enter date to publish assessment'),
+        publish_answers_date: Yup.string()
     })
 
     const handleGetClasses = ()  => {
@@ -81,7 +83,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
 
 
     const deleteVideo = () =>  {
-        const deleteRef = ref(storage, assessmentVideoUrl);
+        const deleteRef = ref(storage, assessmentSolutionUrl);
         deleteObject(deleteRef).then((res: any) => {
             console.log('RES DELETED', res);
         }).catch((err: any) => {
@@ -89,10 +91,10 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
         })
     }
 
-    const uploadAssessmentVideo = (e: any) => {
-        setIsUploadingAssessmentVideo(true);
+    const uploadAssessmentSolution = (e: any) => {
+        setIsUploadingAssessmentSolutionFile(true);
         const videoFile: any = e.target.files[0];
-        const storageRef = ref(storage, `videos/${Date.now()}-${videoFile.name}`);
+        const storageRef = ref(storage, `assessment/${Date.now()}-${videoFile.name}`);
         const uploadTask = uploadBytesResumable(storageRef, videoFile);
 
         console.log(e.target.files[0]);   
@@ -106,11 +108,11 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
           console.log(error);
       },()=> {
            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setAssessmentVideoUrl(downloadURL);
-              console.log('URL', assessmentVideoUrl);
+              setAssessmentSolutionUrl(downloadURL);
+              console.log('URL', assessmentSolutionUrl);
               console.log('VIDEO  URL: ', downloadURL);
-              setShowAssessmentVideoPreview(true);
-              setIsUploadingAssessmentVideo(false);
+              setShowAssessmentVideoSolutionPreview(true);
+              setIsUploadingAssessmentSolutionFile(false);
           });
       })
     }
@@ -118,7 +120,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
     const uploadAnswerPdf = (e: any) => {
         setIsUploadingAssessmentPdf(true);
       const pdfFile: any = e.target.files[0];
-      const storageRef = ref(storage, `pdf-content/${Date.now()}-${pdfFile.name}`);
+      const storageRef = ref(storage, `assessment/${Date.now()}-${pdfFile.name}`);
       const uploadTask = uploadBytesResumable(storageRef, pdfFile);
 
       console.log(e.target.files[0]);   
@@ -146,7 +148,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
             ...values,
             class_room_id: selectedClassroom,
             questions_file: assessmentPdfUrl,
-            video_solution_url: assessmentVideoUrl
+            video_solution_url: assessmentSolutionUrl
         }
 
         console.log('CONTENT', data);
@@ -156,7 +158,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
             return;
         }
 
-        if(assessmentVideoUrl.length < 2 && assessmentPdfUrl.length < 2) {
+        if(assessmentSolutionUrl.length < 2 && assessmentPdfUrl.length < 2) {
             setError('Select Assessment Video Or Assessment Pdf');
             return;
         }
@@ -226,36 +228,9 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                
                         
                         <div className='upload-content-container'>
-                            <div className="content-upload-left">
-                            {!showAssessmentVideoPreview && <div className="form-field-upload">
-                                    <p className="label-text">Upload Assessment Video: </p>
-                                    <div className="file-drop-upload" onClick={() => assessmentVideoFileRef.current.click()}>
-                                    {!isUploadingAssessmentVideo && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                    {isUploadingAssessmentVideo &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                                    <BeatLoader
-                                            color="#623d91" 
-                                            loading={isUploadingAssessmentVideo}
-                                            cssOverride={override}
-                                        />
-                                        <p style={{fontSize: '14px'}}>Uploading Video</p>
-                                    
-                                            <ProgressBar bgcolor={'#6a1b9a'} completed={assessmentVideoProgress}/>
-                                        
-                                    </div>}
-                                    {!isUploadingAssessmentVideo && <input ref={assessmentVideoFileRef} onChange={uploadAssessmentVideo} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="video/mp4,video/x-m4v,video/*"/>}
-                                    </div>
-                                
-                                </div>}
-                                {showAssessmentVideoPreview && <div className="video-container">
-                                    <div className="delete-icon-video">
-                                         <FaTrashAlt color='red' />
-                                    </div>
-                                    <video controls width="100%" height={'100%'} src={assessmentVideoUrl}></video>
-                                </div>}
-                            </div>
-
-                          {assessmentPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
-                            <p className="label-text">Upload Assessment Pdf: </p>
+                     
+                          {assessmentPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-left">
+                            <p className="label-text">Upload Assessment File: </p>
                             <div className="file-drop-upload" onClick={() => assessmentPdfFileRef.current.click()}>
                             {!isUploadingAssessmentPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
                                 <input ref={assessmentPdfFileRef} onChange={uploadAnswerPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
@@ -279,7 +254,42 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                             <p className="label-text" style={{textAlign: 'center'}}>Done</p>
                             </div>
                             }
+
+
+                        <div className="content-upload-right">
+                            {!showAssessmentSolutionPreview && <div className="form-field-upload">
+                                    <p className="label-text">Upload Solution File: </p>
+                                    <div className="file-drop-upload" onClick={() => assessmentSolutionFileRef.current.click()}>
+                                    {!isUploadingAssessmentSolutionFile && <FaCloudUploadAlt size={35} color="#FFA500" />}
+                                    {isUploadingAssessmentSolutionFile &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                    <BeatLoader
+                                            color="#623d91" 
+                                            loading={isUploadingAssessmentSolutionFile}
+                                            cssOverride={override}
+                                        />
+                                        <p style={{fontSize: '14px'}}>Uploading Video</p>
+                                    
+                                            <ProgressBar bgcolor={'#6a1b9a'} completed={assessmentSolutionProgress}/>
+                                        
+                                    </div>}
+                                    {!isUploadingAssessmentSolutionFile && <input ref={assessmentSolutionFileRef} onChange={uploadAssessmentSolution} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="video/mp4,video/x-m4v,video/*"/>}
+                                    </div>
+                                
+                                </div>}
+                                {showAssessmentSolutionPreview && <div className="video-container">
+                                    <div className="delete-icon-video">
+                                         <FaTrashAlt color='red' />
+                                    </div>
+                                    <video controls width="100%" height={'100%'} src={assessmentSolutionUrl}></video>
+                                </div>}
+                            </div>
+
                         </div>
+
+                       
+                        <p className="label-text">Publish Solution Date: </p>
+                        <FormField  name="publish_answers_date" type="date" placeholder="Published Solution Date"/>
+
                
                         <Button isOutLined={true} isFullWidth={false} title="CREATE CONTENT"/>
 

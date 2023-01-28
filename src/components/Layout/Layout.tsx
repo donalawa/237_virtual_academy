@@ -4,6 +4,7 @@ import { isStudent, removeToken } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
 import { MdOutlineContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
+import { GoDeviceCameraVideo } from 'react-icons/go';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from "react-router";
 
@@ -34,7 +35,7 @@ function Layout({ title, children } : any) {
   
       const handleLangInit = () => {
         let lng = localStorage.getItem('locale');
-        console.log("locale", lng);
+        // console.log("locale", lng);
         if(lng == null) {
           localStorage.setItem('locale', 'fr')
           setLang('fr');
@@ -65,12 +66,12 @@ function Layout({ title, children } : any) {
 
         
     if(isStudent()) {
-        console.log('STUDENT');
+        // console.log('STUDENT');
         return <Navigate to="/students/home" replace/>
     }
 
     if(!isTeacher()) {
-        console.log('TEACHER');
+        // console.log('TEACHER');
         return <Navigate to="/" replace/>
     }
 
@@ -119,6 +120,11 @@ function Layout({ title, children } : any) {
                     <NavLink className="link" to="/pass-exams">
                     <i><MdAssessment size={20}/></i>
                         <span>Pass Exams</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/live-session">
+                    <i><GoDeviceCameraVideo size={20}/></i>
+                        <span>Live Sessions</span>
                     </NavLink>
                     
                     
