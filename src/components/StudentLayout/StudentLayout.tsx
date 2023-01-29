@@ -95,12 +95,12 @@ function StudentLayout({ title, children } : any) {
                         <span>Assessments</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/">
+                    <NavLink className="link" to="/students/assessment-submissions">
                     <i><MdAssessment size={20}/></i>
                         <span>Assessment Submissions</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/">
+                    <NavLink className="link" to="/students/passexams">
                     <i><MdAssessment size={20}/></i>
                         <span>Pass Exams</span>
                     </NavLink>

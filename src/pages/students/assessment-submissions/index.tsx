@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from 'react';
-import './assessment.css';
+import './assessment-submissions.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 
@@ -15,13 +15,12 @@ import { toast } from 'react-toastify';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { deletePassExamContent } from '../../../services/passExams';
-import { getStudentSolutions, getStudentsClasses } from '../../../services/student';
+import { getStudentsClasses } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
-import { getTotalAssessments } from '../../../services/assessment';
+import { getTotalAssessments, studentGetAssessments } from '../../../services/assessment';
 import { VideoPlayerModal } from '../../../components';
 
 const rows: any = [
@@ -113,7 +112,7 @@ function Index() {
 
     const handleGetAssessments = (classId: any) => {
         setLoading(true);
-        getTotalAssessments(classId).then((res: any) => {
+        studentGetAssessments(classId).then((res: any) => {
             console.log("STUDENT assessments RES: ",res);
             setLoading(false);
             setAssessments(res.data.data);
@@ -138,21 +137,20 @@ function Index() {
     }
 
 
-
     useEffect(() => {
         console.log('USER EFFECT RAN')
         handleGetClasses();
     },[]);
 
     return (
-        <StudentLayout title="Submitted Assessment assessments">
+        <StudentLayout title="Asssessment Submissions">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
                             <select name="" id="" onChange={(e: any) => handleClassSelected(e.target.value)} className="select-field student-select">
-                                <option value="all">All</option>
+                                <option value="all">Select Class</option>
                                 {classes.map((classData: any, index: any) => <option key={index} value={classData.class_id._id}>{classData.class_id.name}</option>)}
                             </select>
                         </div>
@@ -160,7 +158,7 @@ function Index() {
                             <input type="search" name="" id="" placeholder="Find ..." />
                             <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
                         </form> */}
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button"> Upload Solution <i className="fas fa-plus"></i></button>
+                        {/* <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button"> Upload Solution <i className="fas fa-plus"></i></button> */}
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -174,7 +172,6 @@ function Index() {
                             <thead>
                                 <tr>
                                     {rows.map((row: any, index: any) => <th key={index} className={row.name}>{row.label}</th>)}
-                                    
                                 </tr>
                             </thead>
                         

@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from 'react';
-import './assessment.css';
+import './passexam-content.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 
@@ -15,14 +15,14 @@ import { toast } from 'react-toastify';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { deletePassExamContent } from '../../../services/passExams';
-import { getStudentSolutions, getStudentsClasses } from '../../../services/student';
+import { getStudentsClasses, studentGetPassExams } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
-import { getTotalAssessments } from '../../../services/assessment';
+import { getTotalAssessments, studentGetAssessments } from '../../../services/assessment';
 import { VideoPlayerModal } from '../../../components';
+import { getPassExamContents } from '../../../services/passExams';
 
 const rows: any = [
     {
@@ -30,19 +30,7 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Class',
-        name: 'name'
-    },
-    {
-        label: 'Name',
-        name: 'name'
-    },
-    {
-        label: 'Teacher',
-        name: 'name'
-    },
-    {
-        label: 'Solution File',
+        label: 'Title',
         name: 'name'
     },
     {
@@ -50,13 +38,25 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Submitted Date',
+        label: 'Answer Pdf',
+        name: 'name'
+    },
+    {
+        label: 'Answer Video',
+        name: 'name'
+    },
+    {
+        label: 'Publish Date',
+        name: 'name'
+    },
+    {
+        label: 'Created Date',
         name: 'name'
     },
     {
         label: 'Action',
-        name: 'name'
-    },
+        name: 'action'
+    }
 ]
 
 
@@ -68,13 +68,8 @@ const override = {
 
 function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false); 
-    const [deleteModal, setShowDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const [assessments, setAssessments] = useState([]);
+    const [passexams, setPassExams] = useState([]);
     const [showVideoModal, setShowVideoModal] = useState(false);
-
-    const [editData, setEditData] = useState(null);
 
     const [videoUrl, setVideoUrl] = useState('');
 
@@ -111,12 +106,12 @@ function Index() {
     }
 
 
-    const handleGetAssessments = (classId: any) => {
+    const handleGetPassExamContents = (classId: any) => {
         setLoading(true);
-        getTotalAssessments(classId).then((res: any) => {
-            console.log("STUDENT assessments RES: ",res);
+        studentGetPassExams(classId).then((res: any) => {
+            console.log("PASS EXAMS RES: ",res);
             setLoading(false);
-            setAssessments(res.data.data);
+            setPassExams(res.data.data);
         }).catch((err: any) => {
             console.log('Error: ', err);
             setLoading(false);
@@ -127,16 +122,15 @@ function Index() {
         try {
             console.log('CLASS ID:' , value)
             if(value == 'all') {
-                setAssessments([]);
+                setPassExams([]);
                 return;
             }
 
-            handleGetAssessments(value);
+            handleGetPassExamContents(value);
         } catch (error) {
             console.log('error: ', error)
         }
     }
-
 
 
     useEffect(() => {
@@ -145,22 +139,22 @@ function Index() {
     },[]);
 
     return (
-        <StudentLayout title="Submitted Assessment assessments">
+        <StudentLayout title="Asssessment Submissions">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
                             <select name="" id="" onChange={(e: any) => handleClassSelected(e.target.value)} className="select-field student-select">
-                                <option value="all">All</option>
-                                {classes.map((classData: any, index: any) => <option key={index} value={classData.class_id._id}>{classData.class_id.name}</option>)}
+                                <option value="all">Select Class</option>
+                                {classes.map((classData: any, index: any) => <option key={index} value={classData?.class_id._id}>{classData?.class_id?.name}</option>)}
                             </select>
                         </div>
                         {/* <form className="search">
                             <input type="search" name="" id="" placeholder="Find ..." />
                             <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
                         </form> */}
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button"> Upload Solution <i className="fas fa-plus"></i></button>
+                        {/* <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button"> Upload Solution <i className="fas fa-plus"></i></button> */}
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -174,47 +168,42 @@ function Index() {
                             <thead>
                                 <tr>
                                     {rows.map((row: any, index: any) => <th key={index} className={row.name}>{row.label}</th>)}
-                                    
                                 </tr>
                             </thead>
                         
+                               
                             <tbody>
-                                {assessments?.map((data: any, index: any) => <tr>
+                                {passexams?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data?.class_room_id?.name}</p>
+                                        <p>{data.title}</p>
                                     </td>
-                                    <td className="flex-start">
-                                      {data?.title}
-                                    </td>
-                                    <td className="flex-start">
-                                      {data?.teacher_id?.username}
-                                    </td>
+                            
                     
-                                  {data?.answers_file.length > 2 &&  <td className="flex-start"><a>Available</a></td>}
-
-                                  {data?.answers_file.length < 2 &&  <td className="flex-start"><a>Not Available</a></td>}
+                                    <td className="flex-start"><a href={data?.questions_file} target="_blank" download>Question File</a></td>
+                                    <td className="flex-start"><a>{data?.answers_file?.length > 2 ? 'Available' : "Not Available"}</a></td>
+                                    <td className="flex-start"><a>{data?.video_solution_url?.length > 2 ? 'Available' : "Not Available"}</a></td>
+                                    <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
                                     
-                                    <td className="flex-start"><a href={data?.assessment_file} target="_blank" download>Questions</a></td>
-                                
                                     <td className="flex-start">
                                         <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
                                     </td>
 
-                                   {data?.answers_file.length > 2 && <td className="flex-center">
+                                    <td className="flex-center">
                                         <div className="action">
-                                        {data?.answers_file_type == 'video' && <Tippy content="View Video Solution"  animation="fade">
+                                           {data?.video_solution_url&& <Tippy content="View Video Solution"  animation="fade">
                                             <a onClick={() => {
-                                                handleSetVideoUrl(data.answers_file)
+                                                handleSetVideoUrl(data?.video_solution_url)
                                             }} className="see"><AiFillEye onClick={() => null} size={14}/></a>
                                             </Tippy>}
-                                          {data?.answers_file_type == 'others' &&  <Tippy content="Download Solution File"  animation="fade">
-                                            <a target="_blank" download href={data.answers_file} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                          {data?.answers_file?.length > 2 &&  <Tippy content="Download File Solution"  animation="fade">
+                                            <a href={data?.answers_file} target="_blank" download className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
                                             </Tippy>}
                                         </div>
-                                    </td>}
+                                    </td>
                                 </tr> )}
                             </tbody>
+                       
                         </table>
                     </div>
 

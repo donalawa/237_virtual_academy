@@ -31,6 +31,10 @@ const rows: any = [
         name: 'name'
     },
     {
+        label: 'Class',
+        name: 'name'
+    },
+    {
         label: 'Question File',
         name: 'name'
     },
@@ -99,13 +103,13 @@ function Index() {
         })
     }
 
-    const handleDeleteCourseExamContent = () => {
+    const handleDeletePassExamContent = () => {
         console.log('DELETE COURSE CONTENT');
         console.log(deleteId)
         deletePassExamContent(deleteId).then((res: any) => {
             if(res.ok) {
                 toggleDeleteModal();
-                handleGetClasses();
+                handleGetContent();
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
@@ -189,7 +193,10 @@ function Index() {
                                     <td className="flex-start">
                                         <p>{data.title}</p>
                                     </td>
-                            
+
+                                    <td className="flex-start">
+                                        <p>{data?.class_room_id?.name}</p>
+                                    </td>
                     
                                     <td className="flex-start"><a href={data?.questions_file} target="_blank" download>Question File</a></td>
                                     <td className="flex-start"><a href={data?.answers_file} target="_blank" download>Answers File</a></td>
@@ -218,6 +225,7 @@ function Index() {
                                     </td>
                                 </tr> )}
                             </tbody>
+                                                
                         </table>
                     </div>
 
@@ -227,7 +235,7 @@ function Index() {
 
         {showAddModal &&  <PassExammodal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
-        {deleteModal && <DeleteModal onAccept={handleDeleteCourseExamContent} onCancel={toggleDeleteModal} />}
+        {deleteModal && <DeleteModal onAccept={handleDeletePassExamContent} onCancel={toggleDeleteModal} />}
         </Layout>
     );
 }

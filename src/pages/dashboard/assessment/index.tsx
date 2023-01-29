@@ -3,8 +3,10 @@ import './assessment.css';
 
 import Layout from '../../../components/Layout/Layout';
 
-import { AssessmentModal, EditCourseContentModal, DeleteModal, PassExammodal  } from '../../../components';
+import { AssessmentModal, EditCourseContentModal, DeleteModal, VideoPlayerModal  } from '../../../components';
 import { IoMdCloudDownload } from 'react-icons/io';
+import { AiFillEye } from 'react-icons/ai';
+
 import {  BsPencilSquare } from 'react-icons/bs';
 
 import { toast } from 'react-toastify';
@@ -14,7 +16,7 @@ import 'tippy.js/dist/tippy.css';
 
 import { getClasses } from '../../../services/classroom';
 import { getPassExamContents, deletePassExamContent } from '../../../services/passExams';
-import { getAssessments } from '../../../services/assessment';
+import { deleteAssessment, getAssessments } from '../../../services/assessment';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -35,10 +37,6 @@ const rows: any = [
     },
     {
         label: 'Answer Pdf',
-        name: 'name'
-    },
-    {
-        label: 'Answer Video',
         name: 'name'
     },
     {
@@ -65,9 +63,12 @@ const override = {
 function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false); 
+    const [showVideoModal, setShowVideoModal] = useState(false);
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const [contents, setContents] = useState([]);
+
+    const [videoUrl, setVideoUrl] = useState('');
 
     const [editData, setEditData] = useState(null);
 
@@ -81,6 +82,15 @@ function Index() {
     const toggleEditModal = () => {
         setShowEditModal(!showEditModal);
     }
+
+    const toggleVideoModal = () => {
+        setShowVideoModal(!showVideoModal);
+    }
+
+    const handleSetVideoUrl = (url: any) =>  {
+        setVideoUrl(url);
+        toggleVideoModal();
+    }   
 
     const toggleDeleteModal = () => {
         setShowDeleteModal(!deleteModal);
@@ -97,13 +107,14 @@ function Index() {
         })
     }
 
-    const handleDeleteCourseExamContent = () => {
-        console.log('DELETE COURSE CONTENT');
+    const handleDeleteAssessment = () => {
+        console.log('DELETE ASSESSMENT SOLUTION');
         console.log(deleteId)
-        deletePassExamContent(deleteId).then((res: any) => {
+        deleteAssessment(deleteId).then((res: any) => {
             if(res.ok) {
                 toggleDeleteModal();
                 handleGetClasses();
+                handleGetAssessments();
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
@@ -189,10 +200,11 @@ function Index() {
                                     </td>
                             
                     
-                                    <td className="flex-start"><a href={data?.questions_file} target="_blank" download>Question File</a></td>
-                                    <td className="flex-start"><a href={data?.answers_file} target="_blank" download>Answers File</a></td>
-                                    <td className="flex-start"><a href={data?.video_solution_url} target="_blank" download>Video File</a></td>
-                                    <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
+                                    <td className="flex-start"><a href={data?.assessment_file} target="_blank" download>Assessment File</a></td>
+                                   {data.answers_file_type != 'video' && <td className="flex-start"><a href={data?.answers_file} target="_blank" download>Answers File</a></td>}
+                                   {data.answers_file_type == 'video' && <td className="flex-start"><a  >Video Solution</a></td>}
+                                   
+                                    <td className="flex-start">{data?.publish_date}</td>
                                     
                                     <td className="flex-start">
                                         <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
@@ -200,15 +212,19 @@ function Index() {
 
                                     <td className="flex-center">
                                         <div className="action">
-                                            <Tippy content="Download Video Solution"  animation="fade">
+                                           {data?.answers_file_type == 'video' && <Tippy content="View Video Solution"  animation="fade">
                                             <a onClick={() => {
-                                                setEditData(data);
-                                                toggleEditModal();
-                                            }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
-                                            </Tippy>
-                                            <Tippy content="Delete Class"  animation="fade">
+                                                handleSetVideoUrl(data.answers_file)
+                                            }} className="see"><AiFillEye onClick={() => null} size={14}/></a>
+                                            </Tippy>}
+                                          {data?.answers_file_type == 'others' &&  <Tippy content="Download File Solution"  animation="fade">
+                                            <a onClick={() => {
+                                            //    handleSetVideoUrl(data.answers_file)
+                                            }} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                            </Tippy>}
+                                            <Tippy content="Delete Assessment"  animation="fade">
                                                 <a onClick={() => {
-                                                    setDeleteId(data._id);
+                                                    setDeleteId(data?._id);
                                                     toggleDeleteModal();
                                                 }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
                                             </Tippy>
@@ -225,7 +241,9 @@ function Index() {
 
         {showAddModal &&  <AssessmentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
-        {deleteModal && <DeleteModal onAccept={handleDeleteCourseExamContent} onCancel={toggleDeleteModal} />}
+        {deleteModal && <DeleteModal onAccept={handleDeleteAssessment} onCancel={toggleDeleteModal} />}
+        {showVideoModal && <VideoPlayerModal video={videoUrl} onClose={toggleVideoModal}/>}
+
         </Layout>
     );
 }

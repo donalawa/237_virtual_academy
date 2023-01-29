@@ -6,3 +6,4 @@ export { default as EditCourseContentModal } from './ui/EditCourseContentModal/E
 export { default as PassExammodal } from './ui/PassExamModal/PassExamModal';
 export { default as AssessmentModal } from './ui/AssessmentModal/AssessmentModal';
 export { default as CreateSessionModal } from './ui/CreateSessionModal/CreateSessionModal';
+export { default as VideoPlayerModal } from './ui/VideoPlayerModal/VideoPlayerModal';

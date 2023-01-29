@@ -10,7 +10,7 @@ const addPassExamContent = (data: any) => {
 }
 
 const deletePassExamContent = (id: any) => {
-    return api.delete('/pass-exam/:id');
+    return api.delete(`/pass-exam/${id}`);
 }
 
 export {

@@ -28,6 +28,10 @@ const getAllStudentSolutions = (courseContentId: any) => {
     return api.get(`/solutions/${courseContentId}`)
 }
 
+const studentGetPassExams = (classId: any) => {
+    return api.get(`/students/passexams/${classId}`);
+}
+
 export {
     getStudentsClasses,
     joinClass,
@@ -35,6 +39,7 @@ export {
     getAcceptedClasses,
     getStudentSolutions,
     submitAssignmentSolution,
-    getAllStudentSolutions
+    getAllStudentSolutions,
+    studentGetPassExams
 }
 

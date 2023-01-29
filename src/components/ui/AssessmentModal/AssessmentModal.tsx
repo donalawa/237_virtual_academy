@@ -24,6 +24,7 @@ import { addPassExamContent } from '../../../services/passExams';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { createAssessment } from '../../../services/assessment';
 
 const initialValues= {
     title: '',
@@ -42,11 +43,11 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
     const [error, setError] = useState<any>(null);
     const [selectedClassroom, setSelectedClassroom] = useState(null);
     // Exam Content
-
+    let [answersFileType, setAnswersFileType] = useState('');
 
     // ASSIGNMENT
     const [isUploadingAssessmentSolutionFile,  setIsUploadingAssessmentSolutionFile] = useState(false);
-    const [assessmentSolutionProgress, setAssessmentVideoProgress] = useState(0);
+    const [assessmentSolutionProgress, setAssessmentSolutionProgress] = useState(0);
     const [assessmentSolutionUrl, setAssessmentSolutionUrl] = useState('');
 
     const [assessmentPdfUrl, setAssessmentPdfUrl] = useState('');
@@ -54,6 +55,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
     const [isUploadingAssessmentPdf, setIsUploadingAssessmentPdf] = useState(false);
 
     const [showAssessmentSolutionPreview, setShowAssessmentVideoSolutionPreview] = useState(false);
+    const [showOtherFileCompleted, setShowOtherFileCompleted] = useState(false);
 
     // END OF ASSIGNEMTN
     const storage = getStorage(firebaseApp);
@@ -93,16 +95,28 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
 
     const uploadAssessmentSolution = (e: any) => {
         setIsUploadingAssessmentSolutionFile(true);
+        console.log('FILE DATA:', e.target.files[0]);
+        let fileType = e.target.files[0].type.split('/')[0];
+
+        console.log(fileType);
+        
+        if(fileType == 'video') {
+            setAnswersFileType('video');
+        }else {
+            setAnswersFileType('others')
+        }
+
         const videoFile: any = e.target.files[0];
         const storageRef = ref(storage, `assessment/${Date.now()}-${videoFile.name}`);
         const uploadTask = uploadBytesResumable(storageRef, videoFile);
 
-        console.log(e.target.files[0]);   
+        // console.log(e.target.files[0]);   
+   
     
       uploadTask.on('state_changed', (snapshot: any)=>{
           const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
-          setAssessmentVideoProgress(+uploadProgress);
+          setAssessmentSolutionProgress(+uploadProgress);
+         
 
       }, (error: any) => {
           console.log(error);
@@ -111,13 +125,18 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
               setAssessmentSolutionUrl(downloadURL);
               console.log('URL', assessmentSolutionUrl);
               console.log('VIDEO  URL: ', downloadURL);
-              setShowAssessmentVideoSolutionPreview(true);
+              if(fileType == 'video') {
+                setShowAssessmentVideoSolutionPreview(true);
+              }else {
+                  setShowOtherFileCompleted(true);
+              }
+
               setIsUploadingAssessmentSolutionFile(false);
           });
       })
     }
 
-    const uploadAnswerPdf = (e: any) => {
+    const uploadAssessmentPdf = (e: any) => {
         setIsUploadingAssessmentPdf(true);
       const pdfFile: any = e.target.files[0];
       const storageRef = ref(storage, `assessment/${Date.now()}-${pdfFile.name}`);
@@ -141,31 +160,34 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
     })
   }
 
-    const handleAddCAssessmentContent = (values: any) => {
+    const handleAddAssessmentContent = (values: any) => {
         setError(null);
 
         let data = {
             ...values,
             class_room_id: selectedClassroom,
-            questions_file: assessmentPdfUrl,
-            video_solution_url: assessmentSolutionUrl
+            assessment_file: assessmentPdfUrl,
+            answers_file: assessmentSolutionUrl,
+            answers_file_type: answersFileType
         }
 
         console.log('CONTENT', data);
+        console.log('FILE TYPE: ', answersFileType);
+
 
         if(data.class_room_id == null || data.class_room_id == 'all') {
             setError('You have to select a clasroom for Assessment');
             return;
         }
 
-        if(assessmentSolutionUrl.length < 2 && assessmentPdfUrl.length < 2) {
-            setError('Select Assessment Video Or Assessment Pdf');
+        if(assessmentPdfUrl.length < 2) {
+            setError('Select Assessment Pdf');
             return;
         }
 
-        console.log('ALL DATA: ', data);
+        // console.log('ALL DATA: ', data);
         // return;
-        addPassExamContent(data).then((res: any) => {
+        createAssessment(data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
@@ -208,7 +230,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                 {error && <ErrorMessage error={error} visible={true} />}
                 <Form 
                     initialValues={initialValues}
-                    onSubmit={handleAddCAssessmentContent}
+                    onSubmit={handleAddAssessmentContent}
                     validationSchema={validationSchema}
                 >
                         <p className="label-text">Title: </p>
@@ -233,7 +255,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                             <p className="label-text">Upload Assessment File: </p>
                             <div className="file-drop-upload" onClick={() => assessmentPdfFileRef.current.click()}>
                             {!isUploadingAssessmentPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                <input ref={assessmentPdfFileRef} onChange={uploadAnswerPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
+                                <input ref={assessmentPdfFileRef} onChange={uploadAssessmentPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
                                 {isUploadingAssessmentPdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                               <BeatLoader
                                     color="#623d91" 
@@ -257,7 +279,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
 
 
                         <div className="content-upload-right">
-                            {!showAssessmentSolutionPreview && <div className="form-field-upload">
+                            {assessmentSolutionUrl.length < 2 && <div className="form-field-upload">
                                     <p className="label-text">Upload Solution File: </p>
                                     <div className="file-drop-upload" onClick={() => assessmentSolutionFileRef.current.click()}>
                                     {!isUploadingAssessmentSolutionFile && <FaCloudUploadAlt size={35} color="#FFA500" />}
@@ -272,7 +294,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                                             <ProgressBar bgcolor={'#6a1b9a'} completed={assessmentSolutionProgress}/>
                                         
                                     </div>}
-                                    {!isUploadingAssessmentSolutionFile && <input ref={assessmentSolutionFileRef} onChange={uploadAssessmentSolution} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="video/mp4,video/x-m4v,video/*"/>}
+                                    {!isUploadingAssessmentSolutionFile && <input ref={assessmentSolutionFileRef} onChange={uploadAssessmentSolution} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel,video/mp4,video/x-m4v,video/*"/>}
                                     </div>
                                 
                                 </div>}
@@ -282,6 +304,11 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                                     </div>
                                     <video controls width="100%" height={'100%'} src={assessmentSolutionUrl}></video>
                                 </div>}
+                                {showOtherFileCompleted &&
+                                      <div className="form-field-upload content-upload-right">
+                                      <p className="label-text" style={{textAlign: 'center'}}>Done</p>
+                                      </div>
+                                }
                             </div>
 
                         </div>

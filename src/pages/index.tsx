@@ -18,3 +18,5 @@ export { default as StudentAssignmentPage } from './students/assignments/index';
 export { default as StudentCourseContentPage } from './students/course-content/index';
 export { default as JoinLiveSessionPage } from './students/join-live/index';
 export { default as StudentAssessmentPage }  from './students/assessment/index';
+export { default as StudentAssessmentSubmissionsPage } from './students/assessment-submissions/index';
+export { default as PassexamContentPage } from './students/passexam-content/index';

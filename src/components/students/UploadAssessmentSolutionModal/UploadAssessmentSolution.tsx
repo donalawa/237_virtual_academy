@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './UploadAssignmentSolutionModal.css';
+import './UploadAssessmentSolutionModal.css';
 import * as Yup from 'yup';
 import Form from '../../form/components/Form/Form';
 import FormField from '../../form/components/FormField/FormField';
@@ -25,6 +25,7 @@ import { getStudentsClasses, getCourseContent,  submitAssignmentSolution } from 
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { studentGetAssessments, submitAssessmentSolution } from '../../../services/assessment';
 
 const initialValues= {
     comment: '',
@@ -36,12 +37,12 @@ const override = {
 
 
 
-function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
+function UploadAssessmentSolutionModal({ onClose, onContentAdded } : any) {
     const [classes, setClasses] = useState([]);
-    const [courseContents, setCourseContents] = useState([]);
+    const [assessments, setAssessments] = useState([]);
     const [error, setError] = useState<any>(null);
     const [selectedClassroom, setSelectedClassroom] = useState<any>('all');
-    const [selectedCourseContent, setSelectedCourseContent] = useState<any>('all');
+    const [selectedAssessment, setSelectedAssessment] = useState<any>('all');
 
     // ASSIGNMENT SOLUTION
     const [assessmentVideoUrl, setAssessmentVideoUrl] = useState('');
@@ -98,12 +99,12 @@ function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
     })
   }
 
-    const handleGetCourseContents = (classId: any)  => {
+    const handleGetAssessments = (classId: any)  => {
 
-        getCourseContent(classId).then((res: any) => {
+        studentGetAssessments(classId).then((res: any) => {
             console.log('CONTENT RES', res);
             if(res.ok) {
-                setCourseContents(res.data.data)
+                setAssessments(res.data.data)
             }
         }).catch(err => {
             console.log('Error Getting Course Contents')
@@ -114,12 +115,12 @@ function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
         console.log('class id: ', classId)
         setSelectedClassroom(classId);
         if(classId == 'all') {
-            setSelectedCourseContent('all');
-            setCourseContents([]);
+            setSelectedAssessment('all');
+            setAssessments([]);
             return;
         }
 
-        handleGetCourseContents(classId);
+        handleGetAssessments(classId);
     }
 
     const handleSubmitSolution = (values: any) => {
@@ -127,31 +128,35 @@ function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
             let data = {
                 ...values,
                 classroom_id: selectedClassroom,
-                course_content_id: selectedCourseContent,
+                assessment_id: selectedAssessment,
                 document_url: solutionPdfUrl,
             }
 
+            console.log('DATA: ', data);
+            
+            // return;
+            
             if(data.classroom_id == null || data.classroom_id == 'all') {
                 setError('You have to select a clasroom for for Solution');
                 return;
             }
 
-            if(data.course_content_id == null || data.course_content_id == 'all') {
-                setError('You have to select a Course Content for for Solution');
+            if(data.assessment_id == null || data.assessment_id == 'all') {
+                setError('You have to select a specific Assessment for Solution');
                 return;
             }else {
                 console.log('#### CHECK FAILED')
             }
     
             if(solutionPdfUrl.length < 2) {
-                setError('Select Solution Pdf');
+                setError('Select Solution File');
                 return;
             }   
 
             // console.log("FINAL CONTENT: ",data)
 
             // call submiting solution endpoint
-            submitAssignmentSolution(data).then((res: any) => {
+            submitAssessmentSolution(data).then((res: any) => {
                 if(res.ok) {
                     toast.success(res.data.message, {
                         pauseOnHover: false,
@@ -186,7 +191,7 @@ function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
         <div>
             <div  className='modal-container student-modal-assignment'>
                 <div className='modal-head'>
-                    <p className="modal-title">Upload Assignment Solution</p>
+                    <p className="modal-title">Upload Assessment Solution</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
@@ -210,10 +215,10 @@ function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
                         </select>
 
 
-                        <p className="label-text">Select Course Content: </p>
-                        <select onChange={(e: any) => setSelectedCourseContent(e.target.value) } value={selectedCourseContent} className="select-field-modal">
+                        <p className="label-text">Select Assessment: </p>
+                        <select onChange={(e: any) => setSelectedAssessment(e.target.value) } value={selectedAssessment} className="select-field-modal">
                             <option value="all">Select</option>
-                            {courseContents.map((contentData: any, key: any) => <option key={key} value={contentData?._id}>{contentData?.title}</option>)}
+                            {assessments.map((contentData: any, key: any) => <option key={key} value={contentData?._id}>{contentData?.title}</option>)}
                         </select>
 
 
@@ -260,4 +265,4 @@ function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
     );
 }
 
-export default UploadAssignmentSolutionModal;
+export default UploadAssessmentSolutionModal;

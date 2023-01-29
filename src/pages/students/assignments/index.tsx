@@ -46,10 +46,7 @@ const rows: any = [
         label: 'Submitted Date',
         name: 'name'
     },
-    {
-        label: 'Action',
-        name: 'action'
-    }
+
 ]
 
 
@@ -198,22 +195,7 @@ function Index() {
                                         <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
                                     </td>
 
-                                    <td className="flex-center">
-                                        <div className="action">
-                                            <Tippy content="Download Video Solution"  animation="fade">
-                                            <a onClick={() => {
-                                                setEditData(data);
-                                                toggleEditModal();
-                                            }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
-                                            </Tippy>
-                                            <Tippy content="Delete Class"  animation="fade">
-                                                <a onClick={() => {
-                                                    setDeleteId(data._id);
-                                                    toggleDeleteModal();
-                                                }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
-                                            </Tippy>
-                                        </div>
-                                    </td>
+                          
                                 </tr> )}
                             </tbody>
                         </table>

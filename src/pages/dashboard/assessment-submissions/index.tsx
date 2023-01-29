@@ -3,7 +3,6 @@ import './assessment-submissions.css';
 
 import Layout from '../../../components/Layout/Layout';
 
-import { AssessmentModal, EditCourseContentModal, DeleteModal, PassExammodal  } from '../../../components';
 import { IoMdCloudDownload } from 'react-icons/io';
 import {  BsPencilSquare } from 'react-icons/bs';
 
@@ -13,7 +12,6 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
-import { deleteCourseContent, getCourseContents } from '../../../services/courseContent';
 import { getPassExamContents, deletePassExamContent } from '../../../services/passExams';
 
 import BeatLoader from "react-spinners/BeatLoader";
