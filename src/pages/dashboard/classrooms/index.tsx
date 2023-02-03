@@ -9,6 +9,9 @@ import { AiOutlineCopy } from 'react-icons/ai';
 
 import { toast } from 'react-toastify';
 
+import { useTranslation } from 'react-i18next';
+
+
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
@@ -17,28 +20,6 @@ import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
 
-const rows: any = [
-    {
-        label: '#',
-        name: 'num'
-    },
-    {
-        label: 'Name',
-        name: 'name'
-    },
-    {
-        label: 'Class Url',
-        name: 'name'
-    },
-    {
-        label: 'Created Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'action'
-    }
-]
 
 
 const override = {
@@ -53,6 +34,32 @@ function Index() {
 
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const { t, i18n } = useTranslation();
+
+    const rows: any = [
+        {
+            label: '#',
+            name: 'num'
+        },
+        {
+            label: (`${t('classroom.data_table.class_name')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('classroom.data_table.class_url')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('classroom.data_table.created_date')}`),
+            name: 'name'
+        },
+        {
+            label: 'Action',
+            name: 'action'
+        }
+    ]
+
 
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
@@ -113,19 +120,19 @@ function Index() {
     },[]);
 
     return (
-        <Layout title="Class Rooms">
+        <Layout title={t('classroom.data_table.layout_title')}>
               <div className="section">
                         <div className="parent-con">
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>You have : {classes.length} Classroom</h1>
+                                        <h1>{t('classroom.data_table.title')} {classes.length} {t('classroom.data_table.title2')}</h1>
                                     </div>
                                     {/* <form className="search">
                                         <input type="search" name="" id="" placeholder="Find ..." />
                                         <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
                                     </form> */}
-                                    <button onClick={toggleAddModal} className="btn btn-primary btn-add">Add Classroom  <i className="fas fa-plus"></i></button>
+                                    <button onClick={toggleAddModal} className="btn btn-primary btn-add">{t('classroom.data_table.button')} <i className="fas fa-plus"></i></button>
                                 </div>
                                 <div className="table-con">
                                 <div style={{textAlign: 'center',}}>

@@ -19,37 +19,8 @@ import { toast } from 'react-toastify';
 import BeatLoader from "react-spinners/BeatLoader";
 
 import { getAllSessions, endSession } from '../../services/liveSession';
+import {useTranslation} from "react-i18next";
 
-const rows: any = [
-    {
-        label: '#',
-        name: 'num'
-    },
-    {
-        label: 'Meeting Code',
-        name: 'name'
-    },
-    {
-        label: 'Class',
-        name: 'name'
-    },
-    {
-        label: '# Participants',
-        name: 'name'
-    },
-    {
-        label: 'Status',
-        name: 'name'
-    },
-    {
-        label: 'Session Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'name'
-    },
-]
 
 const override = {
     marginTop: '20px'
@@ -66,7 +37,39 @@ function Index() {
     const [loading, setLoading] = useState(false);
     const [selectedSessionId, setSelectedSessionid] = useState<any>(null);
 
- 
+    const { t, i18n } = useTranslation();
+
+    const rows: any = [
+        {
+            label: '#',
+            name: 'num'
+        },
+        {
+            label: (`${t('create_live.data_table.meeting_code')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('create_live.data_table.class')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('create_live.data_table.participants')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('create_live.data_table.status')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('create_live.data_table.session_date')}`),
+            name: 'name'
+        },
+        {
+            label: 'Action',
+            name: 'name'
+        },
+    ]
+
     const handleFetchAllSessions = () => {
         // GET ALL TEACHER SESSIONS
         getAllSessions().then((res: any) => {
@@ -134,15 +137,16 @@ function Index() {
     }, [])
 
     return (
-        <Layout title="Live Sessions">
+        <Layout title={t('create_live.data_table.layout_title')}
+>
             <div className="section">
                         <div className="parent-con">
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>All Live Sessions</h1>
+                                        <h1>{t('create_live.data_table.heading')}</h1>
                                     </div>
-                                    <button onClick={() => toggleCreateSessionModal()} className="btn btn-primary btn-add">Create Live Session  <i className="fas"><GoDeviceCameraVideo size={16}/></i></button>
+                                    <button onClick={() => toggleCreateSessionModal()} className="btn btn-primary btn-add">{t('create_live.data_table.button')} <i className="fas"><GoDeviceCameraVideo size={16}/></i></button>
                                 </div>
                                 <div className="table-con">
                                 <div style={{textAlign: 'center',}}>

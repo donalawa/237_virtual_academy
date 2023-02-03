@@ -21,37 +21,8 @@ import { deleteAssessment, getAssessments } from '../../../services/assessment';
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
+import {useTranslation} from "react-i18next";
 
-const rows: any = [
-    {
-        label: '#',
-        name: 'num'
-    },
-    {
-        label: 'Title',
-        name: 'name'
-    },
-    {
-        label: 'Question File',
-        name: 'name'
-    },
-    {
-        label: 'Answer Pdf',
-        name: 'name'
-    },
-    {
-        label: 'Publish Date',
-        name: 'name'
-    },
-    {
-        label: 'Created Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'action'
-    }
-]
 
 
 const override = {
@@ -74,6 +45,40 @@ function Index() {
 
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const { t, i18n } = useTranslation();
+
+
+    const rows: any = [
+        {
+            label: '#',
+            name: 'num'
+        },
+        {
+            label: (`${t('assessment.data_table.title')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assessment.data_table.question_file')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assessment.data_table.answer_pdf')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assessment.data_table.publish_date')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assessment.data_table.created_date')}`),
+            name: 'name'
+        },
+        {
+            label: 'Action',
+            name: 'action'
+        }
+    ]
 
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
@@ -159,7 +164,7 @@ function Index() {
     },[]);
 
     return (
-        <Layout title="Assessments">
+        <Layout title={t('assessment.data_table.layout_title')}>
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -174,7 +179,7 @@ function Index() {
                             <input type="search" name="" id="" placeholder="Find ..." />
                             <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
                         </form> */}
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add">Create Assessment  <i className="fas fa-plus"></i></button>
+                        <button onClick={toggleAddModal} className="btn btn-primary btn-add">{t('assessment.data_table.modal_btn')}<i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>

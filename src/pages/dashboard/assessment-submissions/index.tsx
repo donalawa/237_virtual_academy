@@ -17,42 +17,7 @@ import { getPassExamContents, deletePassExamContent } from '../../../services/pa
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
-
-const rows: any = [
-    {
-        label: '#',
-        name: 'num'
-    },
-    {
-        label: 'Title',
-        name: 'name'
-    },
-    {
-        label: 'Student Name',
-        name: 'name'
-    },
-    {
-        label: 'Question File',
-        name: 'name'
-    },
-    {
-        label: 'Answer Pdf',
-        name: 'name'
-    },
-    {
-        label: 'Submited Date',
-        name: 'name'
-    },
-    {
-        label: 'Created Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'action'
-    }
-]
-
+import {useTranslation} from "react-i18next";
 
 const override = {
     marginTop: '20px'
@@ -65,6 +30,44 @@ function Index() {
 
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
+
+
+    const { t, i18n } = useTranslation();
+
+    const rows: any = [
+        {
+            label: '#',
+            name: 'num'
+        },
+        {
+            label: (`${t('assessment_submission.data_table.title')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assessment_submission.data_table.student_name')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assessment_submission.data_table.question_file')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assessment_submission.data_table.answer_pdf')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assessment_submission.data_table.submitted_date')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assessment_submission.data_table.created_date')}`),
+            name: 'name'
+        },
+        {
+            label: 'Action',
+            name: 'action'
+        }
+    ]
 
     const handleGetClasses = ()  => {
 
@@ -97,7 +100,7 @@ function Index() {
     },[]);
 
     return (
-        <Layout title="Assessment Submissions">
+        <Layout title={t('assessment_submission.data_table.layout_title')} >
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">

@@ -19,47 +19,7 @@ import { deleteCourseContent, getCourseContents } from '../../../services/course
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
-
-
-const rows: any = [
-    {
-        label: '#',
-        name: 'num'
-    },
-    {
-        label: 'Title',
-        name: 'name'
-    },
-    {
-        label: 'Classroom',
-        name: 'name'
-    },
-    {
-        label: 'Pdf Content',
-        name: 'name'
-    },
-    {
-        label: 'Video Content',
-        name: 'name'
-    },
-    {
-        label: 'Assignment File',
-        name: 'name'
-    },
-    {
-        label: 'Assignment Solution',
-        name: 'name'
-    },
-    {
-        label: 'Published Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'action'
-    }
-]
-
+import {useTranslation} from "react-i18next";
 
 const override = {
     marginTop: '20px'
@@ -78,6 +38,47 @@ function Index() {
 
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const { t, i18n } = useTranslation();
+
+    const rows: any = [
+        {
+            label: '#',
+            name: 'num'
+        },
+        {
+            label: (`${t('course_content.data_table.title')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.classroom')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.pdf_content')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.video_content')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.assignment_file')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.assignment_solution')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.published_date')}`),
+            name: 'name'
+        },
+        {
+            label: 'Action',
+            name: 'action'
+        }
+    ]
 
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
@@ -154,7 +155,7 @@ function Index() {
     },[]);
 
     return (
-        <Layout title="Course Content">
+        <Layout title = {t('course_content.data_table.layout_title')} >
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -169,7 +170,7 @@ function Index() {
                             <input type="search" name="" id="" placeholder="Find ..." />
                             <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
                         </form> */}
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add">Add Content  <i className="fas fa-plus"></i></button>
+                        <button onClick={toggleAddModal} className="btn btn-primary btn-add">{t('course_content.data_table.button')} <i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>

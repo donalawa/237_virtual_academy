@@ -51,8 +51,121 @@ i18n
          r_account_text: "Already have an account? ",
          username_label: "Username",
          password_label: "Password",
-         c_password_label: "Confirm Password"
-        }
+         c_password_label: "Confirm Password",
+         hello:"Hello",
+         layout:{
+             dashboard:"Dashboard",
+             home:"Home"
+         },
+         student_layout:{
+            dashboard:"Dashboard",
+            course_content:"Course Content",
+            assignment:"Assignments",
+            assessment:"Assessments",
+            assessment_submission:"Assessment Submissions",
+        },
+         landing:{
+            cards:{
+                stat_card_classroom:"Total Classrooms",
+                stat_card_course_content:"Total Course Content",
+                stat_card_application:"Total Applications",
+                stat_card_assessments:"Total Assessments",
+            },
+            data_table:{
+                layout_title:"Dashboard",
+                title:"Student Application",
+                student_name:"Student",
+                class_name:"Class Name",
+                status:"Status",
+                submitted_date:"Submitted Date",
+            },
+        },
+         classroom:{
+            data_table:{
+                layout_title:"Class Rooms",
+                title:"You have: ",
+                title2:"Classroom  ",
+                button:"Add Classroom",
+                class_name:"Name",
+                class_url:"Class Url",
+                created_date:"Created Date"
+            }
+        },
+         course_content:{
+            data_table:{
+                layout_title:"Course Content",
+                button:"Add Content",
+                title:"Title",
+                classroom:"Classroom",
+                pdf_content:"Pdf Content",
+                video_content:"Video Content",
+                assignment_file:"Assignment File",
+                assignment_solution:"Assignment Solution",
+                published_date:"Published Date",
+
+            },
+        },
+         assessment:{
+                data_table:{
+                    layout_title:"Assessments",
+                    modal_btn:"Create Assessment",
+                    title:"Title",
+                    question_file:"Question File",
+                    answer_pdf:"Answer Pdf",
+                    publish_date:"Publish Date",
+                    created_date:"Created Date",
+                }
+            },
+         assessment_submission:{
+                data_table:{
+                    layout_title:"Assessment Submissions",
+                    title:"Title",
+                    student_name:"Student Name",
+                    question_file:"Question File",
+                    answer_pdf:"Answer Pdf",
+                    submitted_date:"Submitted Date",
+                    created_date:"Created Date",
+                }
+            },
+         assignment:{
+                data_table:{
+                    layout_title:"Soumission des évaluations",
+                    select_class:"Select Class",
+                    select_course_content:"Select Course Content",
+                    student_name:"Student Name",
+                    solution:"Solution",
+                    comment:"Comment",
+                    submitted_date:"Submitted Date",
+                }
+            },
+         pass_exams:{
+             data_table:{
+                 layout_title:"Pass Exams",
+                 button:"Add content",
+                 title:"Title",
+                 class:"Class",
+                 question_file:"Question File",
+                 answer_pdf:"Answer Pdf",
+                 answer_video:"Answer Video",
+                 publish_date:"Publish Date",
+                 created_date:"Created Date",
+             }
+         },
+         create_live:{
+                data_table:{
+                    layout_title:"Live Sessions",
+                    heading:"All Live Sessions",
+                    button:"Creer Une séance",
+                    meeting_code: "Meeting Code",
+                    class:"Class",
+                    participants: "#Participants",
+                    status:"Status",
+                    session_date:"Session Date",
+                }
+            }
+
+
+        },
       },
 
       fr: {
@@ -95,7 +208,120 @@ i18n
             r_account_text: "Vous avez déjà un compte? ",
             username_label: "Nom d'utilisateur",
             password_label: "Mot de passe",
-            c_password_label: "Confirmez le mot de passe"
+            c_password_label: "Confirmez le mot de passe",
+            hello:"Salut",
+            layout:{
+                dashboard:"Tableau de bord",
+                home:"Acceuil"
+            },
+            student_layout:{
+                dashboard:"Tableau de bord",
+                course_content:"Contenu du Cours",
+                assignment:"Devoirs",
+                assessment:"Évaluations",
+                assessment_submission:"Soumission des évaluations",
+            },
+            landing:{
+                cards:{
+                    stat_card_classroom:"Nombre Total de Salles de Classe",
+                    stat_card_course_content:"Total Contenu des cours",
+                    stat_card_application:"Nombre Total de Demandes",
+                    stat_card_assessments:"Nombre Total d'évaluations",
+                },
+                data_table:{
+                    layout_title:"Tableau de bord",
+                    title:"Demande des étudiant(e)s",
+                    student_name:"Étudiant(e)",
+                    class_name:"Titre du cours",
+                    status:"Statut",
+                    submitted_date:"Date de Soumission",
+                },
+            },
+            classroom:{
+                data_table:{
+                    layout_title:"Salle de Classes",
+                    title:"Vous avez: ",
+                    title2:"Salle de Classe  ",
+                    button:"Ajouter Une Salle",
+                    class_name:"Nom",
+                    class_url:"Lien de la Classe",
+                    created_date:"Date de Création"
+                }
+            },
+            course_content:{
+                data_table:{
+                    layout_title:"Contenu du Cours",
+                    button:"Ajouter Un Contenu",
+                    title:"Titre",
+                    classroom:"Salle de Classe",
+                    pdf_content:"Contenu Pdf",
+                    video_content:"Contenu vidéo",
+                    assignment_file:"Devoirs",
+                    assignment_solution:"Solution aux Devoirs",
+                    published_date:"Date de Publication",
+
+                },
+            },
+            assessment:{
+                data_table:{
+                    layout_title:"Évaluations",
+                    modal_btn:"Créer l'évaluation",
+                    title:"Titre",
+                    question_file:"Fichier de questions",
+                    answer_pdf:"Pdf pour Solution",
+                    publish_date:"Date de publication",
+                    created_date:"Date de création",
+                }
+            },
+            assessment_submission:{
+                data_table:{
+                    layout_title:"Soumission des évaluations",
+                    title:"Titre",
+                    student_name:"Étudiant(e)",
+                    question_file:"Fichier de questions",
+                    answer_pdf:"Pdf pour Solution",
+                    submitted_date:"Date de soumission",
+                    created_date:"Date de création",
+                },
+
+            },
+            assignment:{
+                data_table:{
+                    layout_title:"Soumission des évaluations",
+                    select_class:"choisir une classe",
+                    select_course_content:"choisir le contenu des cours",
+                    student_name:"Étudiant(e)",
+                    solution:"Solution",
+                    comment:"Commentaire",
+                    submitted_date:"Date de soumission",
+                }
+            },
+            pass_exams:{
+                data_table:{
+                    layout_title:"Épreuves précédentes",
+                    button:"Ajouter un contenu",
+                    title:"Titre",
+                    class:"Cours",
+                    question_file:"Fichier de questions",
+                    answer_pdf:"Pdf pour Solution",
+                    answer_video:"Vidéo pour Solution",
+                    publish_date:"Date de publication",
+                    created_date:"Date de création",
+                }
+            },
+            create_live:{
+                data_table:{
+                    layout_title:"Séances en Direct",
+                    heading:"Toutes les séances en direct",
+                    button:"Creer Une séance",
+                    meeting_code: "Identifiant de la séance",
+                    class:"Classe",
+                    participants: "#Participant(e)s",
+                    status:"Statut",
+                    session_date:"Date de séance",
+                }
+            }
+
         }
       },
     }

@@ -5,6 +5,8 @@ import { getClasses } from '../../../services/classroom';
 import { getCourseContents } from '../../../services/courseContent';
 import { getAllApplications, acceptApplication, rejectApplication } from '../../../services/applications';
 
+import { useTranslation } from 'react-i18next';
+
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
@@ -17,32 +19,6 @@ import moment from 'moment';
 import { DeleteModal } from '../../../components';
 import { toast } from 'react-toastify';
 
-const rows: any = [
-    {
-        label: '#',
-        name: 'num'
-    },
-    {
-        label: 'Student',
-        name: 'name'
-    },
-    {
-        label: 'Class Name',
-        name: 'name'
-    },
-    {
-        label: 'Status',
-        name: 'name'
-    },
-    {
-        label: 'Submited Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'name'
-    },
-]
 
 const override = {
     marginTop: '20px'
@@ -55,9 +31,38 @@ function Index() {
     const [studentsApplicatins, setStudentsApplications] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const { t, i18n } = useTranslation();
+
+
     const [selectedId, setSelectedId] = useState<any>(null);
     const [showConfirmAcceptModal, setShowConfirmAcceptModal] = useState(false);
     const [showRejectModal, setShowRejectModal] = useState(false);
+    const rows: any = [
+        {
+            label: '#',
+            name: 'num'
+        },
+        {
+            label: (`${t('landing.data_table.student_name')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('landing.data_table.class_name')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('landing.data_table.status')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('landing.data_table.submitted_date')}`),
+            name: 'name'
+        },
+        {
+            label: 'Action',
+            name: 'name'
+        },
+    ]
 
 
     const handleGetClasses = ()  => {
@@ -151,23 +156,23 @@ function Index() {
     }, [])
 
     return (
-        <Layout title="Dashboard">
+        <Layout title={t('landing.data_table.layout_title')}>
             <div>
             <div className="flex-4">
                     <a className="stat-card">
-                        <div className="stat-name">Total Classrooms</div>
+                        <div className="stat-name">{t('landing.cards.stat_card_classroom')}</div>
                         <div className="stat-value">{classes.length}</div>
                     </a>
                     <a className="stat-card">
-                        <div className="stat-name">Total Course Content</div>
+                        <div className="stat-name">{t('landing.cards.stat_card_course_content')}</div>
                         <div className="stat-value">{courseContents.length}</div>
                     </a>
                     <a className="stat-card">
-                        <div className="stat-name">Total Applications</div>
+                        <div className="stat-name">{t('landing.cards.stat_card_application')}</div>
                         <div className="stat-value">{studentsApplicatins?.length}</div>
                     </a>
                     <a className="stat-card">
-                        <div className="stat-name">Total Assessments</div>
+                        <div className="stat-name">{t('landing.cards.stat_card_assessments')}</div>
                         <div className="stat-value">0</div>
                     </a>
                 </div>
@@ -178,7 +183,7 @@ function Index() {
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>Students Applications</h1>
+                                        <h1>{t('landing.data_table.title')}</h1>
                                     </div>
                             
                                 </div>

@@ -21,33 +21,8 @@ import { getAllStudentSolutions } from '../../../services/student';
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
+import {useTranslation} from "react-i18next";
 
-const rows: any = [
-    {
-        label: '#',
-        name: 'num'
-    },
-    {
-        label: 'Student Name',
-        name: 'name'
-    },
-    {
-        label: 'Solution',
-        name: 'name'
-    },
-    {
-        label: 'Comment',
-        name: 'name'
-    },
-    {
-        label: 'Submitted Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'action'
-    }
-]
 
 
 const override = {
@@ -64,6 +39,34 @@ function Index() {
     const [seletedContent, setSelectedContent] = useState('all');
     const [loading, setLoading] = useState(false);
 
+    const { t, i18n } = useTranslation();
+
+    const rows: any = [
+        {
+            label: '#',
+            name: 'num'
+        },
+        {
+            label: (`${t('assignment.data_table.student_name')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assignment.data_table.solution')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assignment.data_table.comment')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('assignment.data_table.submitted_date')}`),
+            name: 'name'
+        },
+        {
+            label: 'Action',
+            name: 'action'
+        }
+    ]
 
     const handleGetClasses = ()  => {
 
@@ -133,18 +136,18 @@ function Index() {
     },[]);
 
     return (
-        <Layout title="Assignment Submissions">
+        <Layout title={t('assignment.data_table.layout_title')}>
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
                             <select value={seletedClass} onChange={(e: any) => handleGetContent(e.target.value)} className="select-field">
-                                <option  value="all">Select Class</option>
+                                <option  value="all">{t('assignment.data_table.select_class')}</option>
                                 {classes.map((classData: any, index: any) => <option key={index} value={classData._id}>{classData.name}</option>)}
                             </select>
                             <select value={seletedContent} onChange={(e: any) => handleGetAssignmentSubs(e.target.value)}  className="select-field">
-                                <option value="all">Select Course Content</option>
+                                <option value="all">{t('assignment.data_table.select_course_content')}</option>
                                 {contents.map((contentData: any, index: any) => <option key={index} value={contentData._id}>{contentData.title}</option>)}
                             </select>
                         </div>

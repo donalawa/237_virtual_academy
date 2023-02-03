@@ -156,7 +156,7 @@ function Layout({ title, children } : any) {
                         </a>
                         <div className="divider"></div>
                         <div className="profile-btn" onClick={() => setShowUserMenu(!showUserMenu)}>
-                            <div className="name">Hello Admin</div>
+                            <div className="name">{t('hello')} Admin</div>
                             {/* <img src="./assets/images/users/user-1.png" alt=""> */}
                         </div>
                     </span>
@@ -181,9 +181,9 @@ function Layout({ title, children } : any) {
                         <div className="page-title">
                             <p>{title}</p>
                             <div className="crumb">
-                                <NavLink to="/dashboard" className="crumb-item">Dashboard</NavLink>
+                                <NavLink to="/dashboard" className="crumb-item">{t('layout.dashboard')}</NavLink>
                                 <span>{'>'}</span>
-                                <a className="crumb-item">Home</a>
+                                <a className="crumb-item">{t('layout.home')}</a>
                             </div>
                         </div>
 
