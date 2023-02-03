@@ -3,10 +3,11 @@ import './coursecontent.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 
-import { AssessmentModal, EditCourseContentModal, DeleteModal, PassExammodal  } from '../../../components';
-import UploadAssignmentSolutionModal from '../../../components/students/UploadAssignmentSolutionModal/UploadAssignmentSolutionModal';
+import { AssessmentModal, EditCourseContentModal, DeleteModal, PassExammodal, VideoPlayerModal  } from '../../../components';
+import UploadFollowupSolutionModal from '../../../components/students/UploadFollowupSolutionModal/UploadFollowupSolutionModal';
 import { AiFillEye } from 'react-icons/ai';
 import {  BsPencilSquare } from 'react-icons/bs';
+import { IoMdCloudDownload } from 'react-icons/io';
 
 import { toast } from 'react-toastify';
 
@@ -18,6 +19,7 @@ import { getPassExamContents, deletePassExamContent } from '../../../services/pa
 import { getCourseContent, getAcceptedClasses } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
+import { convertDate } from '../../../utils/date';
 
 import moment from 'moment';
 
@@ -39,11 +41,11 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Assignment File',
+        label: 'Follow-up File',
         name: 'name'
     },
     {
-        label: 'Assignment Solution',
+        label: 'Follow-up Solution',
         name: 'name'
     },
     {
@@ -79,6 +81,18 @@ function Index() {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const [showVideoModal, setShowVideoModal] = useState(false);
+    const [videoUrl, setVideoUrl] = useState('');
+
+    const toggleVideoModal = () => {
+        setShowVideoModal(!showVideoModal);
+    }
+
+    const handleSetVideoUrl = (url: any) =>  {
+        setVideoUrl(url);
+        toggleVideoModal();
+    }  
+    
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
     }
@@ -162,7 +176,7 @@ function Index() {
     },[]);
 
     return (
-        <StudentLayout title="Course Content">
+        <StudentLayout title="Course Content" pageTitle="Course Content">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -207,17 +221,20 @@ function Index() {
                             
                                     <td className="flex-start">{data?.pdf_file_url ? <a href={data?.pdf_file_url} target="_blank" download>Pdf Content</a> : "None"}</td>
                                     <td className="flex-start">{data?.video_url ? <a href={data?.video_url} target="_blank" download>Video Content</a> : "None"}</td>
-                                    <td className="flex-start">{data?.assignment_file_url ? <a href={data?.assignment_file_url} target="_blank" download>Assignment File</a> : "None"}</td>
-                                    <td className="flex-start">{data?.assignment_solution_url ? <a href={data?.assignment_solution_url} target="_blank" download>Solution File</a> : "Not yet available"}</td>                           
+                                    <td className="flex-start">{data?.followup_file_url ? <a href={data?.followup_file_url} target="_blank" download>Foolow-up File</a> : "None"}</td>
+                                    <td className="flex-start">{data?.followup_solution_url ? <a href={data?.followup_solution_url} target="_blank" download>Solution File</a> : "Not yet available"}</td>                           
                                     <td className="flex-start">
-                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                        <p>{convertDate(data?.createdAt)}</p>
                                     </td>
                                     <td className="flex-center">
                                         <div className="action">
-                                            <Tippy content="View Video Content"  animation="fade">
-                                            <a onClick={() => null} className="see"><AiFillEye onClick={() => null} size={14}/></a>
-                                            </Tippy>
-                                    
+                                          {data?.video_url.length > 2 &&  <Tippy content="View Video Content"  animation="fade">
+                                            <a onClick={() => handleSetVideoUrl(data?.video_url)} className="see"><AiFillEye onClick={() => null} size={14}/></a>
+                                            </Tippy>}
+                                        {
+                                            data?.pdf_file_url.length > 2 && <Tippy content="Pdf Content"  animation="fade">
+                                            <a onClick={() => handleSetVideoUrl(data?.video_url)} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                            </Tippy>}
                                         </div>
                                     </td>
 
@@ -231,9 +248,10 @@ function Index() {
             </div>
         </div>
 
-        {showAddModal &&  <UploadAssignmentSolutionModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
+        {showAddModal &&  <UploadFollowupSolutionModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
         {deleteModal && <DeleteModal onAccept={handleDeleteCourseExamContent} onCancel={toggleDeleteModal} />}
+        {showVideoModal && <VideoPlayerModal video={videoUrl} onClose={toggleVideoModal}/>}
         </StudentLayout>
     );
 }

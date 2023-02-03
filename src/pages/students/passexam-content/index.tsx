@@ -23,6 +23,7 @@ import moment from 'moment';
 import { getTotalAssessments, studentGetAssessments } from '../../../services/assessment';
 import { VideoPlayerModal } from '../../../components';
 import { getPassExamContents } from '../../../services/passExams';
+import { convertDate } from '../../../utils/date';
 
 const rows: any = [
     {
@@ -139,7 +140,7 @@ function Index() {
     },[]);
 
     return (
-        <StudentLayout title="Asssessment Submissions">
+        <StudentLayout title="Asssessment Submissions" pageTitle="Pass Exam">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -183,10 +184,10 @@ function Index() {
                                     <td className="flex-start"><a href={data?.questions_file} target="_blank" download>Question File</a></td>
                                     <td className="flex-start"><a>{data?.answers_file?.length > 2 ? 'Available' : "Not Available"}</a></td>
                                     <td className="flex-start"><a>{data?.video_solution_url?.length > 2 ? 'Available' : "Not Available"}</a></td>
-                                    <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
+                                    <td className="flex-start">{convertDate(data?.publish_date)}</td>
                                     
                                     <td className="flex-start">
-                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                        <p>{convertDate(data?.createdAt)}</p>
                                     </td>
 
                                     <td className="flex-center">
@@ -198,6 +199,9 @@ function Index() {
                                             </Tippy>}
                                           {data?.answers_file?.length > 2 &&  <Tippy content="Download File Solution"  animation="fade">
                                             <a href={data?.answers_file} target="_blank" download className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                            </Tippy>}
+                                            {data?.questions_file?.length > 2 &&  <Tippy content="Download Questions File"  animation="fade">
+                                            <a href={data?.questions_file} target="_blank" download className="see orange"><IoMdCloudDownload onClick={() => null} size={14}/></a>
                                             </Tippy>}
                                         </div>
                                     </td>

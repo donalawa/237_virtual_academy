@@ -16,6 +16,7 @@ import 'tippy.js/dist/tippy.css';
 import { getStudentsClasses, joinClass } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
+import {convertDate} from '../../../utils/date';
 
 import moment from 'moment';
 
@@ -90,7 +91,7 @@ function Index() {
     },[]);
 
     return (
-        <StudentLayout title="Class Rooms">
+        <StudentLayout title="Class Rooms" pageTitle="Home">
               <div className="section">
                         <div className="parent-con">
                             <div className="data-table">
@@ -138,7 +139,7 @@ function Index() {
                                                 <td className="flex-start">{data?.status}</td>
 
                                                 <td className="flex-start">
-                                                    <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                                    <p>{convertDate(data?.createdAt)}</p>
                                                 </td>
 
                                     

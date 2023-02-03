@@ -8,8 +8,8 @@ function Index() {
     const roomID: string = params.roomID;
     
     const meeting = async(element: any) => {
-        const appID: any = process.env.APP_ID;
-        const serverSecret: any = process.env.SERVER_SECRET;
+        const appID = 1022775369;
+        const serverSecret = "ee6ade9bda460ffcad9f66d4296f79ce";
         const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, Date.now().toString(), "Name admin");
 
         const zp = ZegoUIKitPrebuilt.create(kitToken);

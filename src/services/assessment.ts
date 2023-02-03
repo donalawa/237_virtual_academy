@@ -8,6 +8,10 @@ const getAssessments = () => {
     return api.get('/assessment');
 }
 
+const getClassAssessments = (classId: any)  => {
+    return api.get(`/assessments/${classId}`);
+}
+
 const studentGetAssessments = (classId: any) => {
     return api.get(`/student/assessment/${classId}`);
 }
@@ -19,6 +23,10 @@ const deleteAssessment = (id: any) => {
 const submitAssessmentSolution = (data: any) => {
     return api.post('/student/assessment', data);
 } 
+
+const submitAssessmentScore = (assessmentSolId: any, data: any) => {
+    return api.post(`/assessment/score/${assessmentSolId}`, data)
+}
 
 const getAllAssessmentSolutions = (assessmentId: any) => {
     return api.get(`/assessment/solutions/${assessmentId}`);
@@ -32,6 +40,7 @@ const getTotalAssessments = (classId: any) => {
     return api.get(`/student/total/assessment/${classId}`)
 }
 
+
 export {
     createAssessment,
     getAssessments,
@@ -40,6 +49,8 @@ export {
     submitAssessmentSolution,
     getAllAssessmentSolutions,
     getStudentsAssessmentSolutions,
-    getTotalAssessments
+    getTotalAssessments,
+    getClassAssessments,
+    submitAssessmentScore
 }   
 

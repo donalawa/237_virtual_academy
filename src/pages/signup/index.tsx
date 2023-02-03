@@ -76,7 +76,7 @@ const Index = () => {
                   })
                 setTimeout(() => {
                     navigate('/login');
-                },2000)
+                },1000)
             }else {
                 toast.error(res.data.message, {
                     pauseOnHover: false,
@@ -121,6 +121,7 @@ const Index = () => {
                             <option value="none">Select Account Type</option>
                             <option value="student">Student</option>
                             <option value="teacher">Teacher</option>
+                            <option value="school">School</option>
                         </select>
                         </div>
                         <FormField  name="password" type="password" placeholder={`${t('password_label')}`}/>

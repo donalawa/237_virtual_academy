@@ -16,16 +16,16 @@ const getCourseContent = (id: any) =>  {
     return api.get(`/course-contents/student/${id}`);
 }
 
-const submitAssignmentSolution = (data: any) => {
-    return api.post(`/solution`, data);
+const submitFollowupSolution = (data: any) => {
+    return api.post(`/followup/solution`, data);
 }
 
 const getStudentSolutions = () => {
-    return api.get('/student/solutions');
+    return api.get('/followup/student/solutions');
 }
 
 const getAllStudentSolutions = (courseContentId: any) => {
-    return api.get(`/solutions/${courseContentId}`)
+    return api.get(`/followup/solutions/${courseContentId}`)
 }
 
 const studentGetPassExams = (classId: any) => {
@@ -38,7 +38,7 @@ export {
     getCourseContent,
     getAcceptedClasses,
     getStudentSolutions,
-    submitAssignmentSolution,
+    submitFollowupSolution,
     getAllStudentSolutions,
     studentGetPassExams
 }

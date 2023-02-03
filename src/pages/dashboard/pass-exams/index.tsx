@@ -3,9 +3,9 @@ import './pass-exams.css';
 
 import Layout from '../../../components/Layout/Layout';
 
-import { AddCourseContentModal, EditCourseContentModal, DeleteModal, PassExammodal  } from '../../../components';
+import { AddCourseContentModal, EditCourseContentModal, DeleteModal, PassExammodal, VideoPlayerModal  } from '../../../components';
 import { IoMdCloudDownload } from 'react-icons/io';
-import { AiOutlineCopy } from 'react-icons/ai';
+import { AiFillEye } from 'react-icons/ai';
 import {  BsPencilSquare } from 'react-icons/bs';
 
 import { toast } from 'react-toastify';
@@ -20,6 +20,7 @@ import { getPassExamContents, deletePassExamContent } from '../../../services/pa
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
+import { convertDate } from '../../../utils/date';
 
 const rows: any = [
     {
@@ -79,6 +80,10 @@ function Index() {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const [showVideoModal, setShowVideoModal] = useState(false);
+
+    const [videoUrl, setVideoUrl] = useState('');
+
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
     }
@@ -90,6 +95,15 @@ function Index() {
     const toggleDeleteModal = () => {
         setShowDeleteModal(!deleteModal);
     }
+
+    const toggleVideoModal = () => {
+        setShowVideoModal(!showVideoModal);
+    }
+
+    const handleSetVideoUrl = (url: any) =>  {
+        setVideoUrl(url);
+        toggleVideoModal();
+    }  
 
     const handleGetClasses = ()  => {
 
@@ -199,23 +213,34 @@ function Index() {
                                     </td>
                     
                                     <td className="flex-start"><a href={data?.questions_file} target="_blank" download>Question File</a></td>
-                                    <td className="flex-start"><a href={data?.answers_file} target="_blank" download>Answers File</a></td>
-                                    <td className="flex-start"><a href={data?.video_solution_url} target="_blank" download>Video File</a></td>
-                                    <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
+                                     <td className="flex-start">{data?.answers_file?.length > 2 ? <a href={data?.answers_file} target="_blank" download>Answers File</a> : "Not Available"}</td> 
+                                    <td className="flex-start">{data?.video_solution_url.length > 2 ? <a href={data?.video_solution_url} target="_blank" download>Video File</a> : "Not Available"}</td>
+                                    <td className="flex-start">{convertDate(data?.publish_date)}</td>
                                     
                                     <td className="flex-start">
-                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                        <p>{convertDate(data?.createdAt)}</p>
                                     </td>
 
                                     <td className="flex-center">
                                         <div className="action">
-                                            <Tippy content="Download Video Solution"  animation="fade">
+                                            {/* <Tippy content="Download Video Solution"  animation="fade">
                                             <a onClick={() => {
                                                 setEditData(data);
                                                 toggleEditModal();
                                             }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
-                                            </Tippy>
-                                            <Tippy content="Delete Class"  animation="fade">
+                                            </Tippy> */}
+                                            {data?.video_solution_url&& <Tippy content="View Video Solution"  animation="fade">
+                                            <a onClick={() => {
+                                                handleSetVideoUrl(data?.video_solution_url)
+                                            }} className="see"><AiFillEye onClick={() => null} size={14}/></a>
+                                            </Tippy>}
+                                          {data?.answers_file?.length > 2 &&  <Tippy content="Download Solution File"  animation="fade">
+                                            <a href={data?.answers_file} target="_blank" download className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                            </Tippy>}
+                                            {data?.questions_file?.length > 2 &&  <Tippy content="Download Questions File"  animation="fade">
+                                            <a href={data?.questions_file} target="_blank" download className="see orange"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                            </Tippy>}
+                                            <Tippy content="Delete Pass Exam"  animation="fade">
                                                 <a onClick={() => {
                                                     setDeleteId(data._id);
                                                     toggleDeleteModal();
@@ -236,6 +261,7 @@ function Index() {
         {showAddModal &&  <PassExammodal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
         {deleteModal && <DeleteModal onAccept={handleDeletePassExamContent} onCancel={toggleDeleteModal} />}
+        {showVideoModal && <VideoPlayerModal video={videoUrl} onClose={toggleVideoModal}/>}
         </Layout>
     );
 }

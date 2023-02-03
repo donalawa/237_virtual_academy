@@ -3,8 +3,11 @@ import './assessment-submissions.css';
 
 import Layout from '../../../components/Layout/Layout';
 
-import { IoMdCloudDownload } from 'react-icons/io';
+import { AddCourseContentModal, EditCourseContentModal, DeleteModal, AssessmentScoreModal } from '../../../components';
+
+import { AiFillEye } from 'react-icons/ai';
 import {  BsPencilSquare } from 'react-icons/bs';
+import { IoMdCloudDownload } from 'react-icons/io';
 
 import { toast } from 'react-toastify';
 
@@ -12,11 +15,15 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
-import { getPassExamContents, deletePassExamContent } from '../../../services/passExams';
+import { deleteCourseContent, getCourseContents, getClassCourseContents } from '../../../services/courseContent';
+import { getAllStudentSolutions } from '../../../services/student';
+import { getAllAssessmentSolutions, getClassAssessments } from '../../../services/assessment';
 
+import { FollowUpScoreModal } from '../../../components';
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
+import { convertDate } from '../../../utils/date';
 
 const rows: any = [
     {
@@ -24,27 +31,27 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Title',
-        name: 'name'
-    },
-    {
         label: 'Student Name',
         name: 'name'
     },
     {
-        label: 'Question File',
+        label: 'Submission',
         name: 'name'
     },
     {
-        label: 'Answer Pdf',
+        label: 'Comment',
         name: 'name'
     },
     {
-        label: 'Submited Date',
+        label: 'Score',
         name: 'name'
     },
     {
-        label: 'Created Date',
+        label: 'Total Score',
+        name: 'name'
+    },
+    {
+        label: 'Submitted Date',
         name: 'name'
     },
     {
@@ -61,10 +68,16 @@ const override = {
 
 
 function Index() {
-    const [submissions, setSubmissions] = useState([]);
-
     const [classes, setClasses] = useState([]);
+    const [contents, setContents] = useState([]);
+    const [solutions, setSolutions] = useState([]);
+    const [seletedClass, setSelectedClass] = useState('all');
+    const [seletedContent, setSelectedContent] = useState('all');
     const [loading, setLoading] = useState(false);
+    const [showAssessmentScoreModal, setShowAssessmentScoreModal] = useState(false);
+    const [selectedSolutionId, setSelectedSolutionId] = useState(null);
+
+    const [submissionVals, setSubmissionVals] = useState(null);
 
     const handleGetClasses = ()  => {
 
@@ -77,38 +90,99 @@ function Index() {
         })
     }
 
+    const handleGetContent = (classId: any) => {
+        // setLoading(true);
+        setSolutions([]);
+        setSelectedContent('all')
 
-    const handleGetContent = () => {
-        setLoading(true);
-        getPassExamContents().then((res: any) => {
-            console.log("ASSESSMENT SUBMISSIONS: ",res);
-            setLoading(false);
-            setSubmissions(res.data.data);
+        if(classId == 'all') {
+            setSelectedClass('all');
+            setContents([]);
+            setSolutions([]);
+            setSelectedContent('all')
+            return;
+        }
+        setSelectedClass(classId)
+        // CHANGE TO GET CLASS ASSESSMENTS
+        getClassAssessments(classId).then((res: any) => {
+            // console.log("CLASSS COURSE CONTENT RES: ",res);
+            // setLoading(false);
+            // console.log(res);
+            if(res.ok) {
+                setContents(res.data.data);
+            }
         }).catch((err: any) => {
             console.log('Error: ', err);
+            // setLoading(false);
+        })
+    }
+
+    const getSolutions = (contentId: any) => {
+        setLoading(true);
+
+        getAllAssessmentSolutions(contentId).then((res: any) => {
+            // console.log('All Solutions', res)
+            setSolutions(res.data.data)
+            setLoading(false);
+        }).catch(err => {
+            console.log('ERROR')
             setLoading(false);
         })
     }
 
+    const handleGetAssignmentSubs = (contentId: any) => {
+        // console.log('GET SUBS');
+        // console.log('CONTENT ID: ', contentId)
+
+        if(contentId == 'all') {
+            setSelectedContent('all');
+            setSolutions([]);
+            return;
+        }
+        setSelectedContent(contentId);
+        getSolutions(contentId);
+    }
+
+    const toggleScoreModal = () => {
+        setShowAssessmentScoreModal(!showAssessmentScoreModal)
+    }
+
+    const handleSetSelectedId = (id: any, data: any) => {
+        setSelectedSolutionId(id);
+        if(data?.score) {
+            setSubmissionVals(data);
+        }
+        toggleScoreModal();
+    }
+
+    const scoreSubmited = () => {
+        getSolutions(seletedContent);
+        setShowAssessmentScoreModal(false);
+    }
+
+
     useEffect(() => {
         console.log('USER EFFECT RAN')
-        handleGetContent();
         handleGetClasses();
     },[]);
 
     return (
-        <Layout title="Assessment Submissions">
+        <Layout title="Assessment Submissions" pageTitle="Assessment Submissions">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                            <select name="" id="" className="select-field">
-                                <option value="all">All</option>
+                            <select value={seletedClass} onChange={(e: any) => handleGetContent(e.target.value)} className="select-field">
+                                <option  value="all">Select Class</option>
                                 {classes.map((classData: any, index: any) => <option key={index} value={classData._id}>{classData.name}</option>)}
                             </select>
+                            <select value={seletedContent} onChange={(e: any) => handleGetAssignmentSubs(e.target.value)}  className="select-field">
+                                <option value="all">Select Course Content</option>
+                                {contents.map((contentData: any, index: any) => <option key={index} value={contentData._id}>{contentData.title}</option>)}
+                            </select>
                         </div>
-                     
+                
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -127,30 +201,32 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {submissions?.map((data: any, index: any) => <tr>
+                                {solutions?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data.title}</p>
+                                        <p>{data?.student_id?.username}</p>
                                     </td>
                             
-                    
-                                    <td className="flex-start"><a href={data?.questions_file} target="_blank" download>Question File</a></td>
-                                    <td className="flex-start"><a href={data?.answers_file} target="_blank" download>Answers File</a></td>
-                                    <td className="flex-start"><a href={data?.video_solution_url} target="_blank" download>Video File</a></td>
-                                    <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
-                                    
+                                    <td className="flex-start"><a href={data?.document_url} target="_blank" download>Submission File</a></td>
+                                    <td className="flex-start">{data?.comment}</td>
+
+                                    <td className="flex-start">{data?.score ? data?.score : 'Not Yet'}</td>
+                                    <td className="flex-start">{data?.total_score ? data?.total_score : 'Not Yet'}</td>
+                           
+
                                     <td className="flex-start">
-                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                        <p>{convertDate(data?.createdAt)}</p>
                                     </td>
 
                                     <td className="flex-center">
                                         <div className="action">
-                                            <Tippy content="Download Video Solution"  animation="fade">
-                                            <a onClick={() => {
-                               
-                                            }} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                        
+                                            <Tippy content="Enter Score"  animation="fade">
+                                                <a className="see"><BsPencilSquare onClick={() => handleSetSelectedId(data?._id, data)} size={16}/></a>
                                             </Tippy>
-                                         
+                                            <Tippy content="Download  Submission"  animation="fade">
+                                            <a target="_blank" download href={data?.document_url} className="see"><IoMdCloudDownload size={16}/></a>
+                                            </Tippy>
                                         </div>
                                     </td>
                                 </tr> )}
@@ -161,6 +237,7 @@ function Index() {
                 </div>
             </div>
         </div>
+        {showAssessmentScoreModal && <AssessmentScoreModal onContentAdded={scoreSubmited} values={submissionVals} assessMentSolId={selectedSolutionId} onClose={toggleScoreModal}/>}
         </Layout>
     );
 }

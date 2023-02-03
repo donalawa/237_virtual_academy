@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import './StudentLayout.css';
+import './SchoolLayout.css';
 import { removeToken } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
 import { MdContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 import { GoDeviceCameraVideo } from 'react-icons/go';
+import { BsInfoCircle } from 'react-icons/bs';
 
 import { getUser } from '../../utils/storage';
 
-function StudentLayout({ title, children, pageTitle } : any) {
+function SchoolLayout({ title, children, pageTitle } : any) {
     const { t, i18n } = useTranslation();
     let [lang, setLang] = useState<any>(null);
 
@@ -67,49 +68,28 @@ function StudentLayout({ title, children, pageTitle } : any) {
 
     return (
         <div className="dashboard-grid">
-        <div className={`sidebar-student student student-dashboard-sidebar  ${!showStudNav ? 'show' : ''}`}>
+        <div className={`sidebar-student student school-dashboard-sidebar  ${!showStudNav ? 'show' : ''}`}>
             <div className="logo" style={{cursor: 'pointer'}}>
                 <a onClick={() => navigate('/')}><img src={require('../../assets/images/logo/logo-light.png')} alt=" " /></a>
             </div>
             <div className="menu">
                 <div className="sub-menu">
                     <div className="title">MAIN NAVIGATION</div>
-                    <NavLink className="link" to="/students/home">
+                    <NavLink className="link" to="/school/home">
                     <i><MdDashboard size={20}/></i>
                         <span>Dashboard</span>
                     </NavLink>
 
 
-                    <NavLink className="link" to="/students/course-contents">
+                    <NavLink className="link" to="/school/courses">
                     <i><MdContentPaste size={20}/></i>
-                        <span>Course Content</span>
-                    </NavLink>
-
-                    <NavLink className="link" to="/students/followups">
-                    <i><MdAssignmentLate size={20}/></i>
-                        <span>Follow Ups</span>
-                    </NavLink>
-
-                    <NavLink className="link" to="/students/assessments">
-                    <i><MdAssessment size={20}/></i>
-                        <span>Assessments</span>
-                    </NavLink>
-
-                    <NavLink className="link" to="/students/assessment-submissions">
-                    <i><MdAssessment size={20}/></i>
-                        <span>Assessment Submissions</span>
-                    </NavLink>
-
-                    <NavLink className="link" to="/students/passexams">
-                    <i><MdAssessment size={20}/></i>
-                        <span>Pass Exams</span>
+                        <span>School Courses</span>
                     </NavLink>
                     
-                    <NavLink className="link" to="/students/live-session">
-                    <i><GoDeviceCameraVideo size={20}/></i>
-                        <span>Join Live Session</span>
+                    <NavLink className="link" to="/school/info">
+                    <i><BsInfoCircle size={20}/></i>
+                        <span>School Info</span>
                     </NavLink>
-                    
                 </div>
     
             </div>
@@ -131,7 +111,7 @@ function StudentLayout({ title, children, pageTitle } : any) {
                         </a>
                         <div className="divider"></div>
                         <div className="profile-btn" onClick={() => setShowUserMenu(!showUserMenu)}>
-                            <div className="name">Hello</div>
+                            <div className="name">Hello Admin</div>
                             {/* <img src="./assets/images/users/user-1.png" alt=""> */}
                         </div>
                     </span>
@@ -143,10 +123,10 @@ function StudentLayout({ title, children, pageTitle } : any) {
                     <i className="fa fa-times" onClick={() => setShowUserMenu(!showUserMenu)}></i>
                     <img src={require("../../assets/images/users/avatar.jpg")} alt="" />
                     <p>{user?.username}</p>
-                    <span>Student</span>
+                    <span>School</span>
                 </div>
                 <div className="user-menu-footer">
-                    <a><i className="fas fa-cog"></i> Settings</a>
+                    <a onClick={() => navigate('/school/info')} className="logout-link"><i className="fas fa-cog"></i> Settings</a>
                     <a onClick={handleLogout} className="logout-link"><i className="fas fa-door-open"></i> Logout</a>
                 </div>
             </div>
@@ -156,7 +136,7 @@ function StudentLayout({ title, children, pageTitle } : any) {
                         <div className="page-title">
                             <p>{title}</p>
                             <div className="crumb">
-                                <NavLink to="/" className="crumb-item">Students</NavLink>
+                                <NavLink to="/" className="crumb-item">School</NavLink>
                                 <span>{'>'}</span>
                                 <a className="crumb-item">{pageTitle}</a>
                             </div>
@@ -180,4 +160,4 @@ function StudentLayout({ title, children, pageTitle } : any) {
     );
 }
 
-export default StudentLayout;
+export default SchoolLayout;

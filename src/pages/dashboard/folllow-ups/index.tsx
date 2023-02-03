@@ -18,6 +18,7 @@ import { getClasses, deleteClass } from '../../../services/classroom';
 import { deleteCourseContent, getCourseContents, getClassCourseContents } from '../../../services/courseContent';
 import { getAllStudentSolutions } from '../../../services/student';
 
+import { FollowUpScoreModal } from '../../../components';
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
@@ -37,6 +38,14 @@ const rows: any = [
     },
     {
         label: 'Comment',
+        name: 'name'
+    },
+    {
+        label: 'Score',
+        name: 'name'
+    },
+    {
+        label: 'Total Score',
         name: 'name'
     },
     {
@@ -63,7 +72,10 @@ function Index() {
     const [seletedClass, setSelectedClass] = useState('all');
     const [seletedContent, setSelectedContent] = useState('all');
     const [loading, setLoading] = useState(false);
+    const [showFollowUpScoreModal, setShowFollowUpScoreModal] = useState(false);
+    const [selectedSolutionId, setSelectedSolutionId] = useState(null);
 
+    const [followUpScoreVals, setFollowUpScoreVals] = useState(null)
 
     const handleGetClasses = ()  => {
 
@@ -126,6 +138,22 @@ function Index() {
         getSolutions(contentId);
     }
 
+    const toggleScoreModal = () => {
+        setShowFollowUpScoreModal(!showFollowUpScoreModal)
+    }
+
+    const handleSetSelectedId = (id: any, data: any) => {
+        setSelectedSolutionId(id);
+        toggleScoreModal();
+        setFollowUpScoreVals(data);
+    }
+
+    const scoreSubmited = () => {
+        setShowFollowUpScoreModal(false);
+        getSolutions(seletedContent);
+        
+    }
+
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
@@ -133,7 +161,7 @@ function Index() {
     },[]);
 
     return (
-        <Layout title="Assignment Submissions">
+        <Layout title="Follow-up Submissions">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -175,6 +203,9 @@ function Index() {
                             
                                     <td className="flex-start"><a href={data?.document_url} target="_blank" download>Solution File</a></td>
                                     <td className="flex-start">{data?.comment}</td>
+
+                                    <td className="flex-start">{data?.score ? data?.score : 'Not Yet'}</td>
+                                    <td className="flex-start">{data?.total_score ? data?.total_score : 'Not Yet'}</td>
                            
 
                                     <td className="flex-start">
@@ -183,6 +214,10 @@ function Index() {
 
                                     <td className="flex-center">
                                         <div className="action">
+                                     
+                                            <Tippy content="Enter Score"  animation="fade">
+                                                <a className="see"><BsPencilSquare onClick={() => handleSetSelectedId(data?._id, data)} size={16}/></a>
+                                            </Tippy>
                                             <Tippy content="Download  Submissions"  animation="fade">
                                             <a target="_blank" download href={data?.document_url} className="see"><IoMdCloudDownload size={16}/></a>
                                             </Tippy>
@@ -196,6 +231,7 @@ function Index() {
                 </div>
             </div>
         </div>
+        {showFollowUpScoreModal && <FollowUpScoreModal onContentAdded={scoreSubmited} followVals={followUpScoreVals} solutinId={selectedSolutionId} onClose={toggleScoreModal}/>}
         </Layout>
     );
 }

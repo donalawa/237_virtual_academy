@@ -21,6 +21,7 @@ import { deleteAssessment, getAssessments } from '../../../services/assessment';
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
+import { convertDate } from '../../../utils/date';
 
 const rows: any = [
     {
@@ -36,7 +37,7 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Answer Pdf',
+        label: 'Answer File',
         name: 'name'
     },
     {
@@ -145,7 +146,7 @@ function Index() {
         getAssessments().then((res: any) => {
             console.log("ASSESSMENT CONTENT:  ",res);
             setLoading(false);
-            setContents(res.data.data);
+            setContents(res.data.data.reverse());
         }).catch((err: any) => {
             console.log('Error: ', err);
             setLoading(false);
@@ -201,13 +202,14 @@ function Index() {
                             
                     
                                     <td className="flex-start"><a href={data?.assessment_file} target="_blank" download>Assessment File</a></td>
-                                   {data.answers_file_type != 'video' && <td className="flex-start"><a href={data?.answers_file} target="_blank" download>Answers File</a></td>}
-                                   {data.answers_file_type == 'video' && <td className="flex-start"><a  >Video Solution</a></td>}
+                                    
+                                   <td className="flex-start">{data.answers_file.length > 2 ? <a>Available</a> : "Not Available"}</td>
+                                  
                                    
                                     <td className="flex-start">{data?.publish_date}</td>
                                     
                                     <td className="flex-start">
-                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                        <p>{convertDate(data?.createdAt)}</p>
                                     </td>
 
                                     <td className="flex-center">
@@ -217,17 +219,24 @@ function Index() {
                                                 handleSetVideoUrl(data.answers_file)
                                             }} className="see"><AiFillEye onClick={() => null} size={14}/></a>
                                             </Tippy>}
-                                          {data?.answers_file_type == 'others' &&  <Tippy content="Download File Solution"  animation="fade">
+                                          {data?.answers_file_type == 'others' &&  <Tippy content="Download Answer File"  animation="fade">
                                             <a onClick={() => {
                                             //    handleSetVideoUrl(data.answers_file)
                                             }} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
                                             </Tippy>}
+
+                                               
+                                            <Tippy content="Enter Solution File"  animation="fade">
+                                                <a className="see"><BsPencilSquare onClick={() => null} size={16}/></a>
+                                            </Tippy>
+
                                             <Tippy content="Delete Assessment"  animation="fade">
                                                 <a onClick={() => {
                                                     setDeleteId(data?._id);
                                                     toggleDeleteModal();
                                                 }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
                                             </Tippy>
+                                        
                                         </div>
                                     </td>
                                 </tr> )}

@@ -10,7 +10,7 @@ import { Navigate } from "react-router";
 
 import { getUser, isTeacher } from '../../utils/storage';
 
-function Layout({ title, children } : any) {
+function Layout({ title, children, pageTitle = '' } : any) {
     const { t, i18n } = useTranslation();
     let [lang, setLang] = useState<any>(null);
 
@@ -102,9 +102,9 @@ function Layout({ title, children } : any) {
                     </NavLink>
 
 
-                    <NavLink className="link" to="/assignments">
+                    <NavLink className="link" to="/follow-up">
                     <i><MdAssignmentLate size={20}/></i>
-                        <span>Assignments</span>
+                        <span>Follow-up</span>
                     </NavLink>
 
                     <NavLink className="link" to="/assessments">
@@ -183,7 +183,7 @@ function Layout({ title, children } : any) {
                             <div className="crumb">
                                 <NavLink to="/dashboard" className="crumb-item">Dashboard</NavLink>
                                 <span>{'>'}</span>
-                                <a className="crumb-item">Home</a>
+                                <a className="crumb-item">{ pageTitle }</a>
                             </div>
                         </div>
 

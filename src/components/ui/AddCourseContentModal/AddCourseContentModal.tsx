@@ -53,12 +53,12 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
 
     // ASSIGNMENT
     const [isUploadingAssignmentSolutionFile,  setIsUploadingAssignmentSolutionFile] = useState(false);
-    const [assignmentSolutionProgress, setAssignmentSolutionProgress] = useState(0);
-    const [assignmentSolutionUrl, setAssignmentSolutionUrl] = useState('');
+    const [followupSolutionProgress, setFollowupSolutionProgress] = useState(0);
+    const [followUpSolutionUrl, setFollowupSolutionUrl] = useState('');
 
-    const [assignmentPdfUrl, setAssignmentPdfUrl] = useState('');
-    const [assignmentPdfProgress,  setAssignmentPdfProgress] = useState(0);
-    const [isUploadingAssignmentPdf, setIsUploadingAssignmentPdf] = useState(false);
+    const [followupPdfUrl, setFollowupPdfUrl] = useState('');
+    const [followupPdfProgress,  setFollowupPdfProgress] = useState(0);
+    const [isUploadingFollowupPdf, setIsUploadingFollowupPdf] = useState(false);
 
     const [showAssignmentSolutionPreview, setShowAssignmentSolutionPreview] = useState(false);
 
@@ -68,8 +68,8 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
 
     const videoFiileRef: any = useRef(null) 
     const pdfFileRef: any = useRef(null);
-    const assignPdfFileRef: any = useRef(null);
-    const assignSolutionFileRef: any = useRef(null);
+    const followupPdfFileRef: any = useRef(null);
+    const followupSolutionFileRef: any = useRef(null);
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Class Name is required'),
@@ -168,13 +168,13 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
       uploadTask.on('state_changed', (snapshot: any)=>{
           const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-          setAssignmentSolutionProgress(+uploadProgress);
+          setFollowupSolutionProgress(+uploadProgress);
 
       }, (error: any) => {
           console.log(error);
       },()=> {
            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setAssignmentSolutionUrl(downloadURL);
+              setFollowupSolutionUrl(downloadURL);
               console.log('URL', videoUrl);
               console.log('VIDEO  URL: ', downloadURL);
               setShowAssignmentSolutionPreview(true);
@@ -184,7 +184,7 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
     }
 
     const uploadAssignmentPdf = (e: any) => {
-        setIsUploadingAssignmentPdf(true);
+        setIsUploadingFollowupPdf(true);
       const pdfFile: any = e.target.files[0];
       const storageRef = ref(storage, `pdf-content/${Date.now()}-${pdfFile.name}`);
       const uploadTask = uploadBytesResumable(storageRef, pdfFile);
@@ -194,16 +194,16 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
     uploadTask.on('state_changed', (snapshot: any)=>{
         const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-        setAssignmentPdfProgress(+uploadProgress);
+        setFollowupPdfProgress(+uploadProgress);
 
     }, (error: any) => {
         console.log(error);
     },()=> {
          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setAssignmentPdfUrl(downloadURL);
+            setFollowupPdfUrl(downloadURL);
             console.log('URL', pdfUrl);
             console.log('PDF  URL: ', downloadURL);
-            setIsUploadingAssignmentPdf(false);
+            setIsUploadingFollowupPdf(false);
         });
     })
   }
@@ -216,8 +216,8 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
             classroom_id: selectedClassroom,
             video_url: videoUrl,
             pdf_file_url: pdfUrl,
-            assignment_file_url: assignmentPdfUrl,
-            assignment_solution_url: assignmentSolutionUrl,
+            followup_file_url: followupPdfUrl,
+            followup_solution_url: followUpSolutionUrl,
         }
 
         console.log('CONTENT', data);
@@ -361,10 +361,36 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
                   
                         
                         <div className='upload-content-container'>
-                            <div className="content-upload-left">
-                            {assignmentSolutionUrl.length < 2 && <div className="form-field-upload">
-                                    <p className="label-text">Upload Assignment Solution Content: </p>
-                                    <div className="file-drop-upload" onClick={() => assignSolutionFileRef.current.click()}>
+                        {followupPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-left ">
+                            <p className="label-text">Upload Follow-up Pdf Content: </p>
+                            <div className="file-drop-upload" onClick={() => followupPdfFileRef.current.click()}>
+                            {!isUploadingFollowupPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
+                                <input ref={followupPdfFileRef} onChange={uploadAssignmentPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
+                                {isUploadingFollowupPdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                              <BeatLoader
+                                    color="#623d91" 
+                                    loading={isUploadingFollowupPdf}
+                                    cssOverride={override}
+                                />
+                                <p style={{fontSize: '14px'}}>Uploading Content</p>
+                            
+                                    <ProgressBar bgcolor={'#6a1b9a'} completed={followupPdfProgress}/>
+                                
+                              </div>}
+                        
+                            </div>
+                        </div>}
+                        {followupPdfUrl.length > 2 &&
+                            <div className="form-field-upload content-upload-right">
+                            <p className="label-text" style={{textAlign: 'center'}}>Done</p>
+                            </div>
+                            }
+
+
+                            <div className="content-upload-right">
+                            {followUpSolutionUrl.length < 2 && <div className="form-field-upload">
+                                    <p className="label-text">Upload Follow-up Solution Content: </p>
+                                    <div className="file-drop-upload" onClick={() => followupSolutionFileRef.current.click()}>
                                     {!isUploadingAssignmentSolutionFile && <FaCloudUploadAlt size={35} color="#FFA500" />}
                                     {isUploadingAssignmentSolutionFile &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                     <BeatLoader
@@ -374,49 +400,26 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
                                         />
                                         <p style={{fontSize: '14px'}}>Uploading Solution</p>
                                     
-                                            <ProgressBar bgcolor={'#6a1b9a'} completed={assignmentSolutionProgress}/>
+                                            <ProgressBar bgcolor={'#6a1b9a'} completed={followupSolutionProgress}/>
                                         
                                     </div>}
-                                    {!isUploadingAssignmentSolutionFile && <input ref={assignSolutionFileRef} onChange={uploadAssignmentSolution} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel,video/mp4,video/x-m4v,video/*"/>}
+                                    {!isUploadingAssignmentSolutionFile && <input ref={followupSolutionFileRef} onChange={uploadAssignmentSolution} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel,video/mp4,video/x-m4v,video/*"/>}
                                     </div>
                                 
                                 </div>}
-                                {assignmentSolutionUrl.length > 2 &&
+                                {followUpSolutionUrl.length > 2 &&
                                     <div className="form-field-upload content-upload-right">
                                     <p className="label-text" style={{textAlign: 'center'}}>Done</p>
                                     </div>
                                 }
                             </div>
 
-                          {assignmentPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
-                            <p className="label-text">Upload Assignment Pdf Content: </p>
-                            <div className="file-drop-upload" onClick={() => assignPdfFileRef.current.click()}>
-                            {!isUploadingAssignmentPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                <input ref={assignPdfFileRef} onChange={uploadAssignmentPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
-                                {isUploadingAssignmentPdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                              <BeatLoader
-                                    color="#623d91" 
-                                    loading={isUploadingAssignmentPdf}
-                                    cssOverride={override}
-                                />
-                                <p style={{fontSize: '14px'}}>Uploading Content</p>
-                            
-                                    <ProgressBar bgcolor={'#6a1b9a'} completed={assignmentPdfProgress}/>
-                                
-                              </div>}
-                        
-                            </div>
-                        </div>}
-                        {assignmentPdfUrl.length > 2 &&
-                            <div className="form-field-upload content-upload-right">
-                            <p className="label-text" style={{textAlign: 'center'}}>Done</p>
-                            </div>
-                            }
+                         
                         </div>
                
 
-                        <p className="label-text">Assignment Solution Pulish Date: </p>
-                        <FormField  name="publish_solution_date" type="date" placeholder="Assignment Solution Pulish Date"/>
+                        <p className="label-text">Follow-up  Solution Pulish Date: </p>
+                        <FormField  name="publish_solution_date" type="date" placeholder="Followup Solution Pulish Date"/>
 
                       
 

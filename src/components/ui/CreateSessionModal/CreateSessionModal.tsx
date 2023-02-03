@@ -10,7 +10,7 @@ import { FaCloudUploadAlt, FaTrashAlt } from  'react-icons/fa';
 import { useRef } from 'react';
 import { toast } from 'react-toastify';
 
-import { submitAssignmentSolution } from '../../../services/student';
+// import { submitAssignmentSolution } from '../../../services/student';
 import { getClasses } from '../../../services/classroom';
 import { createSession } from '../../../services/liveSession';
 

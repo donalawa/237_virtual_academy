@@ -10,7 +10,7 @@ import AuthLayout from '../../components/form/components/Layout/AuthLayout';
 import { Link } from 'react-router-dom';
 import ErrorMessage from '../../components/form/components/ErrorMessage/ErrorMessage';
 import { loginUser } from '../../services/auth';
-import { storeToken, getToken,isTeacher } from '../../utils/storage';
+import { storeToken, getToken,isTeacher, isStudent } from '../../utils/storage';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
@@ -37,9 +37,12 @@ function Index() {
                 storeToken(res.data.accessToken);
                 if(isTeacher()) {
                     navigate('/dashboard');
-                }else {
+                }else if(isStudent()) {
                     navigate('/students/home')
-                } 
+                } else {
+                    // SCHOOL
+                    navigate('/school/home')
+                }
             
                 toast.success(`${t('login_success_text')}`, {
                     pauseOnHover: false,

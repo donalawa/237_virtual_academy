@@ -27,7 +27,7 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Class Url',
+        label: 'Class Code',
         name: 'name'
     },
     {

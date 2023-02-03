@@ -4,7 +4,7 @@ import './assignments.css';
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 
 import { AssessmentModal, EditCourseContentModal, DeleteModal, PassExammodal  } from '../../../components';
-import UploadAssignmentSolutionModal from '../../../components/students/UploadAssignmentSolutionModal/UploadAssignmentSolutionModal';
+import UploadAssignmentSolutionModal from '../../../components/students/UploadFollowupSolutionModal/UploadFollowupSolutionModal';
 import { IoMdCloudDownload } from 'react-icons/io';
 import {  BsPencilSquare } from 'react-icons/bs';
 
@@ -20,6 +20,7 @@ import { getStudentSolutions, getStudentsClasses } from '../../../services/stude
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
+import { convertDate } from '../../../utils/date';
 
 const rows: any = [
     {
@@ -31,7 +32,7 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Course Name',
+        label: 'Course Content',
         name: 'name'
     },
     {
@@ -43,7 +44,19 @@ const rows: any = [
         name: 'name'
     },
     {
+        label: 'Score',
+        name: 'name'
+    },
+    {
+        label: 'Total Score',
+        name: 'name'
+    },
+    {
         label: 'Submitted Date',
+        name: 'name'
+    },
+    {
+        label: 'Action',
         name: 'name'
     },
 
@@ -143,7 +156,7 @@ function Index() {
     },[]);
 
     return (
-        <StudentLayout title="Submitted Assignment Solutions">
+        <StudentLayout title="Submitted FollowUp Solutions" pageTitle="Follow Up">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -190,15 +203,31 @@ function Index() {
                                     </td>
                     
                                     <td className="flex-start"><a href={data?.document_url} target="_blank" download>Your Solution File</a></td>
-                                
+                                    
+                                    <td className="flex-start">{data?.score ? data?.score : 'Not Yet'}</td>
+                                    
+                                    <td className="flex-start">{data?.total_score ? data?.total_score : 'Not Yet'}</td>
+                           
+                    
                                     <td className="flex-start">
-                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                        <p>{convertDate(data?.createdAt)}</p>
                                     </td>
-
+                                    
+                                    <td className="flex-center">
+                                        <div className="action">
+                                        {data?.document_url?.length > 2 &&  <Tippy content="Download Question File"  animation="fade">
+                                            <a href={data?.document_url} target="_blank" download className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                        </Tippy>}
+                                        {data?.marked_script_file?.length > 2 &&  <Tippy content="Download Marked Script "  animation="fade">
+                                            <a href={data?.marked_script_file} target="_blank" download className="see orange"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                        </Tippy>}
+                                        </div>
+                                    </td>
                           
                                 </tr> )}
                             </tbody>
                         </table>
+                    
                     </div>
 
                 </div>

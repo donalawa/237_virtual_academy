@@ -21,7 +21,7 @@ import { createCourseContent } from '../../../services/courseContent';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
 import { addPassExamContent } from '../../../services/passExams';
-import { getStudentsClasses, getCourseContent,  submitAssignmentSolution } from '../../../services/student';
+import { getStudentsClasses, getCourseContent } from '../../../services/student';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
