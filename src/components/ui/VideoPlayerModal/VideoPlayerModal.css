@@ -15,7 +15,7 @@
 }
 
 .video-modal-container {
-    top: 60%;
+    top: 60% !important;
     width: 50vw;
 }
 

@@ -20,6 +20,10 @@
     align-items: center;
 }
 
+.student-live-title {
+    color: #1A2D42 !important;
+}
+
 .live-form-input {
     width: 100%;
 }
@@ -30,6 +34,9 @@
     color: var(--primary-color);
 }
 
+.student-session-form .primary-btn {
+    background-color: #1A2D42 !important;
+}
 
 @media screen and (max-width: 679px) {
     .session-form {

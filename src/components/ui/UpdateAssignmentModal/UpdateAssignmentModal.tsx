@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './UpdateAssessmentModal.css';
+import './UpdateAssignmentModal.css';
 import * as Yup from 'yup';
 import Form from '../../form/components/Form/Form';
 import FormField from '../../form/components/FormField/FormField';
@@ -24,6 +24,7 @@ import { getClasses } from '../../../services/classroom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { createAssessment, updateAssessment } from '../../../services/assessment';
+import { updateAssignment } from '../../../services/assignment';
 
 
 const override = {
@@ -32,7 +33,7 @@ const override = {
 
 
 
-function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : any) {
+function UpdateAssignmentModal({ onClose, onContentUpdated, assignmentVals } : any) {
     const [classes, setClasses] = useState([]);
     const [error, setError] = useState<any>(null);
     const [selectedClassroom, setSelectedClassroom] = useState('all');
@@ -40,15 +41,15 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
     let [answersFileType, setAnswersFileType] = useState('');
 
     // ASSIGNMENT
-    const [isUploadingAssessmentSolutionFile,  setIsUploadingAssessmentSolutionFile] = useState(false);
-    const [assessmentSolutionProgress, setAssessmentSolutionProgress] = useState(0);
-    const [assessmentSolutionUrl, setAssessmentSolutionUrl] = useState('');
+    const [isUploadingAssignmentSolutionFile,  setIsUploadingAssignmentSolutionFile] = useState(false);
+    const [assignmentSolutionProgress, setAssignmentSolutionProgress] = useState(0);
+    const [assignmentSolutionUrl, setAssignmentSolutionUrl] = useState('');
 
-    const [assessmentPdfUrl, setAssessmentPdfUrl] = useState('');
-    const [assessmentPdfProgress,  setAssessmentPdfProgress] = useState(0);
-    const [isUploadingAssessmentPdf, setIsUploadingAssessmentPdf] = useState(false);
+    const [assignmentPdfUrl, setAssignmentPdfUrl] = useState('');
+    const [assignmentPdfProgress,  setAssignmentPdfProgress] = useState(0);
+    const [isUploadingAssignmentPdf, setIsUploadingAssignmentPdf] = useState(false);
 
-    const [showAssessmentSolutionPreview, setShowAssessmentVideoSolutionPreview] = useState(false);
+    const [showAssignmentSolutionPreview, setShowAssignmentVideoSolutionPreview] = useState(false);
     const [showOtherFileCompleted, setShowOtherFileCompleted] = useState(false);
 
     // END OF ASSIGNEMTN
@@ -63,8 +64,8 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
     
 
     // good
-    const assessmentPdfFileRef: any = useRef(null);
-    const assessmentSolutionFileRef: any = useRef(null);
+    const assignmentPdfFileRef: any = useRef(null);
+    const assignmentSolutionFileRef: any = useRef(null);
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Accessment title is required'),
@@ -86,7 +87,7 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
 
 
     const deleteVideo = () =>  {
-        const deleteRef = ref(storage, assessmentSolutionUrl);
+        const deleteRef = ref(storage, assignmentSolutionUrl);
         deleteObject(deleteRef).then((res: any) => {
             console.log('RES DELETED', res);
         }).catch((err: any) => {
@@ -94,8 +95,8 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
         })
     }
 
-    const uploadAssessmentSolution = (e: any) => {
-        setIsUploadingAssessmentSolutionFile(true);
+    const uploadAssignmentSolution = (e: any) => {
+        setIsUploadingAssignmentSolutionFile(true);
         console.log('FILE DATA:', e.target.files[0]);
         let fileType = e.target.files[0].type.split('/')[0];
 
@@ -116,29 +117,29 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
     
       uploadTask.on('state_changed', (snapshot: any)=>{
           const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setAssessmentSolutionProgress(+uploadProgress);
+          setAssignmentSolutionProgress(+uploadProgress);
          
 
       }, (error: any) => {
           console.log(error);
       },()=> {
            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setAssessmentSolutionUrl(downloadURL);
-              console.log('URL', assessmentSolutionUrl);
+              setAssignmentSolutionUrl(downloadURL);
+              console.log('URL', assignmentSolutionUrl);
               console.log('VIDEO  URL: ', downloadURL);
               if(fileType == 'video') {
-                setShowAssessmentVideoSolutionPreview(true);
+                setShowAssignmentVideoSolutionPreview(true);
               }else {
                   setShowOtherFileCompleted(true);
               }
 
-              setIsUploadingAssessmentSolutionFile(false);
+              setIsUploadingAssignmentSolutionFile(false);
           });
       })
     }
 
     const uploadAssessmentPdf = (e: any) => {
-        setIsUploadingAssessmentPdf(true);
+        setIsUploadingAssignmentPdf(true);
       const pdfFile: any = e.target.files[0];
       const storageRef = ref(storage, `assessment/${Date.now()}-${pdfFile.name}`);
       const uploadTask = uploadBytesResumable(storageRef, pdfFile);
@@ -148,15 +149,15 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
     uploadTask.on('state_changed', (snapshot: any)=>{
         const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-        setAssessmentPdfProgress(+uploadProgress);
+        setAssignmentPdfProgress(+uploadProgress);
 
     }, (error: any) => {
         console.log(error);
     },()=> {
          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setAssessmentPdfUrl(downloadURL);
+            setAssignmentPdfUrl(downloadURL);
             console.log('PDF  URL: ', downloadURL);
-            setIsUploadingAssessmentPdf(false);
+            setIsUploadingAssignmentPdf(false);
         });
     })
   }
@@ -167,8 +168,8 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
         let data = {
             ...values,
             class_room_id: selectedClassroom,
-            assessment_file: assessmentPdfUrl,
-            answers_file: assessmentSolutionUrl,
+            assignment_file: assignmentPdfUrl,
+            answers_file: assignmentSolutionUrl,
             answers_file_type: answersFileType
         }
 
@@ -177,18 +178,18 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
 
 
         if(data.class_room_id == null || data.class_room_id == 'all') {
-            setError('You have to select a clasroom for Assessment');
+            setError('You have to select a clasroom for Assignment');
             return;
         }
 
-        if(assessmentPdfUrl.length < 2) {
-            setError('Select Assessment Pdf');
+        if(assignmentPdfUrl.length < 2) {
+            setError('Select Assignment Pdf');
             return;
         }
 
         // console.log('ALL DATA: ', data);
         // return;
-        updateAssessment(assessmentVals._id,data).then((res: any) => {
+        updateAssignment(assignmentVals._id,data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
@@ -215,18 +216,18 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
 
     useEffect(() => {
         handleGetClasses();
-        if(assessmentVals) {
+        if(assignmentVals) {
             setInitialValues({
-                title: assessmentVals?.title,
-                publish_date: assessmentVals?.publish_date,
-                publish_answers_date: assessmentVals?.publish_answers_date
+                title: assignmentVals?.title,
+                publish_date: assignmentVals?.publish_date,
+                publish_answers_date: assignmentVals?.publish_answers_date
             });
-            setSelectedClassroom(assessmentVals?.class_room_id);
-            setAssessmentSolutionUrl(assessmentVals?.answers_file);
-            setAssessmentPdfUrl(assessmentVals?.assessment_file)
-            setAnswersFileType(assessmentVals?.answers_file_type);
-            if(assessmentVals?.answers_file_type == 'video') {
-                setShowAssessmentVideoSolutionPreview(true);
+            setSelectedClassroom(assignmentVals?.class_room_id);
+            setAssignmentSolutionUrl(assignmentVals?.answers_file);
+            setAssignmentPdfUrl(assignmentVals?.assignment_file)
+            setAnswersFileType(assignmentVals?.answers_file_type);
+            if(assignmentVals?.answers_file_type == 'video') {
+                setShowAssignmentVideoSolutionPreview(true);
             }
         }
     },[])
@@ -234,9 +235,9 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
     
     return (
         <div>
-            <div  className='modal-container add-assessment-modal'>
+            <div  className='modal-container update-assignment-modal'>
                 <div className='modal-head'>
-                    <p className="modal-title">Update Assessment</p>
+                    <p className="modal-title">Update Assignment</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
@@ -266,27 +267,27 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
                         
                         <div className='upload-content-container'>
                      
-                          {assessmentPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-left">
+                          {assignmentPdfUrl?.length < 2 &&  <div className="form-field-upload content-upload-left">
                             <p className="label-text">Upload Assessment File: </p>
-                            <div className="file-drop-upload" onClick={() => assessmentPdfFileRef.current.click()}>
-                            {!isUploadingAssessmentPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                <input ref={assessmentPdfFileRef} onChange={uploadAssessmentPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
-                                {isUploadingAssessmentPdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                            <div className="file-drop-upload" onClick={() => assignmentPdfFileRef.current.click()}>
+                            {!isUploadingAssignmentPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
+                                <input ref={assignmentPdfFileRef} onChange={uploadAssessmentPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
+                                {isUploadingAssignmentPdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                               <BeatLoader
                                     color="#623d91" 
-                                    loading={isUploadingAssessmentPdf}
+                                    loading={isUploadingAssignmentPdf}
                                     cssOverride={override}
                                 />
                                 <p style={{fontSize: '14px'}}>Uploading Content</p>
                             
-                                    <ProgressBar bgcolor={'#6a1b9a'} completed={assessmentPdfProgress}/>
+                                    <ProgressBar bgcolor={'#6a1b9a'} completed={assignmentPdfProgress}/>
                                 
                               </div>}
                         
                             </div>
                         </div>}
 
-                        {assessmentPdfUrl.length > 2 &&
+                        {assignmentPdfUrl.length > 2 &&
                             <div className="form-field-upload content-upload-right">
                             <p className="label-text" style={{textAlign: 'center'}}>Done</p>
                             </div>
@@ -294,30 +295,30 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
 
 
                         <div className="content-upload-right">
-                            {assessmentSolutionUrl.length < 2 && <div className="form-field-upload">
+                            {assignmentSolutionUrl.length < 2 && <div className="form-field-upload">
                                     <p className="label-text">Upload Solution File: </p>
-                                    <div className="file-drop-upload" onClick={() => assessmentSolutionFileRef.current.click()}>
-                                    {!isUploadingAssessmentSolutionFile && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                    {isUploadingAssessmentSolutionFile &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                    <div className="file-drop-upload" onClick={() => assignmentSolutionFileRef.current.click()}>
+                                    {!isUploadingAssignmentSolutionFile && <FaCloudUploadAlt size={35} color="#FFA500" />}
+                                    {isUploadingAssignmentSolutionFile &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                     <BeatLoader
                                             color="#623d91" 
-                                            loading={isUploadingAssessmentSolutionFile}
+                                            loading={isUploadingAssignmentSolutionFile}
                                             cssOverride={override}
                                         />
                                         <p style={{fontSize: '14px'}}>Uploading Video</p>
                                     
-                                            <ProgressBar bgcolor={'#6a1b9a'} completed={assessmentSolutionProgress}/>
+                                            <ProgressBar bgcolor={'#6a1b9a'} completed={assignmentSolutionProgress}/>
                                         
                                     </div>}
-                                    {!isUploadingAssessmentSolutionFile && <input ref={assessmentSolutionFileRef} onChange={uploadAssessmentSolution} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel,video/mp4,video/x-m4v,video/*"/>}
+                                    {!isUploadingAssignmentSolutionFile && <input ref={assignmentSolutionFileRef} onChange={uploadAssignmentSolution} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel,video/mp4,video/x-m4v,video/*"/>}
                                     </div>
                                 
                                 </div>}
-                                {showAssessmentSolutionPreview && <div className="video-container">
+                                {showAssignmentSolutionPreview && <div className="video-container">
                                     <div className="delete-icon-video">
                                          <FaTrashAlt color='red' />
                                     </div>
-                                    <video controls width="100%" height={'100%'} src={assessmentSolutionUrl}></video>
+                                    <video controls width="100%" height={'100%'} src={assignmentSolutionUrl}></video>
                                 </div>}
                                 {showOtherFileCompleted &&
                                       <div className="form-field-upload content-upload-right">
@@ -333,7 +334,7 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
                         <FormField  name="publish_answers_date" type="date" placeholder="Published Solution Date"/>
 
                
-                        <Button isOutLined={true} isFullWidth={false} title="UPDATE ASSESSMENT"/>
+                        <Button isOutLined={true} isFullWidth={false} title="UPDATE ASSIGNMENT"/>
 
                         </Form>
                 </form>
@@ -346,4 +347,4 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
     );
 }
 
-export default UpdateAssessmentModal;
+export default UpdateAssignmentModal;

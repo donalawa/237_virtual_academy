@@ -3,7 +3,7 @@ import './Layout.css';
 import { isStudent, removeToken } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
-import { MdOutlineContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
+import { MdOutlineContentPaste, MdAssignmentTurnedIn, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
 import { GoDeviceCameraVideo } from 'react-icons/go';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from "react-router";
@@ -105,6 +105,16 @@ function Layout({ title, children, pageTitle = '' } : any) {
                     <NavLink className="link" to="/follow-up">
                     <i><MdAssignmentLate size={20}/></i>
                         <span>Follow-up</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/assignments">
+                    <i><MdAssignmentLate size={20}/></i>
+                        <span>Assignments</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/assignment-submissions">
+                    <i><MdAssignmentTurnedIn size={20}/></i>
+                        <span>Assignment Submissions</span>
                     </NavLink>
 
                     <NavLink className="link" to="/assessments">

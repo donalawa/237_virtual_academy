@@ -4,6 +4,10 @@ const createAssessment = (data: any) => {
     return api.post(`/assessment`, data);
 }
 
+const updateAssessment = (id: any, data: any) => {
+    return api.post(`/assessment/${id}`, data);
+}
+
 const getAssessments = () => {
     return api.get('/assessment');
 }
@@ -51,6 +55,7 @@ export {
     getStudentsAssessmentSolutions,
     getTotalAssessments,
     getClassAssessments,
-    submitAssessmentScore
+    submitAssessmentScore,
+    updateAssessment
 }   
 

@@ -1,7 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import logo from './logo.svg';
-import { HomePage, LoginPage, SignupPage, DashboardLanding, CourseContentPage, CalassroomsPage, FollowUpPage, AssessmentPage, AssessmentSubmissionsPage, PassExamsPage, StudentsLandingPage, StudentFollowUpPage, StudentCourseContentPage, LiveSessionPage, CreateSessionPage, JoinLiveSessionPage, StudentAssessmentPage, StudentAssessmentSubmissionsPage, PassexamContentPage, SchoolHomePage,  SchoolInfoPage } from './pages';
+import { 
+  HomePage, 
+  LoginPage, 
+  SignupPage, 
+  DashboardLanding, 
+  CourseContentPage, 
+  CalassroomsPage, 
+  FollowUpPage, 
+  AssessmentPage, 
+  AssessmentSubmissionsPage, 
+  PassExamsPage, 
+  StudentsLandingPage, 
+  StudentFollowUpPage, 
+  StudentCourseContentPage, 
+  LiveSessionPage, 
+  CreateSessionPage, 
+  JoinLiveSessionPage, 
+  StudentAssessmentPage, 
+  StudentAssessmentSubmissionsPage, 
+  PassexamContentPage, SchoolHomePage,  
+  SchoolInfoPage, 
+  AssignmentPage, 
+  AssignmentSubmissionPage, 
+  StudentAssignmentPage,
+  StudentAssignmentSubmissionPage
+} from './pages';
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -57,6 +82,8 @@ function App() {
             <Route path="/follow-up" element={(<Protected > <FollowUpPage  /> </Protected>)} />
             <Route path="/assessments" element={(<Protected > <AssessmentPage  /> </Protected>)} />
             <Route path="/assessment-submissions" element={(<Protected > <AssessmentSubmissionsPage  /> </Protected>)} />
+            <Route path="/assignments" element={(<Protected > <AssignmentPage  /> </Protected>)} />
+            <Route path="/assignment-submissions" element={(<Protected > <AssignmentSubmissionPage  /> </Protected>)} />
             <Route path="/pass-exams" element={(<Protected > <PassExamsPage  /> </Protected>)} />
 
             <Route path="/live-session" element={(<Protected > <CreateSessionPage  /> </Protected>)} />
@@ -70,8 +97,9 @@ function App() {
             <Route  path="/students/assessments" element={(<Protected> <StudentAssessmentPage /> </Protected>)} />
             <Route  path="/students/assessment-submissions" element={(<Protected> <StudentAssessmentSubmissionsPage /> </Protected>)} />
             <Route  path="/students/passexams" element={(<Protected> <PassexamContentPage /> </Protected>)} />
-
             <Route  path="/students/live-session" element={(<Protected> <JoinLiveSessionPage /> </Protected>)} />
+            <Route  path="/students/assignments" element={(<Protected> <StudentAssignmentPage /> </Protected>)} />
+            <Route  path="/students/assignment-submissions" element={(<Protected> <StudentAssignmentSubmissionPage /> </Protected>)} />
 
 
             <Route  path="/school/home" element={(<Protected> <SchoolHomePage /> </Protected>)} />

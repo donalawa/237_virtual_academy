@@ -8,7 +8,8 @@ export { default as FollowUpPage } from './dashboard/folllow-ups/index';
 export { default as AssessmentPage } from './dashboard/assessment/index';
 export { default as PassExamsPage } from './dashboard/pass-exams/index';
 export { default as AssessmentSubmissionsPage } from './dashboard/assessment-submissions/index';
-
+export { default as AssignmentPage } from './dashboard/assignment/index';
+export { default as AssignmentSubmissionPage } from './dashboard/assignment-submissions/index';
 export { default as LiveSessionPage } from './live-session/index';
 export { default as CreateSessionPage } from './create-live/index';
 
@@ -20,7 +21,8 @@ export { default as JoinLiveSessionPage } from './students/join-live/index';
 export { default as StudentAssessmentPage }  from './students/assessment/index';
 export { default as StudentAssessmentSubmissionsPage } from './students/assessment-submissions/index';
 export { default as PassexamContentPage } from './students/passexam-content/index';
-
+export { default as StudentAssignmentPage } from './students/assignment/assignment';
+export { default as StudentAssignmentSubmissionPage } from './students/assignment-submissions/assignment-submissions';
 
 // SCHOOL
 export { default as SchoolHomePage } from './school/home/index';

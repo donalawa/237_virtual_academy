@@ -1,10 +1,10 @@
 import React, { useState, useEffect }  from 'react';
-import './assessment.css';
+import './assignment.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 
 import { EditCourseContentModal, DeleteModal  } from '../../../components';
-import UploadAssessmentSolutionModal from '../../../components/students/UploadAssessmentSolutionModal/UploadAssessmentSolution';
+import SubmitAssignmentModal from '../../../components/students/SubmitAssignmentModal/SubmitAssignmentModal';
 import {  BsPencilSquare } from 'react-icons/bs';
 
 import { IoMdCloudDownload } from 'react-icons/io';
@@ -24,6 +24,7 @@ import moment from 'moment';
 import { getTotalAssessments } from '../../../services/assessment';
 import { VideoPlayerModal } from '../../../components';
 import { convertDate } from '../../../utils/date';
+import { getTotalAssignments } from '../../../services/assignment';
 
 const rows: any = [
     {
@@ -76,7 +77,7 @@ function Index() {
     const [showEditModal, setShowEditModal] = useState(false); 
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
-    const [assessments, setAssessments] = useState([]);
+    const [assignments, setAssignments] = useState([]);
     const [showVideoModal, setShowVideoModal] = useState(false);
 
     const [editData, setEditData] = useState(null);
@@ -118,10 +119,10 @@ function Index() {
 
     const handleGetAssessments = (classId: any) => {
         setLoading(true);
-        getTotalAssessments(classId).then((res: any) => {
-            console.log("STUDENT assessments RES: ",res);
+        getTotalAssignments(classId).then((res: any) => {
+            console.log("STUDENT assignments RES: ",res);
             setLoading(false);
-            setAssessments(res.data.data);
+            setAssignments(res.data.data);
         }).catch((err: any) => {
             console.log('Error: ', err);
             setLoading(false);
@@ -132,7 +133,7 @@ function Index() {
         try {
             console.log('CLASS ID:' , value)
             if(value == 'all') {
-                setAssessments([]);
+                setAssignments([]);
                 return;
             }
 
@@ -150,7 +151,7 @@ function Index() {
     },[]);
 
     return (
-        <StudentLayout title="Submitted Assessment assessments" pageTitle="Assessment">
+        <StudentLayout title="Assignments" pageTitle="Assignments">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -161,7 +162,10 @@ function Index() {
                                 {classes.map((classData: any, index: any) => <option key={index} value={classData.class_id._id}>{classData.class_id.name}</option>)}
                             </select>
                         </div>
-                
+                        {/* <form className="search">
+                            <input type="search" name="" id="" placeholder="Find ..." />
+                            <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
+                        </form> */}
                         <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button"> Upload Solution <i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
@@ -181,7 +185,7 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {assessments?.map((data: any, index: any) => <tr>
+                                {assignments?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
                                         <p>{data?.class_room_id?.name}</p>
@@ -197,7 +201,7 @@ function Index() {
 
                                   {data?.answers_file.length < 2 &&  <td className="flex-start"><a>Not Available</a></td>}
                                     
-                                    <td className="flex-start"><a href={data?.assessment_file} target="_blank" download>Questions</a></td>
+                                    <td className="flex-start"><a href={data?.assignment_file} target="_blank" download>Questions</a></td>
                                 
                                     <td className="flex-start">
                                         <p>{convertDate(data?.createdAt)}</p>
@@ -208,9 +212,9 @@ function Index() {
                                         <p>{data?.publish_answers_date}</p>
                                     </td>
 
-                                    <td className="flex-center">
+                                   <td className="flex-center">
                                         <div className="action">
-                                       {data?.answers_file.length > 2 && <>{data?.answers_file_type == 'video' && <Tippy content="View Video Solution"  animation="fade">
+                                       {data?.answers_file.length > 2 &&  <>{data?.answers_file_type == 'video' && <Tippy content="View Video Solution"  animation="fade">
                                             <a onClick={() => {
                                                 handleSetVideoUrl(data.answers_file)
                                             }} className="see"><AiFillEye onClick={() => null} size={14}/></a>
@@ -218,8 +222,9 @@ function Index() {
                                           {data?.answers_file_type == 'others' &&  <Tippy content="Download Solution File"  animation="fade">
                                             <a target="_blank" download href={data.answers_file} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
                                             </Tippy>}</>}
-                                            {data?.assessment_file?.length > 2 &&  <Tippy content="Download Assessment File"  animation="fade">
-                                            <a href={data?.assessment_file} target="_blank" download className="see orange"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                            
+                                            {data?.assignment_file?.length > 2 &&  <Tippy content="Download Assignment File"  animation="fade">
+                                            <a href={data?.assignment_file} target="_blank" download className="see orange"><IoMdCloudDownload onClick={() => null} size={14}/></a>
                                             </Tippy>}
                                         </div>
                                     </td>
@@ -232,7 +237,7 @@ function Index() {
             </div>
         </div>
 
-        {showAddModal &&  <UploadAssessmentSolutionModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
+        {showAddModal &&  <SubmitAssignmentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         {showVideoModal && <VideoPlayerModal video={videoUrl} onClose={toggleVideoModal}/>}
         </StudentLayout>
     );

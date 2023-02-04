@@ -91,12 +91,12 @@ function Index() {
         <StudentLayout title="Join Live Session" pageTitle="Live">
       <div className="section">
             <div className="parent-con student-live">
-                <div className="session-form">
-                    <h1 className="live-form-title">ENTER MEETING ID</h1>
+                <div className="session-form student-session-form">
+                    <h1 className="live-form-title student-live-title">ENTER MEETING ID</h1>
                     <br />
                     {error && <ErrorMessage error={error} visible={true} />}
                     <div className="input-with-icon-form-group live-form-input">
-                        <i className="text-primary"><GoDeviceCameraVideo size={20}/> </i>
+                        <i className="text-primary student-live-title"><GoDeviceCameraVideo size={20}/> </i>
                         <input value={meetingCode} onChange={(e: any) => setMeetingCode(e.target.value)} type='text' placeholder="Enter meeting id" />
                     </div>
                     <Button text="Join Meeting" onClicked={() => handleJoinMeeting()}/>

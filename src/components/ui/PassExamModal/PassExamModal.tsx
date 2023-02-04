@@ -238,7 +238,7 @@ function PassExamModal({ onClose, onContentAdded } : any) {
     
     return (
         <div>
-            <div  className='modal-container'>
+            <div  className='modal-container pass-exam-modal'>
                 <div className='modal-head'>
                     <p className="modal-title">Add New Exam Content</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>

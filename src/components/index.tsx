@@ -9,3 +9,6 @@ export { default as CreateSessionModal } from './ui/CreateSessionModal/CreateSes
 export { default as VideoPlayerModal } from './ui/VideoPlayerModal/VideoPlayerModal';
 export { default as FollowUpScoreModal } from './ui/FollowUpScoreModal/FollowUpScoreModal';
 export { default as AssessmentScoreModal } from './ui/AssessmentScoreModal/AssessmentScoreModal';
+export { default as UpdateAssessmentmodal } from  './ui/UpdateAssessmentModal/UpdateAssessmentModal'
+export { default as AssignmentModal } from './ui/AssignmentModal/AssignmentModal';
+export { default as UpdateAssignmentModal } from './ui/UpdateAssignmentModal/UpdateAssignmentModal';

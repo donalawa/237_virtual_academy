@@ -26,11 +26,6 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { createAssessment } from '../../../services/assessment';
 
-const initialValues= {
-    title: '',
-    publish_date: '',
-    publish_answers_date: ''
-}
 
 const override = {
     marginTop: '20px'
@@ -38,10 +33,10 @@ const override = {
 
 
 
-function AssessmentModal({ onClose, onContentAdded } : any) {
+function AssessmentModal({ onClose, onContentAdded, assessmentVals } : any) {
     const [classes, setClasses] = useState([]);
     const [error, setError] = useState<any>(null);
-    const [selectedClassroom, setSelectedClassroom] = useState(null);
+    const [selectedClassroom, setSelectedClassroom] = useState('all');
     // Exam Content
     let [answersFileType, setAnswersFileType] = useState('');
 
@@ -59,6 +54,13 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
 
     // END OF ASSIGNEMTN
     const storage = getStorage(firebaseApp);
+
+    const [initialValues, setInitialValues]= useState({
+        title: '',
+        publish_date: '',
+        publish_answers_date: ''
+    });
+    
     
 
     // good
@@ -214,6 +216,17 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
 
     useEffect(() => {
         handleGetClasses();
+        if(assessmentVals) {
+            setInitialValues({
+                title: assessmentVals?.title,
+                publish_date: assessmentVals?.publish_date,
+                publish_answers_date: assessmentVals?.publish_answers_date
+            });
+            setSelectedClassroom(assessmentVals?.class_room_id);
+            setAssessmentSolutionUrl(assessmentVals?.answers_file);
+            setAssessmentPdfUrl(assessmentVals?.assessment_file)
+            setAnswersFileType(assessmentVals?.answers_file_type);
+        }
     },[])
 
     
@@ -241,7 +254,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
 
 
                         <p className="label-text">Select Classroom: </p>
-                        <select onChange={(e: any) => setSelectedClassroom(e.target.value) } className="select-field-modal">
+                        <select onChange={(e: any) => setSelectedClassroom(e.target.value) } value={selectedClassroom} className="select-field-modal">
                             <option value="all">Select</option>
                             {classes.map((classData: any, key: any) => <option key={key} value={classData._id}>{classData.name}</option>)}
                         </select>
@@ -289,7 +302,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                                             loading={isUploadingAssessmentSolutionFile}
                                             cssOverride={override}
                                         />
-                                        <p style={{fontSize: '14px'}}>Uploading Video</p>
+                                        <p style={{fontSize: '14px'}}>Uploading File</p>
                                     
                                             <ProgressBar bgcolor={'#6a1b9a'} completed={assessmentSolutionProgress}/>
                                         

@@ -3,7 +3,12 @@ import './StudentLayout.css';
 import { removeToken } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
-import { MdContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
+import { MdContentPaste, MdAssignmentTurnedIn,MdReportProblem, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
+import { SlCalender } from 'react-icons/sl';
+import { BsFillCalendar2CheckFill } from 'react-icons/bs';
+import { FaPeopleArrows } from 'react-icons/fa';
+import { GiMoneyStack } from 'react-icons/gi';
+import { TfiAnnouncement } from 'react-icons/tfi';
 import { useTranslation } from 'react-i18next';
 import { GoDeviceCameraVideo } from 'react-icons/go';
 
@@ -90,6 +95,16 @@ function StudentLayout({ title, children, pageTitle } : any) {
                         <span>Follow Ups</span>
                     </NavLink>
 
+                    <NavLink className="link" to="/students/assignments">
+                    <i><MdAssignmentLate size={20}/></i>
+                        <span>Assignments</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/students/assignment-submissions">
+                    <i><MdAssignmentTurnedIn size={20}/></i>
+                        <span>Assignment Submissions</span>
+                    </NavLink>
+
                     <NavLink className="link" to="/students/assessments">
                     <i><MdAssessment size={20}/></i>
                         <span>Assessments</span>
@@ -108,6 +123,38 @@ function StudentLayout({ title, children, pageTitle } : any) {
                     <NavLink className="link" to="/students/live-session">
                     <i><GoDeviceCameraVideo size={20}/></i>
                         <span>Join Live Session</span>
+                    </NavLink>
+
+
+                    <NavLink className="link" to="/students/report">
+                    <i><SlCalender size={20}/></i>
+                        <span>Time Table</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/students/report">
+                    <i><TfiAnnouncement size={20}/></i>
+                        <span>Anouncements</span>
+                    </NavLink>
+                    
+                    <NavLink className="link" to="/students/report">
+                    <i><FaPeopleArrows size={20}/></i>
+                        <span>Peers Groups</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/students/report">
+                    <i><BsFillCalendar2CheckFill size={20}/></i>
+                        <span>Personal Todos</span>
+                    </NavLink>
+
+
+                    <NavLink className="link" to="/students/report">
+                    <i><MdReportProblem size={20}/></i>
+                        <span>Submit Report</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/students/fees">
+                    <i><GiMoneyStack size={20}/></i>
+                        <span>Fees Payment</span>
                     </NavLink>
                     
                 </div>

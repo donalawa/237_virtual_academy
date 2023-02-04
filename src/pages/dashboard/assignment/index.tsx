@@ -1,9 +1,9 @@
 import React, { useState, useEffect }  from 'react';
-import './assessment.css';
+import './assignment.css';
 
 import Layout from '../../../components/Layout/Layout';
 
-import { AssessmentModal, EditCourseContentModal, DeleteModal, VideoPlayerModal, UpdateAssessmentmodal  } from '../../../components';
+import { AssessmentModal, EditCourseContentModal, DeleteModal, VideoPlayerModal, UpdateAssessmentmodal, AssignmentModal, UpdateAssignmentModal  } from '../../../components';
 import { IoMdCloudDownload } from 'react-icons/io';
 import { AiFillEye } from 'react-icons/ai';
 
@@ -23,6 +23,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import moment from 'moment';
 import {useTranslation} from "react-i18next";
 import { convertDate } from '../../../utils/date';
+import { deleteAssignments, getAssignments } from '../../../services/assignment';
 
 
 
@@ -51,7 +52,7 @@ function Index() {
     const [loading, setLoading] = useState(false);
 
     const [showUpdateModal, setShowUpdateModal] = useState(false);
-    const [selectedAssessment, setSelectedAssessment] = useState(null);
+    const [selectedAssignment, setSelectedAssignment] = useState(null);
 
     const { t, i18n } = useTranslation();
   
@@ -123,14 +124,14 @@ function Index() {
         })
     }
 
-    const handleDeleteAssessment = () => {
+    const handleDeleteAssignment = () => {
         console.log('DELETE ASSESSMENT SOLUTION');
         console.log(deleteId)
-        deleteAssessment(deleteId).then((res: any) => {
+        deleteAssignments(deleteId).then((res: any) => {
             if(res.ok) {
                 toggleDeleteModal();
                 handleGetClasses();
-                handleGetAssessments();
+                handleGetAssignments();
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
@@ -151,26 +152,26 @@ function Index() {
     }
 
     const handleContentAdded = ()  => {
-        handleGetAssessments();
+        handleGetAssignments();
         toggleAddModal();
     }
 
     const handleContentUpdated = () => {
-        handleGetAssessments();
+        handleGetAssignments();
         toggleUpdateModal();
     }
 
     const handleSetSelectedData = (data: any) => {
         // alert('Hello')
-        setSelectedAssessment(data);
+        setSelectedAssignment(data);
         toggleUpdateModal();
     }
 
 
-    const handleGetAssessments = () => {
+    const handleGetAssignments = () => {
         setLoading(true);
-        getAssessments().then((res: any) => {
-            console.log("ASSESSMENT CONTENT:  ",res);
+        getAssignments().then((res: any) => {
+            console.log("ASSIGNMENT CONTENT:  ",res);
             setLoading(false);
             setContents(res.data.data.reverse());
             setFilteredData(res.data.data.reverse());
@@ -195,12 +196,12 @@ function Index() {
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
-        handleGetAssessments();
+        handleGetAssignments();
         handleGetClasses();
     },[]);
 
     return (
-        <Layout title={t('assessment.data_table.layout_title')}>
+        <Layout title="Assignments">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -211,11 +212,8 @@ function Index() {
                                 {classes.map((classData: any, index: any) => <option key={index} value={classData._id}>{classData.name}</option>)}
                             </select>
                         </div>
-                        {/* <form className="search">
-                            <input type="search" name="" id="" placeholder="Find ..." />
-                            <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
-                        </form> */}
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add">{t('assessment.data_table.modal_btn')}<i className="fas fa-plus"></i></button>
+ 
+                        <button onClick={toggleAddModal} className="btn btn-primary btn-add">Create Assignment<i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -241,7 +239,7 @@ function Index() {
                                     </td>
                             
                     
-                                    <td className="flex-start"><a href={data?.assessment_file} target="_blank" download>Assessment File</a></td>
+                                    <td className="flex-start"><a href={data?.assessment_file} target="_blank" download>Available</a></td>
                                     
                                    <td className="flex-start">{data.answers_file.length > 2 ? <a>Available</a> : "Not Available"}</td>
                                   
@@ -256,7 +254,7 @@ function Index() {
                                         <div className="action">
                                            {data?.answers_file_type == 'video' && <Tippy content="View Video Solution"  animation="fade">
                                             <a onClick={() => {
-                                                handleSetVideoUrl(data.answers_file)
+                                                handleSetVideoUrl(data?.answers_file)
                                             }} className="see"><AiFillEye onClick={() => null} size={14}/></a>
                                             </Tippy>}
                                           {data?.answers_file_type == 'others' &&  <Tippy content="Download Answer File"  animation="fade">
@@ -266,7 +264,7 @@ function Index() {
                                             </Tippy>}
 
                                                
-                                            <Tippy content="Enter Solution File"  animation="fade">
+                                            <Tippy content="Edit Assiignment"  animation="fade">
                                                 <a className="see"><BsPencilSquare onClick={() => handleSetSelectedData(data)} size={16}/></a>
                                             </Tippy>
 
@@ -288,10 +286,10 @@ function Index() {
             </div>
         </div>
 
-        {showAddModal &&  <AssessmentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
-        {showUpdateModal &&  <UpdateAssessmentmodal onContentUpdated={handleContentUpdated} assessmentVals={selectedAssessment} onClose={toggleUpdateModal} />}
+        {showAddModal &&  <AssignmentModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
+        {showUpdateModal &&  <UpdateAssignmentModal onContentUpdated={handleContentUpdated} assignmentVals={selectedAssignment} onClose={toggleUpdateModal} />}
         {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
-        {deleteModal && <DeleteModal onAccept={handleDeleteAssessment} onCancel={toggleDeleteModal} />}
+        {deleteModal && <DeleteModal onAccept={handleDeleteAssignment} onCancel={toggleDeleteModal} />}
         {showVideoModal && <VideoPlayerModal video={videoUrl} onClose={toggleVideoModal}/>}
 
         </Layout>
