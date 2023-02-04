@@ -11,7 +11,7 @@ function FormField({name, type = "text", placeholder} : any) {
             <TextInput 
                 onBlur={() => setFieldTouched(name)}
                 onChange={(e:any) => setFieldValue(name,e.target.value)}
-                value={values.name}
+                value={values[name]}
                 placeholder={placeholder}
                 type={type}
                 name={name}

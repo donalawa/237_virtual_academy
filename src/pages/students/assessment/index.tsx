@@ -23,6 +23,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import moment from 'moment';
 import { getTotalAssessments } from '../../../services/assessment';
 import { VideoPlayerModal } from '../../../components';
+import { convertDate } from '../../../utils/date';
 
 const rows: any = [
     {
@@ -50,7 +51,11 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Submitted Date',
+        label: 'Created Date',
+        name: 'name'
+    },
+    {
+        label: 'Sumission Deadline',
         name: 'name'
     },
     {
@@ -145,7 +150,7 @@ function Index() {
     },[]);
 
     return (
-        <StudentLayout title="Submitted Assessment assessments">
+        <StudentLayout title="Submitted Assessment assessments" pageTitle="Assessment">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
@@ -198,7 +203,12 @@ function Index() {
                                     <td className="flex-start"><a href={data?.assessment_file} target="_blank" download>Questions</a></td>
                                 
                                     <td className="flex-start">
-                                        <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                        <p>{convertDate(data?.createdAt)}</p>
+                                    </td>
+
+                                     
+                                    <td className="flex-start">
+                                        <p>{data?.publish_answers_date}</p>
                                     </td>
 
                                    {data?.answers_file.length > 2 && <td className="flex-center">
@@ -210,6 +220,9 @@ function Index() {
                                             </Tippy>}
                                           {data?.answers_file_type == 'others' &&  <Tippy content="Download Solution File"  animation="fade">
                                             <a target="_blank" download href={data.answers_file} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                            </Tippy>}
+                                            {data?.assessment_file?.length > 2 &&  <Tippy content="Download Assessment File"  animation="fade">
+                                            <a href={data?.assessment_file} target="_blank" download className="see orange"><IoMdCloudDownload onClick={() => null} size={14}/></a>
                                             </Tippy>}
                                         </div>
                                     </td>}

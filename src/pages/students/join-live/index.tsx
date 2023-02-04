@@ -88,7 +88,7 @@ function Index() {
     }
 
     return (
-        <StudentLayout title="Join Live Session">
+        <StudentLayout title="Join Live Session" pageTitle="Live">
       <div className="section">
             <div className="parent-con student-live">
                 <div className="session-form">

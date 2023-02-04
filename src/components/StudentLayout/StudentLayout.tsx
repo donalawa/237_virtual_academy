@@ -9,7 +9,7 @@ import { GoDeviceCameraVideo } from 'react-icons/go';
 
 import { getUser } from '../../utils/storage';
 
-function StudentLayout({ title, children } : any) {
+function StudentLayout({ title, children, pageTitle } : any) {
     const { t, i18n } = useTranslation();
     let [lang, setLang] = useState<any>(null);
 
@@ -85,9 +85,9 @@ function StudentLayout({ title, children } : any) {
                         <span>Course Content</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/students/assignments">
+                    <NavLink className="link" to="/students/followups">
                     <i><MdAssignmentLate size={20}/></i>
-                        <span>Assignments</span>
+                        <span>Follow Ups</span>
                     </NavLink>
 
                     <NavLink className="link" to="/students/assessments">
@@ -158,7 +158,7 @@ function StudentLayout({ title, children } : any) {
                             <div className="crumb">
                                 <NavLink to="/" className="crumb-item">Students</NavLink>
                                 <span>{'>'}</span>
-                                <a className="crumb-item">Home</a>
+                                <a className="crumb-item">{pageTitle}</a>
                             </div>
                         </div>
 

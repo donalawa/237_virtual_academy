@@ -23,45 +23,19 @@ import { getClasses, deleteClass } from '../../../services/classroom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
+const initialValues= {
+    title: '',
+    publish_date: '',
+    publish_solution_date: ''
+}
+
 const override = {
     marginTop: '20px'
   };
 
 
 
-function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
-
-    const [initialValues, setInitialValues]= useState({
-        title: 'Hello Worlds',
-        description: '',
-        expectation: '',
-        publish_date: ''
-    });
-
-    const getInitalVals = () => {
-        let initialData = {
-            title: data?.title,
-            description: data?.description,
-            expectation: data?.expectation,
-            publish_date: ''
-        }
-
-        return initialData
-    }
-
-    useEffect(() => {
-        let initialData = {
-            title: data?.title,
-            description: data?.description,
-            expectation: data?.expectation,
-            publish_date: ''
-        }
-        console.log("INITIAL DATA", initialData);
-
-        // setInitialValues(initialData);
-    },[])
-
-
+function EditCourseContentModal({ onClose, onContentAdded } : any) {
     const [classes, setClasses] = useState([]);
     const [error, setError] = useState<any>(null);
     const [selectedClassroom, setSelectedClassroom] = useState(null);
@@ -78,15 +52,15 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
     // End Content
 
     // ASSIGNMENT
-    const [isUploadingAssignmentVideo,  setIsUploadingAssignmentVideo] = useState(false);
-    const [assignmentVideoProgress, setAssignmentVideoProgress] = useState(0);
-    const [assignmentVideoUrl, setAssignmentVideoUrl] = useState('');
+    const [isUploadingAssignmentSolutionFile,  setIsUploadingAssignmentSolutionFile] = useState(false);
+    const [followupSolutionProgress, setFollowupSolutionProgress] = useState(0);
+    const [followUpSolutionUrl, setFollowupSolutionUrl] = useState('');
 
-    const [assignmentPdfUrl, setAssignmentPdfUrl] = useState('');
-    const [assignmentPdfProgress,  setAssignmentPdfProgress] = useState(0);
-    const [isUploadingAssignmentPdf, setIsUploadingAssignmentPdf] = useState(false);
+    const [followupPdfUrl, setFollowupPdfUrl] = useState('');
+    const [followupPdfProgress,  setFollowupPdfProgress] = useState(0);
+    const [isUploadingFollowupPdf, setIsUploadingFollowupPdf] = useState(false);
 
-    const [showAssignmentVideoPreview, setShowAssignmentVideoPreview] = useState(false);
+    const [showAssignmentSolutionPreview, setShowAssignmentSolutionPreview] = useState(false);
 
     // END OF ASSIGNEMTN
     const storage = getStorage(firebaseApp);
@@ -94,14 +68,13 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
 
     const videoFiileRef: any = useRef(null) 
     const pdfFileRef: any = useRef(null);
-    const assignPdfFileRef: any = useRef(null);
-    const assignVideoFileRef: any = useRef(null);
+    const followupPdfFileRef: any = useRef(null);
+    const followupSolutionFileRef: any = useRef(null);
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Class Name is required'),
-        description: Yup.string(),
-        expectation: Yup.string(),
         publish_date: Yup.string(),
+        publish_solution_date: Yup.string(),
     })
 
     const handleGetClasses = ()  => {
@@ -184,8 +157,8 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
         })
     }
 
-    const uploadAssignmentVideo = (e: any) => {
-        setIsUploadingAssignmentVideo(true);
+    const uploadAssignmentSolution = (e: any) => {
+        setIsUploadingAssignmentSolutionFile(true);
         const videoFile: any = e.target.files[0];
         const storageRef = ref(storage, `videos/${Date.now()}-${videoFile.name}`);
         const uploadTask = uploadBytesResumable(storageRef, videoFile);
@@ -195,23 +168,23 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
       uploadTask.on('state_changed', (snapshot: any)=>{
           const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-          setAssignmentVideoProgress(+uploadProgress);
+          setFollowupSolutionProgress(+uploadProgress);
 
       }, (error: any) => {
           console.log(error);
       },()=> {
            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setAssignmentVideoUrl(downloadURL);
+              setFollowupSolutionUrl(downloadURL);
               console.log('URL', videoUrl);
               console.log('VIDEO  URL: ', downloadURL);
-              setShowAssignmentVideoPreview(true);
-              setIsUploadingAssignmentVideo(false);
+              setShowAssignmentSolutionPreview(true);
+              setIsUploadingAssignmentSolutionFile(false);
           });
       })
     }
 
     const uploadAssignmentPdf = (e: any) => {
-        setIsUploadingAssignmentPdf(true);
+        setIsUploadingFollowupPdf(true);
       const pdfFile: any = e.target.files[0];
       const storageRef = ref(storage, `pdf-content/${Date.now()}-${pdfFile.name}`);
       const uploadTask = uploadBytesResumable(storageRef, pdfFile);
@@ -221,16 +194,16 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
     uploadTask.on('state_changed', (snapshot: any)=>{
         const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-        setAssignmentPdfProgress(+uploadProgress);
+        setFollowupPdfProgress(+uploadProgress);
 
     }, (error: any) => {
         console.log(error);
     },()=> {
          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setAssignmentPdfUrl(downloadURL);
+            setFollowupPdfUrl(downloadURL);
             console.log('URL', pdfUrl);
             console.log('PDF  URL: ', downloadURL);
-            setIsUploadingAssignmentPdf(false);
+            setIsUploadingFollowupPdf(false);
         });
     })
   }
@@ -243,8 +216,8 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
             classroom_id: selectedClassroom,
             video_url: videoUrl,
             pdf_file_url: pdfUrl,
-            assignment_file_url: assignmentPdfUrl,
-            assignment_video_url: assignmentVideoUrl
+            followup_file_url: followupPdfUrl,
+            followup_solution_url: followUpSolutionUrl,
         }
 
         console.log('CONTENT', data);
@@ -270,7 +243,7 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
-                onContentUpdated();
+                onContentAdded();
             }else {
                 console.log(res)
                 toast.error(res.data.message, {
@@ -287,6 +260,7 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
         })
 
     }
+
 
     useEffect(() => {
         handleGetClasses();
@@ -305,18 +279,18 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
 
                 {error && <ErrorMessage error={error} visible={true} />}
                 <Form 
-                    initialValues={{ title: 'Hello'}}
+                    initialValues={initialValues}
                     onSubmit={handleAddCourseContent}
                     validationSchema={validationSchema}
                 >
                         <p className="label-text">Title: </p>
-                        <FormField  name="title" type="general" placeholder="Classroom Name"/>
+                        <FormField  name="title" type="general" placeholder="Content Title"/>
                         
-                        <p className="label-text">Description (optional): </p>
+                        {/* <p className="label-text">Description (optional): </p>
                         <FormField  name="description" type="general" placeholder="Short Description"/>
 
                         <p className="label-text">Expectation (optional): </p>
-                        <FormField  name="expectation" type="general" placeholder="Expectation"/>
+                        <FormField  name="expectation" type="general" placeholder="Expectation"/> */}
 
                         <p className="label-text">Publish Date: </p>
                         <FormField  name="publish_date" type="date" placeholder="Published Date"/>
@@ -383,65 +357,70 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
                             </div>
                         }
                         </div>
-               
+                        
+                  
                         
                         <div className='upload-content-container'>
-                            <div className="content-upload-left">
-                            {!showAssignmentVideoPreview && <div className="form-field-upload">
-                                    <p className="label-text">Upload Assignment Video Content: </p>
-                                    <div className="file-drop-upload" onClick={() => assignVideoFileRef.current.click()}>
-                                    {!isUploadingAssignmentVideo && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                    {isUploadingAssignmentVideo &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                                    <BeatLoader
-                                            color="#623d91" 
-                                            loading={isUploadingAssignmentVideo}
-                                            cssOverride={override}
-                                        />
-                                        <p style={{fontSize: '14px'}}>Uploading Video</p>
-                                    
-                                            <ProgressBar bgcolor={'#6a1b9a'} completed={assignmentVideoProgress}/>
-                                        
-                                    </div>}
-                                    {!isUploadingAssignmentVideo && <input ref={assignVideoFileRef} onChange={uploadAssignmentVideo} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="video/mp4,video/x-m4v,video/*"/>}
-                                    </div>
-                                
-                                </div>}
-                                {showAssignmentVideoPreview && <div className="video-container">
-                                    <div className="delete-icon-video">
-                                         <FaTrashAlt color='red' />
-                                    </div>
-                                    <video controls width="100%" height={'100%'} src={assignmentVideoUrl}></video>
-                                </div>}
-                            </div>
-
-                          {assignmentPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
-                            <p className="label-text">Upload Assignment Pdf Content: </p>
-                            <div className="file-drop-upload" onClick={() => assignPdfFileRef.current.click()}>
-                            {!isUploadingAssignmentPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                <input ref={assignPdfFileRef} onChange={uploadAssignmentPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
-                                {isUploadingAssignmentPdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                        {followupPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-left ">
+                            <p className="label-text">Upload Follow-up Pdf Content: </p>
+                            <div className="file-drop-upload" onClick={() => followupPdfFileRef.current.click()}>
+                            {!isUploadingFollowupPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
+                                <input ref={followupPdfFileRef} onChange={uploadAssignmentPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
+                                {isUploadingFollowupPdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                               <BeatLoader
                                     color="#623d91" 
-                                    loading={isUploadingAssignmentPdf}
+                                    loading={isUploadingFollowupPdf}
                                     cssOverride={override}
                                 />
                                 <p style={{fontSize: '14px'}}>Uploading Content</p>
                             
-                                    <ProgressBar bgcolor={'#6a1b9a'} completed={assignmentPdfProgress}/>
+                                    <ProgressBar bgcolor={'#6a1b9a'} completed={followupPdfProgress}/>
                                 
                               </div>}
                         
                             </div>
                         </div>}
-                        {assignmentPdfUrl.length > 2 &&
+                        {followupPdfUrl.length > 2 &&
                             <div className="form-field-upload content-upload-right">
                             <p className="label-text" style={{textAlign: 'center'}}>Done</p>
                             </div>
                             }
+
+
+                            <div className="content-upload-right">
+                            {followUpSolutionUrl.length < 2 && <div className="form-field-upload">
+                                    <p className="label-text">Upload Follow-up Solution Content: </p>
+                                    <div className="file-drop-upload" onClick={() => followupSolutionFileRef.current.click()}>
+                                    {!isUploadingAssignmentSolutionFile && <FaCloudUploadAlt size={35} color="#FFA500" />}
+                                    {isUploadingAssignmentSolutionFile &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                    <BeatLoader
+                                            color="#623d91" 
+                                            loading={isUploadingAssignmentSolutionFile}
+                                            cssOverride={override}
+                                        />
+                                        <p style={{fontSize: '14px'}}>Uploading Solution</p>
+                                    
+                                            <ProgressBar bgcolor={'#6a1b9a'} completed={followupSolutionProgress}/>
+                                        
+                                    </div>}
+                                    {!isUploadingAssignmentSolutionFile && <input ref={followupSolutionFileRef} onChange={uploadAssignmentSolution} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel,video/mp4,video/x-m4v,video/*"/>}
+                                    </div>
+                                
+                                </div>}
+                                {followUpSolutionUrl.length > 2 &&
+                                    <div className="form-field-upload content-upload-right">
+                                    <p className="label-text" style={{textAlign: 'center'}}>Done</p>
+                                    </div>
+                                }
+                            </div>
+
+                         
                         </div>
                
 
-           
+                        <p className="label-text">Follow-up  Solution Pulish Date: </p>
+                        <FormField  name="publish_solution_date" type="date" placeholder="Followup Solution Pulish Date"/>
+
                       
 
                         <Button isOutLined={true} isFullWidth={false} title="CREATE CONTENT"/>
@@ -457,4 +436,4 @@ function EditourseContentModal({ onClose, onContentUpdated, data } : any) {
     );
 }
 
-export default EditourseContentModal;
+export default EditCourseContentModal;

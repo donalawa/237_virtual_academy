@@ -1,7 +1,8 @@
-const convertDate = (date: any) => {
-    let date2 = new Date(date *  1000).toDateString();
+import moment from "moment";
 
-    return date2;
+const convertDate = (date: any) => {
+    let formatedDate = moment(date).utc().format('DD/MM/YYYY');
+    return formatedDate;
   }
 
 export {

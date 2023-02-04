@@ -26,12 +26,6 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { createAssessment } from '../../../services/assessment';
 
-const initialValues= {
-    title: '',
-    publish_date: '',
-    publish_answers_date: ''
-}
-
 const override = {
     marginTop: '20px'
   };

@@ -16,11 +16,15 @@ const deleteCourseContent = (id: any) => {
     return api.delete(`/course-content/${id}`)
 }
 
+const submitStudentFollowUpScore = (data: any, solutionId: any) => {
+    return api.post(`/followup/score/${solutionId}`, data);
+}
 
 export {
     createCourseContent,
     getCourseContents,
     getClassCourseContents,
-    deleteCourseContent
+    deleteCourseContent,
+    submitStudentFollowUpScore
 }
 

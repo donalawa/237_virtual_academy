@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import logo from './logo.svg';
-import { HomePage, LoginPage, SignupPage, DashboardLanding, CourseContentPage, CalassroomsPage, AssignmentPage, AssessmentPage, AssessmentSubmissionsPage, PassExamsPage, StudentsLandingPage, StudentAssignmentPage, StudentCourseContentPage, LiveSessionPage, CreateSessionPage, JoinLiveSessionPage, StudentAssessmentPage, StudentAssessmentSubmissionsPage, PassexamContentPage } from './pages';
+import { HomePage, LoginPage, SignupPage, DashboardLanding, CourseContentPage, CalassroomsPage, FollowUpPage, AssessmentPage, AssessmentSubmissionsPage, PassExamsPage, StudentsLandingPage, StudentFollowUpPage, StudentCourseContentPage, LiveSessionPage, CreateSessionPage, JoinLiveSessionPage, StudentAssessmentPage, StudentAssessmentSubmissionsPage, PassexamContentPage, SchoolHomePage,  SchoolInfoPage } from './pages';
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -54,7 +54,7 @@ function App() {
             <Route path="/dashboard" element={(<Protected > <DashboardLanding  /> </Protected>)} />
             <Route path="/class-rooms" element={(<Protected > <CalassroomsPage  /> </Protected>)} />
             <Route path="/course-contents" element={(<Protected > <CourseContentPage  /> </Protected>)} />
-            <Route path="/assignments" element={(<Protected > <AssignmentPage  /> </Protected>)} />
+            <Route path="/follow-up" element={(<Protected > <FollowUpPage  /> </Protected>)} />
             <Route path="/assessments" element={(<Protected > <AssessmentPage  /> </Protected>)} />
             <Route path="/assessment-submissions" element={(<Protected > <AssessmentSubmissionsPage  /> </Protected>)} />
             <Route path="/pass-exams" element={(<Protected > <PassExamsPage  /> </Protected>)} />
@@ -66,12 +66,16 @@ function App() {
 
             <Route path="/students/home" element={(<Protected > <StudentsLandingPage /> </Protected>)} />
             <Route  path="/students/course-contents" element={(<Protected> <StudentCourseContentPage /> </Protected>)} />
-            <Route  path="/students/assignments" element={(<Protected> <StudentAssignmentPage /> </Protected>)} />
+            <Route  path="/students/followups" element={(<Protected> <StudentFollowUpPage /> </Protected>)} />
             <Route  path="/students/assessments" element={(<Protected> <StudentAssessmentPage /> </Protected>)} />
             <Route  path="/students/assessment-submissions" element={(<Protected> <StudentAssessmentSubmissionsPage /> </Protected>)} />
             <Route  path="/students/passexams" element={(<Protected> <PassexamContentPage /> </Protected>)} />
 
             <Route  path="/students/live-session" element={(<Protected> <JoinLiveSessionPage /> </Protected>)} />
+
+
+            <Route  path="/school/home" element={(<Protected> <SchoolHomePage /> </Protected>)} />
+            <Route  path="/school/info" element={(<Protected> <SchoolInfoPage /> </Protected>)} />
 
         </Routes>
       </BrowserRouter>

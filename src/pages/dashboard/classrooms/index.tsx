@@ -21,7 +21,6 @@ import BeatLoader from "react-spinners/BeatLoader";
 import moment from 'moment';
 
 
-
 const override = {
     marginTop: '20px'
   };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './UploadAssignmentSolutionModal.css';
+import './UploadFollowupSolutionModal.css';
 import * as Yup from 'yup';
 import Form from '../../form/components/Form/Form';
 import FormField from '../../form/components/FormField/FormField';
@@ -21,7 +21,7 @@ import { createCourseContent } from '../../../services/courseContent';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
 import { addPassExamContent } from '../../../services/passExams';
-import { getStudentsClasses, getCourseContent,  submitAssignmentSolution } from '../../../services/student';
+import { getStudentsClasses, getCourseContent,  submitFollowupSolution } from '../../../services/student';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -36,7 +36,7 @@ const override = {
 
 
 
-function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
+function UploadFollowupSolutionModal({ onClose, onContentAdded } : any) {
     const [classes, setClasses] = useState([]);
     const [courseContents, setCourseContents] = useState([]);
     const [error, setError] = useState<any>(null);
@@ -44,8 +44,6 @@ function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
     const [selectedCourseContent, setSelectedCourseContent] = useState<any>('all');
 
     // ASSIGNMENT SOLUTION
-    const [assessmentVideoUrl, setAssessmentVideoUrl] = useState('');
-
     const [solutionPdfUrl, setSolutionPdfUrl] = useState('');
     const [solutionPdfProgress,  setSolutionPdfProgress] = useState(0);
     const [isUploadingSolutionPdf, setIsUploadingSolutionPdf] = useState(false);
@@ -151,7 +149,7 @@ function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
             // console.log("FINAL CONTENT: ",data)
 
             // call submiting solution endpoint
-            submitAssignmentSolution(data).then((res: any) => {
+            submitFollowupSolution(data).then((res: any) => {
                 if(res.ok) {
                     toast.success(res.data.message, {
                         pauseOnHover: false,
@@ -186,7 +184,7 @@ function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
         <div>
             <div  className='modal-container student-modal-assignment'>
                 <div className='modal-head'>
-                    <p className="modal-title">Upload Assignment Solution</p>
+                    <p className="modal-title">Upload Followup Solution</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
@@ -260,4 +258,4 @@ function UploadAssignmentSolutionModal({ onClose, onContentAdded } : any) {
     );
 }
 
-export default UploadAssignmentSolutionModal;
+export default UploadFollowupSolutionModal;

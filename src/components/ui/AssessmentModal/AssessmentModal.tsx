@@ -219,7 +219,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
     
     return (
         <div>
-            <div  className='modal-container'>
+            <div  className='modal-container add-assessment-modal'>
                 <div className='modal-head'>
                     <p className="modal-title">Add Assessment</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
@@ -242,7 +242,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
 
                         <p className="label-text">Select Classroom: </p>
                         <select onChange={(e: any) => setSelectedClassroom(e.target.value) } className="select-field-modal">
-                            <option value="all">All</option>
+                            <option value="all">Select</option>
                             {classes.map((classData: any, key: any) => <option key={key} value={classData._id}>{classData.name}</option>)}
                         </select>
 

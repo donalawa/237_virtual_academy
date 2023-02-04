@@ -19,7 +19,47 @@ import { deleteCourseContent, getCourseContents } from '../../../services/course
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next';
+
+const rows: any = [
+    {
+        label: '#',
+        name: 'num'
+    },
+    {
+        label: 'Title',
+        name: 'name'
+    },
+    {
+        label: 'Classroom',
+        name: 'name'
+    },
+    {
+        label: 'Pdf Content',
+        name: 'name'
+    },
+    {
+        label: 'Video Content',
+        name: 'name'
+    },
+    {
+        label: 'Follow-up File',
+        name: 'name'
+    },
+    {
+        label: 'Follow-up Solution',
+        name: 'name'
+    },
+    {
+        label: 'Published Date',
+        name: 'name'
+    },
+    {
+        label: 'Action',
+        name: 'action'
+    }
+]
+
 
 const override = {
     marginTop: '20px'
@@ -41,44 +81,6 @@ function Index() {
 
     const { t, i18n } = useTranslation();
 
-    const rows: any = [
-        {
-            label: '#',
-            name: 'num'
-        },
-        {
-            label: (`${t('course_content.data_table.title')}`),
-            name: 'name'
-        },
-        {
-            label: (`${t('course_content.data_table.classroom')}`),
-            name: 'name'
-        },
-        {
-            label: (`${t('course_content.data_table.pdf_content')}`),
-            name: 'name'
-        },
-        {
-            label: (`${t('course_content.data_table.video_content')}`),
-            name: 'name'
-        },
-        {
-            label: (`${t('course_content.data_table.assignment_file')}`),
-            name: 'name'
-        },
-        {
-            label: (`${t('course_content.data_table.assignment_solution')}`),
-            name: 'name'
-        },
-        {
-            label: (`${t('course_content.data_table.published_date')}`),
-            name: 'name'
-        },
-        {
-            label: 'Action',
-            name: 'action'
-        }
-    ]
 
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
@@ -110,6 +112,7 @@ function Index() {
         deleteCourseContent(deleteId).then((res: any) => {
             if(res.ok) {
                 toggleDeleteModal();
+                handleGetContent();
                 handleGetClasses();
                 toast.success(res.data.message, {
                     pauseOnHover: false,
@@ -198,8 +201,8 @@ function Index() {
                     
                                     <td className="flex-start">{data?.pdf_file_url ? <a href={data?.pdf_file_url} target="_blank" download>Pdf Content</a> : "None"}</td>
                                     <td className="flex-start">{data?.video_url ? <a href={data?.video_url} target="_blank" download>Video Content</a> : "None"}</td>
-                                    <td className="flex-start">{data?.assignment_file_url ? <a href={data?.assignment_file_url} target="_blank" download>Assignment File</a> : "None"}</td>
-                                    <td className="flex-start">{data?.assignment_solution_url ? <a href={data?.assignment_solution_url} target="_blank" download>Solution File</a> : "Not available"}</td>                           
+                                    <td className="flex-start">{data?.followup_file_url ? <a href={data?.followup_file_url} target="_blank" download>Follow-up File</a> : "None"}</td>
+                                    <td className="flex-start">{data?.followup_solution_url ? <a href={data?.followup_solution_url} target="_blank" download>Solution File</a> : "Not available"}</td>                           
                                     <td className="flex-start">{moment(new Date(data?.publish_date)).format('MMMM d, YYYY')}</td>
                                     
 
