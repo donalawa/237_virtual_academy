@@ -10,3 +10,7 @@
 .student-button {
     background-color: #484848;
 }
+
+.student-button:hover {
+    background-color: #484848;
+}

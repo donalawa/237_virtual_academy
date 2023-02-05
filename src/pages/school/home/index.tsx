@@ -16,6 +16,8 @@ import BeatLoader from "react-spinners/BeatLoader";
 import moment from 'moment';
 import { DeleteModal } from '../../../components';
 import { toast } from 'react-toastify';
+import { schoolGetAcceptedStudents, schoolGetAcceptedTeachers } from '../../../services/school';
+import { getSchoolSpecialitis } from '../../../services/specialities';
 
 const rows: any = [
     {
@@ -50,9 +52,10 @@ const override = {
 
 
 function Index() {
-    const [classes, setClasses] = useState([]);
-    const [courseContents, setCourseContents] = useState([]);
-    const [studentsApplicatins, setStudentsApplications] = useState([]);
+    const [teachers, setTeachers] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [specialities, setSpecialities] = useState([]);
+    const [reminders, setReminders] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const [selectedId, setSelectedId] = useState<any>(null);
@@ -60,27 +63,33 @@ function Index() {
     const [showRejectModal, setShowRejectModal] = useState(false);
 
 
-    const handleGetClasses = ()  => {
-        getClasses().then((res: any) => {
+    const handleGetData = ()  => {
+        schoolGetAcceptedStudents().then((res: any) => {
             if(res.ok) {
-                setClasses(res?.data?.data)
+                setStudents(res?.data?.data)
             }
         })
-    }
 
-    const handleGetCourseContents = () => {
-        getCourseContents().then((res: any) => {
+        schoolGetAcceptedTeachers().then((res: any) => {
             if(res.ok) {
-                setCourseContents(res?.data?.data);
+                setTeachers(res?.data?.data)
             }
         })
+
+        getSchoolSpecialitis().then((res: any) => {
+            if(res.ok) {
+                setSpecialities(res?.data?.data)
+            }
+        })
+
+
     }
 
     const handleGetStudentsApplications = () => {
         getAllApplications().then((res: any) => {
             if(res.ok) {
                 console.log('RESPONSE: ', res);
-                setStudentsApplications(res.data.data);
+                setSpecialities(res.data.data);
             }
         })
     }
@@ -145,9 +154,7 @@ function Index() {
 
 
     useEffect(() => {
-        handleGetClasses();
-        handleGetCourseContents();
-        handleGetStudentsApplications();
+        handleGetData();
     }, [])
 
     return (
@@ -156,18 +163,18 @@ function Index() {
             <div className="flex-4">
                     <a className="stat-card">
                         <div className="stat-name">Total Teachers</div>
-                        <div className="stat-value">{classes.length}</div>
+                        <div className="stat-value">{teachers.length}</div>
                     </a>
                     <a className="stat-card">
-                        <div className="stat-name">Total Courses</div>
-                        <div className="stat-value">{courseContents.length}</div>
+                        <div className="stat-name">Total Students</div>
+                        <div className="stat-value">{students.length}</div>
                     </a>
                     <a className="stat-card">
-                        <div className="stat-name">Total Applications</div>
-                        <div className="stat-value">{studentsApplicatins?.length}</div>
+                        <div className="stat-name">Total Specialities</div>
+                        <div className="stat-value">{specialities?.length}</div>
                     </a>
                     <a className="stat-card">
-                        <div className="stat-name">Total Assessments</div>
+                        <div className="stat-name">Total Anouncements</div>
                         <div className="stat-value">0</div>
                     </a>
                 </div>
@@ -178,7 +185,7 @@ function Index() {
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>School Teachers</h1>
+                                        <h1>School Reminders</h1>
                                     </div>
                             
                                 </div>
@@ -199,7 +206,7 @@ function Index() {
                                         </thead>
                                  
                                         <tbody>
-                                          {studentsApplicatins.map((data: any, index: any) => <tr>
+                                          {reminders.map((data: any, index: any) => <tr>
                                                 <td className="flex-center">{index + 1}</td>
                                                 <td className="flex-start">
                                                     <p>{data?.student_id?.username}</p>

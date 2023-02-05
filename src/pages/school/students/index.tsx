@@ -1,28 +1,22 @@
 import React, { useState, useEffect }  from 'react';
 import './students.css';
 
-import StudentLayout from '../../../components/StudentLayout/StudentLayout';
-
-import { EditCourseContentModal, DeleteModal  } from '../../../components';
-import UploadAssessmentSolutionModal from '../../../components/students/UploadAssessmentSolutionModal/UploadAssessmentSolution';
-import {  BsPencilSquare } from 'react-icons/bs';
-
-import { IoMdCloudDownload } from 'react-icons/io';
-import { AiFillEye } from 'react-icons/ai';
 
 import { toast } from 'react-toastify';
 
+import { AiOutlineCheckSquare } from 'react-icons/ai';
+import { MdOutlineCancelPresentation } from 'react-icons/md';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { deletePassExamContent } from '../../../services/passExams';
-import { getStudentSolutions, getStudentsClasses } from '../../../services/student';
+import { DeleteModal } from '../../../components';
+
+import { schoolAcceptStudent, schoolGetStudents, schoolRejectStudent, schoolSuspendStudent } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
-import moment from 'moment';
+
 import { getTotalAssessments } from '../../../services/assessment';
-import { VideoPlayerModal } from '../../../components';
 import { convertDate } from '../../../utils/date';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
 
@@ -32,31 +26,31 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Class',
-        name: 'name'
-    },
-    {
         label: 'Name',
         name: 'name'
     },
     {
-        label: 'Teacher',
+        label: 'Speciality',
         name: 'name'
     },
     {
-        label: 'Solution File',
+        label: 'Email',
         name: 'name'
     },
     {
-        label: 'Question File',
+        label: 'Fees Paid',
         name: 'name'
     },
     {
-        label: 'Created Date',
+        label: 'Total Fees',
         name: 'name'
     },
     {
-        label: 'Sumission Deadline',
+        label: 'Status',
+        name: 'name'
+    },
+    {
+        label: 'Applied Date',
         name: 'name'
     },
     {
@@ -73,81 +67,118 @@ const override = {
 
 
 function Index() {
-    const [ showAddModal, setShoowAddModal ] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false); 
-    const [deleteModal, setShowDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const [assessments, setAssessments] = useState([]);
-    const [showVideoModal, setShowVideoModal] = useState(false);
+    const [schoolStudents, setSchoolStudents] = useState([]);
+    const [ showAcceptModal, setShowAcceptModal ] = useState(false);
+    const [ showRejectModal, setShowRejectModal ] = useState(false);
+    const [ showSuspendedModal, setShowSuspendedModal ] = useState(false);
 
-    const [editData, setEditData] = useState(null);
+    const [selectedId, setSelectedId] = useState<any>(null);
 
-    const [videoUrl, setVideoUrl] = useState('');
-
-    const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const toggleAddModal = () => {
-        setShoowAddModal(!showAddModal);
-    }
-
-    const handleGetClasses = ()  => {
+    const handleGetStudents = ()  => {
 
 
-        getStudentsClasses().then((res: any) => {
+        schoolGetStudents().then((res: any) => {
             if(res.ok) {
-                setClasses(res.data.data);
+                console.log('DATA: ', res.data.data);
+                setSchoolStudents(res.data.data);
             }
         }).catch(err => {
             console.log('error: ', err);
         })
     }
 
-    const toggleVideoModal = () => {
-        setShowVideoModal(!showVideoModal);
+    const toggleAcceptModal = () => {
+        setShowAcceptModal(!showAcceptModal);
     }
 
-    const handleSetVideoUrl = (url: any) =>  {
-        setVideoUrl(url);
-        toggleVideoModal();
-    }  
-
-    const handleContentAdded = ()  => {
-        toggleAddModal();
+    const toggleRejectModal = () => {
+        setShowRejectModal(!showRejectModal);
     }
 
+    const toggleSuspendModal = () => {
+        setShowSuspendedModal(!showSuspendedModal);
+    }
 
-    const handleGetAssessments = (classId: any) => {
-        setLoading(true);
-        getTotalAssessments(classId).then((res: any) => {
-            console.log("STUDENT assessments RES: ",res);
-            setLoading(false);
-            setAssessments(res.data.data);
-        }).catch((err: any) => {
-            console.log('Error: ', err);
-            setLoading(false);
+    const handleSuspend = () => {
+        schoolSuspendStudent(selectedId).then((res: any) => {
+            if(res.ok) {
+                toggleSuspendModal();
+                handleGetStudents();
+                toast.success(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+          
+            }else {
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+            }
+        }).catch(err => {
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
         })
     }
 
-    const handleClassSelected = (value: any) => {
-        try {
-            console.log('CLASS ID:' , value)
-            if(value == 'all') {
-                setAssessments([]);
-                return;
+    const handleRejected = () => {
+        schoolRejectStudent(selectedId).then((res: any) => {
+            if(res.ok) {
+                toggleRejectModal();
+                handleGetStudents();
+                toast.success(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+          
+            }else {
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
             }
-
-            handleGetAssessments(value);
-        } catch (error) {
-            console.log('error: ', error)
-        }
+        }).catch(err => {
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        })
     }
+
+    const handleAccepted = () => {
+        schoolAcceptStudent(selectedId).then((res: any) => {
+            if(res.ok) {
+                toggleAcceptModal();
+                handleGetStudents();
+                toast.success(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+          
+            }else {
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+            }
+        }).catch(err => {
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        })
+    }
+
 
 
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
-        handleGetClasses();
+        handleGetStudents();
     },[]);
 
     return (
@@ -157,9 +188,11 @@ function Index() {
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                            <select name="" id="" onChange={(e: any) => handleClassSelected(e.target.value)} className="select-field school-student-select">
-                                <option value="all">Select Speciality</option>
-                                {classes.map((classData: any, index: any) => <option key={index} value={classData.class_id._id}>{classData.class_id.name}</option>)}
+                            <select name="" id="" onChange={(e: any) => null} className="select-field school-student-select">
+                                <option value="all">Fillter Status</option>
+                                <option value='active'>Active</option>
+                                <option value='pending'>Pending</option>
+                                <option value='suspended'>Suspended</option>
                             </select>
                         </div>
                 
@@ -182,46 +215,59 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {assessments?.map((data: any, index: any) => <tr>
+                                {schoolStudents?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data?.class_room_id?.name}</p>
+                                        <p>{data?.username}</p>
                                     </td>
                                     <td className="flex-start">
-                                      {data?.title}
+                                      {data?.speciality_id?.name}
                                     </td>
                                     <td className="flex-start">
-                                      {data?.teacher_id?.username}
+                                      {data?.email}
                                     </td>
-                    
-                                  {data?.answers_file.length > 2 &&  <td className="flex-start"><a>Available</a></td>}
 
-                                  {data?.answers_file.length < 2 &&  <td className="flex-start"><a>Not Available</a></td>}
-                                    
-                                    <td className="flex-start"><a href={data?.assessment_file} target="_blank" download>Questions</a></td>
-                                
+                                    <td className="flex-start">
+                                      {data?.fees_paid}
+                                    </td>
+
+                                    <td className="flex-start">
+                                      {data?.total_fees}
+                                    </td>
+
+                                    <td className="flex-start">
+                                      {data?.student_status ? data?.student_status : 'Pending'}
+                                    </td>
+
                                     <td className="flex-start">
                                         <p>{convertDate(data?.createdAt)}</p>
                                     </td>
 
-                                     
-                                    <td className="flex-start">
-                                        <p>{data?.publish_answers_date}</p>
-                                    </td>
+                                    
 
                                     <td className="flex-center">
                                         <div className="action">
-                                       {data?.answers_file.length > 2 && <>{data?.answers_file_type == 'video' && <Tippy content="View Video Solution"  animation="fade">
+                                        
+                                       {data.student_status != 'accepted' &&    <Tippy content="Activate"  animation="fade">
+                                                    <a className="see" onClick={() => {
+                                                        setSelectedId(data?._id);
+                                                        toggleAcceptModal();
+                                                    }}><AiOutlineCheckSquare size={14}/></a>
+                                                    </Tippy>}
+
+                                          {data.student_status == 'pending' &&   <Tippy content="Reject"  animation="fade">
                                             <a onClick={() => {
-                                                handleSetVideoUrl(data.answers_file)
-                                            }} className="see"><AiFillEye onClick={() => null} size={14}/></a>
-                                            </Tippy>}
-                                          {data?.answers_file_type == 'others' &&  <Tippy content="Download Solution File"  animation="fade">
-                                            <a target="_blank" download href={data.answers_file} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
-                                            </Tippy>}</>}
-                                            {data?.assessment_file?.length > 2 &&  <Tippy content="Download Assessment File"  animation="fade">
-                                            <a href={data?.assessment_file} target="_blank" download className="see orange"><IoMdCloudDownload onClick={() => null} size={14}/></a>
-                                            </Tippy>}
+                                                    setSelectedId(data?._id);
+                                                    toggleRejectModal();
+                                            }} className="delete"><MdOutlineCancelPresentation /></a>
+                                        </Tippy>}
+
+                                       {data.student_status == 'accepted' &&  <Tippy content="Suspend"  animation="fade">
+                                            <a onClick={() => {
+                                                    setSelectedId(data?._id);
+                                                    toggleSuspendModal();
+                                            }} className="delete"><MdOutlineCancelPresentation /></a>
+                                        </Tippy>}
                                         </div>
                                     </td>
                                 </tr> )}
@@ -233,8 +279,11 @@ function Index() {
             </div>
         </div>
 
-        {showAddModal &&  <UploadAssessmentSolutionModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
-        {showVideoModal && <VideoPlayerModal video={videoUrl} onClose={toggleVideoModal}/>}
+        {showRejectModal && <DeleteModal color={'#605E5A'} title="Are you sure you  want to reject request ?" onAccept={handleRejected} onCancel={toggleRejectModal} />}
+        
+        {showSuspendedModal && <DeleteModal color={'#605E5A'} title="Are you sure you  want to suspend student ?" onAccept={handleSuspend} onCancel={toggleSuspendModal} />}
+
+        {showAcceptModal && <DeleteModal color={'#605E5A'} title="Are you sure you  want to activate student ?" onAccept={handleAccepted} onCancel={toggleAcceptModal} />}
         </SchoolLayout>
     );
 }

@@ -31,16 +31,19 @@ const Index = () => {
     const { t, i18n } = useTranslation();
     const [error, setError] = useState<any>(null);
     const [accountType, setAccountType] = useState('none');
+    const [loading, setIsLoading] = useState(false);
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(`${t('username_required_error')}`),
         email: Yup.string().email(`${t('email_valid_error')}`).required(`${t('email_required_error')}`),
+        school_code: Yup.string(),
+        speciality_code: Yup.string(),
         password: Yup.string().min(4, `${t('password_length_error')}`).required(`${t('password_required_error')}`),
         confirm_password: Yup.string().min(4, `${t('password_length_error')}`).required(`${t('c_password_required_error')}`)
     })
 
     const handleRegister = (values : any) => {
         console.log('VALUES: ', values);
-
+        setError(null)
         if(values.password != values.confirm_password) {
             toast.error(`${t('password_match_error')}`, {
                 pauseOnHover: false,
@@ -59,16 +62,31 @@ const Index = () => {
             return;
         }
 
-        let data = {
-            ...values,
-            account_type: accountType
+    
+        let data: any = {
+            username: values.username,
+            email: values.email,
+            password: values.password,
+            confirm_password: values.confirm_password,
+            account_type: accountType,
         }
- 
+
+        if(accountType == 'student') {
+            if(values.speciality_code.length < 2 || values.school_code.length < 2) {
+                setError('You Need To Enter School and Speciality Code')
+                return;
+            }
+            data.speciality_code = values.speciality_code;
+            data.school_code = values.school_code
+        }
+
+        // console.log('REGISTER DATA: ', data);
+
         registerUser(data).then((res: any) => {
             // console.log('REGISTERED USER');
             // console.log(res);
          
-
+            setIsLoading(true);
             if(res.ok) {
                 toast.success(`${t('registered_successfully')}`, {
                     pauseOnHover: false,
@@ -78,12 +96,14 @@ const Index = () => {
                     navigate('/login');
                 },1000)
             }else {
+                setIsLoading(false);
                 toast.error(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
             }
         }).catch(err => {
+            setIsLoading(false);
             console.log('ERROR REGISTRATION', err);
             toast.error(`${t('register_failed_error')}`, {
                 pauseOnHover: false,
@@ -124,11 +144,16 @@ const Index = () => {
                             <option value="school">School</option>
                         </select>
                         </div>
+
+                       {accountType == 'student' && <FormField  name="school_code" type="general" placeholder="School Code"/>}
+
+                        {accountType == 'student' && <FormField  name="speciality_code" type="general" placeholder="Speciality Code"/>}
+
                         <FormField  name="password" type="password" placeholder={`${t('password_label')}`}/>
 
                         <FormField  name="confirm_password" type="password" placeholder={`${t('c_password_label')}`}/>
 
-                        <Button title={`${t('register_text')}`}/>
+                       {!loading && <Button title={`${t('register_text')}`}/>}
                         </Form>
                 </form>
                 <p className="u-padding-bottom-small label-link">

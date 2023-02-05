@@ -32,6 +32,26 @@ const studentGetPassExams = (classId: any) => {
     return api.get(`/students/passexams/${classId}`);
 }
 
+
+
+
+// SCHOOOL
+const schoolGetStudents = () => {
+    return api.get('/school/students');
+}
+
+const schoolAcceptStudent = (studId: any) => {
+    return api.post(`/school/student/accept/${studId}`, {student_status: 'accepted'});
+}
+
+const schoolRejectStudent = (studId: any) => {
+    return api.post(`/school/student/reject/${studId}`, {student_status: 'rejected'});
+}
+
+const schoolSuspendStudent = (studId: any) => {
+    return api.post(`/school/student/suspend/${studId}`, {student_status: 'suspended'});
+}
+
 export {
     getStudentsClasses,
     joinClass,
@@ -40,6 +60,10 @@ export {
     getStudentSolutions,
     submitFollowupSolution,
     getAllStudentSolutions,
-    studentGetPassExams
+    studentGetPassExams,
+    schoolGetStudents,
+    schoolAcceptStudent,
+    schoolRejectStudent,
+    schoolSuspendStudent
 }
 

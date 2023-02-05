@@ -8,6 +8,10 @@ const getClasses = () => {
     return api.get('/classes');
 }
 
+const getTeachersClassReq = () => {
+    return api.get('/school/class-request');
+}
+
 const deleteClass = (id: any) => {
     return api.delete(`/class/${id}`)
 }
@@ -16,6 +20,7 @@ const deleteClass = (id: any) => {
 export {
     createClass,
     getClasses,
-    deleteClass
+    deleteClass,
+    getTeachersClassReq
 }
 

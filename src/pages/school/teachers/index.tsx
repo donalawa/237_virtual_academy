@@ -1,25 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import './teachers.css';
 
-import Layout from '../../../components/Layout/Layout';
-import StudentLayout from '../../../components/StudentLayout/StudentLayout';
-import { AddClassModal, DeleteModal } from '../../../components';
-import JoinClassModal from '../../../components/students/JoinClassModal/JoinClassModal';
-
-import { AiOutlineCopy } from 'react-icons/ai';
-
-import { toast } from 'react-toastify';
-
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { getStudentsClasses, joinClass } from '../../../services/student';
+import { AiOutlineCheckSquare } from 'react-icons/ai';
+import { MdOutlineCancelPresentation } from 'react-icons/md';
+
+import { DeleteModal } from '../../../components';
 
 import BeatLoader from "react-spinners/BeatLoader";
 import {convertDate} from '../../../utils/date';
+import { toast } from 'react-toastify';
 
-import moment from 'moment';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
+import { getTeachersClassReq } from '../../../services/classroom';
 
 const rows: any = [
     {
@@ -27,15 +22,11 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Name',
+        label: 'Teachers Name',
         name: 'name'
     },
     {
-        label: 'Class ID',
-        name: 'name'
-    },
-    {
-        label: 'Teacher',
+        label: 'Specialities',
         name: 'name'
     },
     {
@@ -43,7 +34,11 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Submited Date',
+        label: 'Requested Date',
+        name: 'name'
+    },
+    {
+        label: 'Action',
         name: 'name'
     },
 ]
@@ -55,23 +50,38 @@ const override = {
 
 
 function Index() {
-    const [ showJoinModal, setShowJoinModal ] = useState(false);
+    const [ showAcceptModal, setShowAcceptModal ] = useState(false);
+    const [ showRejectModal, setShowRejectModal ] = useState(false);
 
-    const [classes, setClasses] = useState([]);
+
+    const [teachersRequests, setTeachersRequests] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [selectedId, setSelectedId] = useState<any>(null);
 
-    const toggleAddModal = () => {
-        setShowJoinModal(!showJoinModal);
+    const toggleAcceptModal = () => {
+        setShowAcceptModal(!showAcceptModal);
+    }
+
+    const toggleRejectModal = () => {
+        setShowRejectModal(!showRejectModal);
+    }
+
+    const handleRejected = () => {
+
+    }
+
+    const handleAccepted = () => {
+
     }
 
 
-    const handleGetClasses = ()  => {
+    const handleGetTeachersReq = ()  => {
         setLoading(true);
 
-        getStudentsClasses().then((res: any) => {
+        getTeachersClassReq().then((res: any) => {
             console.log('RESPONSE GET: ', res);
             if(res.ok) {
-                setClasses(res.data.data);
+                setTeachersRequests(res.data.data);
             }
             setLoading(false);
         }).catch(err => {
@@ -80,15 +90,10 @@ function Index() {
         })
     }
 
- 
 
-    const handleClassAdded = ()  => {
-        handleGetClasses();
-        toggleAddModal();
-    }
 
     useEffect(() => {
-        handleGetClasses();
+        handleGetTeachersReq();
     },[]);
 
     return (
@@ -98,7 +103,14 @@ function Index() {
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>You have : {classes.length} Teachers</h1>
+                                        <h1>You have : {teachersRequests.length} Teachers</h1>
+                                    </div>
+
+                                    <div className="span">
+                                        <select name="" id="" onChange={(e: any) => null} className="select-field school-student-select">
+                                            <option value="all">Select Status</option>
+                                            {teachersRequests.map((classData: any, index: any) => <option key={index} value={classData?.class_id?._id}>{classData?.class_id?.name}</option>)}
+                                        </select>
                                     </div>
                                     {/* <form className="search">
                                         <input type="search" name="" id="" placeholder="Find ..." />
@@ -123,25 +135,43 @@ function Index() {
                                         </thead>
                                  
                                         <tbody>
-                                          {classes.map((data: any, index: any) => <tr key={index}>
+                                          {teachersRequests.map((data: any, index: any) => <tr key={index}>
                                                 <td className="flex-center">{index + 1}</td>
 
                                                 <td className="flex-start">
-                                                    <p>{data?.class_id?.name}</p>
+                                                    <p>{data?.teacher_id?.username}</p>
                                                 </td>
 
                                                 <td className="flex-start">
-                                                    <p>{data?.class_id?._id}</p>
+                                                    <p>{data?.specialities?.map((sp: any) => `${sp.name},` )}</p>
                                                 </td>
                                        
-                                
-                                                <td className="flex-start">{data?.teacher_id?.username}</td>
+                            
                                                 
                                                 <td className="flex-start">{data?.status}</td>
 
                                                 <td className="flex-start">
                                                     <p>{convertDate(data?.createdAt)}</p>
                                                 </td>
+
+                                                <td className="flex-center">
+
+                                                <div className="action">
+                                                    <Tippy content="Accept"  animation="fade">
+                                                                <a className="see" onClick={() => {
+                                                                    setSelectedId(data?._id);
+                                                                    toggleAcceptModal();
+                                                                }}><AiOutlineCheckSquare size={14}/></a>
+                                                                </Tippy>
+                                                        <Tippy content="Reject"  animation="fade">
+                                                        <a onClick={() => {
+                                                             setSelectedId(data?._id);
+                                                             toggleRejectModal();
+                                                        }} className="delete"><MdOutlineCancelPresentation /></a>
+                                                    </Tippy>
+            
+                                                    </div>
+                                            </td>
 
                                     
                                             </tr> )}
@@ -154,7 +184,9 @@ function Index() {
                         </div>
                     </div>
 
-                    {showJoinModal &&  <JoinClassModal onClassAdded={handleClassAdded} onClose={toggleAddModal} />}
+                    {showRejectModal && <DeleteModal color={'#605E5A'} title="Are you sure you  want to reject request ?" onAccept={handleRejected} onCancel={toggleRejectModal} />}
+
+                    {showAcceptModal && <DeleteModal color={'#605E5A'} title="Are you sure you  want to accept request ?" onAccept={handleAccepted} onCancel={toggleAcceptModal} />}
         </SchoolLayout>
     );
 }
