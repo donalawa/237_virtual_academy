@@ -24,6 +24,7 @@ import { addPassExamContent } from '../../../services/passExams';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import {useTranslation} from "react-i18next";
 
 const initialValues= {
     title: '',
@@ -40,6 +41,10 @@ function PassExamModal({ onClose, onContentAdded } : any) {
     const [classes, setClasses] = useState([]);
     const [error, setError] = useState<any>(null);
     const [selectedClassroom, setSelectedClassroom] = useState(null);
+
+    const { t, i18n } = useTranslation();
+
+
     // Exam Content
 
     const [questionPdfUrl, setQuestionPdfUrl] = useState('');
@@ -195,7 +200,7 @@ function PassExamModal({ onClose, onContentAdded } : any) {
         }
 
         if(answerVideoUrl.length < 2 && answerPdfUrl.length < 2) {
-            setError('Selecte Video Solutions Or Pdf Solutions');
+            setError('Select Video Solutions Or Pdf Solutions');
             return;
         }
 
@@ -240,7 +245,7 @@ function PassExamModal({ onClose, onContentAdded } : any) {
         <div>
             <div  className='modal-container'>
                 <div className='modal-head'>
-                    <p className="modal-title">Add New Exam Content</p>
+                    <p className="modal-title">{t('pass_exams.modal.modal_title')}</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
@@ -252,14 +257,14 @@ function PassExamModal({ onClose, onContentAdded } : any) {
                     onSubmit={handleAddCoursePassExamContent}
                     validationSchema={validationSchema}
                 >
-                        <p className="label-text">Title: </p>
-                        <FormField  name="title" type="general" placeholder="Exam Title"/>
+                        <p className="label-text">{t('pass_exams.modal.title')} </p>
+                        <FormField  name="title" type="general" placeholder={t('pass_exams.modal.exam_title')}/>
                         
-                        <p className="label-text">Publish Date: </p>
+                        <p className="label-text">{t('pass_exams.modal.publish_date')} </p>
                         <FormField  name="publish_date" type="date" placeholder="Published Date"/>
 
 
-                        <p className="label-text">Select Classroom: </p>
+                        <p className="label-text">{t('pass_exams.modal.select_classroom')} </p>
                         <select onChange={(e: any) => setSelectedClassroom(e.target.value) } className="select-field-modal">
                             <option value="all">All</option>
                             {classes.map((classData: any, key: any) => <option key={key} value={classData._id}>{classData.name}</option>)}
@@ -269,7 +274,7 @@ function PassExamModal({ onClose, onContentAdded } : any) {
                             
 
                       {questionPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
-                            <p className="label-text">Upload Assesssment Pdf Content: </p>
+                            <p className="label-text">{t('pass_exams.modal.upload_assessment_pdf_content')} </p>
                             <div className="file-drop-upload" onClick={handleQuestionPdfFileSelect}>
                             {!isUploadingQestionPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
                                 <input ref={questionPdfFileRef} onChange={uploadQuestionPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
@@ -298,7 +303,7 @@ function PassExamModal({ onClose, onContentAdded } : any) {
                         <div className='upload-content-container'>
                             <div className="content-upload-left">
                             {!showAnswerVideoPreview && <div className="form-field-upload">
-                                    <p className="label-text">Upload Assessment Video Answer: </p>
+                                    <p className="label-text">{t('pass_exams.modal.upload_assessment_video_answer')} </p>
                                     <div className="file-drop-upload" onClick={() => assignVideoFileRef.current.click()}>
                                     {!isUploadingAnswerVideo && <FaCloudUploadAlt size={35} color="#FFA500" />}
                                     {isUploadingAnswerVideo &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
@@ -325,7 +330,7 @@ function PassExamModal({ onClose, onContentAdded } : any) {
                             </div>
 
                           {answerPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
-                            <p className="label-text">Upload Assessment Pdf Answer: </p>
+                            <p className="label-text">{t('pass_exams.modal.upload_assessment_pdf_answer')} </p>
                             <div className="file-drop-upload" onClick={() => assignPdfFileRef.current.click()}>
                             {!isUploadingAnswerPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
                                 <input ref={assignPdfFileRef} onChange={uploadAnswerPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
@@ -355,7 +360,7 @@ function PassExamModal({ onClose, onContentAdded } : any) {
            
                       
 
-                        <Button isOutLined={true} isFullWidth={false} title="CREATE CONTENT"/>
+                        <Button isOutLined={true} isFullWidth={false} title={t('pass_exams.modal.button')}/>
 
                         </Form>
                 </form>

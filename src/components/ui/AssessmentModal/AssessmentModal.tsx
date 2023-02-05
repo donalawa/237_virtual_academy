@@ -225,7 +225,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
         <div>
             <div  className='modal-container add-assessment-modal'>
                 <div className='modal-head'>
-                    <p className="modal-title">{t('create_live.data_table.layout_title')}</p>
+                    <p className="modal-title">{t('assessment.modal.modal_title')}</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
@@ -237,14 +237,14 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                     onSubmit={handleAddAssessmentContent}
                     validationSchema={validationSchema}
                 >
-                        <p className="label-text">Title: </p>
-                        <FormField  name="title" type="general" placeholder="Exam Title"/>
+                        <p className="label-text">{t('assessment.modal.title_label')} </p>
+                        <FormField  name="title" type="general" placeholder={t('assessment.modal.title_placeholder')} />
                         
-                        <p className="label-text">Publish Date: </p>
-                        <FormField  name="publish_date" type="date" placeholder="Published Date"/>
+                        <p className="label-text">{t('assessment.modal.date_label')} </p>
+                        <FormField  name="publish_date" type="date" placeholder={t('assessment.modal.date_label')} />
 
 
-                        <p className="label-text">Select Classroom: </p>
+                        <p className="label-text">{t('assessment.modal.select_classroom_label')} </p>
                         <select onChange={(e: any) => setSelectedClassroom(e.target.value) } className="select-field-modal">
                             <option value="all">Select</option>
                             {classes.map((classData: any, key: any) => <option key={key} value={classData._id}>{classData.name}</option>)}
@@ -256,7 +256,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                         <div className='upload-content-container'>
                      
                           {assessmentPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-left">
-                            <p className="label-text">Upload Assessment File: </p>
+                            <p className="label-text">{t('assessment.modal.upload_assessment_file_label')} </p>
                             <div className="file-drop-upload" onClick={() => assessmentPdfFileRef.current.click()}>
                             {!isUploadingAssessmentPdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
                                 <input ref={assessmentPdfFileRef} onChange={uploadAssessmentPdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
@@ -284,7 +284,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
 
                         <div className="content-upload-right">
                             {assessmentSolutionUrl.length < 2 && <div className="form-field-upload">
-                                    <p className="label-text">Upload Solution File: </p>
+                                    <p className="label-text">{t('assessment.modal.upload_solution_file_label')} </p>
                                     <div className="file-drop-upload" onClick={() => assessmentSolutionFileRef.current.click()}>
                                     {!isUploadingAssessmentSolutionFile && <FaCloudUploadAlt size={35} color="#FFA500" />}
                                     {isUploadingAssessmentSolutionFile &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
@@ -318,11 +318,11 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
                         </div>
 
                        
-                        <p className="label-text">Publish Solution Date: </p>
-                        <FormField  name="publish_answers_date" type="date" placeholder="Published Solution Date"/>
+                        <p className="label-text">{t('assessment.modal.publish_solution_date_label')} </p>
+                        <FormField  name="publish_answers_date" type="date" placeholder={t('assessment.modal.publish_solution_date_label')}/>
 
                
-                        <Button isOutLined={true} isFullWidth={false} title="CREATE CONTENT"/>
+                        <Button isOutLined={true} isFullWidth={false} title={t('assessment.modal.create_content_button')}/>
 
                         </Form>
                 </form>

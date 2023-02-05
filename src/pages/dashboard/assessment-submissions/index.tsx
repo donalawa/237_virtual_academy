@@ -26,40 +26,6 @@ import moment from 'moment';
 import { convertDate } from '../../../utils/date';
 import { useTranslation } from 'react-i18next';
 
-const rows: any = [
-    {
-        label: '#',
-        name: 'num'
-    },
-    {
-        label: 'Student Name',
-        name: 'name'
-    },
-    {
-        label: 'Submission',
-        name: 'name'
-    },
-    {
-        label: 'Comment',
-        name: 'name'
-    },
-    {
-        label: 'Score',
-        name: 'name'
-    },
-    {
-        label: 'Total Score',
-        name: 'name'
-    },
-    {
-        label: 'Submitted Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'action'
-    }
-]
 
 
 const override = {

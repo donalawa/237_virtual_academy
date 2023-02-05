@@ -178,6 +178,17 @@ i18n
                  answer_video:"Answer Video",
                  publish_date:"Publish Date",
                  created_date:"Created Date",
+             },
+             modal:{
+                 modal_title:"Add New Exam Content",
+                 title:"Title:",
+                 exam_title:"Exame Title",
+                 publish_date:"Publish Date:",
+                 select_classroom:"Select Classroom:",
+                 upload_assessment_pdf_content:"Upload Assessment Pdf Content:",
+                 upload_assessment_video_answer:"Upload Assessment Video Answer:",
+                 upload_assessment_pdf_answer:"Upload Assessment Pdf Answer:",
+                 button:"CREATE CONTENT"
              }
          },
          create_live:{
@@ -322,7 +333,7 @@ i18n
                   upload_assessment_file_label:"Charger le fichier d'évaluation:",
                   upload_solution_file_label:"Charger le fichier de solution:",
                   publish_solution_date_label:"Date pour publier la solution",
-                 create_content_button:"Créer l'évaluation",
+                 create_content_button:"CREER L'EVALUATION",
                 }
             },
             assessment_submission:{
@@ -353,7 +364,7 @@ i18n
             pass_exams:{
                 data_table:{
                     layout_title:"Épreuves précédentes",
-                    button:"Ajouter un contenu",
+                    button:"",
                     title:"Titre",
                     class:"Cours",
                     question_file:"Fichier de questions",
@@ -361,6 +372,17 @@ i18n
                     answer_video:"Vidéo pour Solution",
                     publish_date:"Date de publication",
                     created_date:"Date de création",
+                },
+                modal:{
+                    modal_title:"Ajouter un contenu pour l'évaluation",
+                    title:"Titre:",
+                    exam_title:"Titre de l'évaluation",
+                    publish_date:"Date de publication:",
+                    select_classroom:"Choisir une Salle:",
+                    upload_assessment_pdf_content:"Charger un Pdf pour le Contenu de l'évaluation:",
+                    upload_assessment_video_answer:"Charger une Vidéo les Réponses l'évaluation:",
+                    upload_assessment_pdf_answer:"Charger un Pdf les Réponses l'évaluation:",
+                    button:"CREER UN CONTENU"
                 }
             },
             create_live:{
