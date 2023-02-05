@@ -58,6 +58,10 @@ function Index() {
             label: `School`,
             name: 'name'
         },
+        {
+            label: `Status`,
+            name: 'name'
+        },
 
         {
             label: 'Action',
@@ -168,7 +172,9 @@ function Index() {
                                                {data.specialities.length > 0 && <td className="flex-start">{data.specialities.map((sp:any ) => sp.name )}</td>}
                                                {data.specialities.length <= 0 && <td className="flex-start">Private</td>}
 
-                                                <td className="flex-start">{data.school_id?.username ? data.school_id?.username : "Private"}</td>
+                                               <td className="flex-start">{data?.school_id?.username ? data?.school_id?.username : "Private"}</td>
+                                               
+                                                <td className="flex-start">{data?.status ? data?.status : "Private"}</td>
 
                                                 
                                                 <td className="flex-start">
