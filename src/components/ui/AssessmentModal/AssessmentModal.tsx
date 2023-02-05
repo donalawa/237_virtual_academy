@@ -25,6 +25,7 @@ import { addPassExamContent } from '../../../services/passExams';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { createAssessment } from '../../../services/assessment';
+import {useTranslation} from "react-i18next";
 
 const initialValues= {
     title: '',
@@ -42,6 +43,9 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
     const [classes, setClasses] = useState([]);
     const [error, setError] = useState<any>(null);
     const [selectedClassroom, setSelectedClassroom] = useState(null);
+
+    const { t, i18n } = useTranslation();
+
     // Exam Content
     let [answersFileType, setAnswersFileType] = useState('');
 
@@ -221,7 +225,7 @@ function AssessmentModal({ onClose, onContentAdded } : any) {
         <div>
             <div  className='modal-container add-assessment-modal'>
                 <div className='modal-head'>
-                    <p className="modal-title">Add Assessment</p>
+                    <p className="modal-title">{t('create_live.data_table.layout_title')}</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>

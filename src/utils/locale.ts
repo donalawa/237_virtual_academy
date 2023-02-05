@@ -86,6 +86,9 @@ i18n
                 title:"You have: ",
                 title2:"Classroom  ",
                 button:"Add Classroom",
+                modal_title:"Add New Classroom",
+                modal_button:"CREATE CLASSROOM",
+                modal_placeholder:"Classroom Name",
                 class_name:"Name",
                 class_url:"Class Url",
                 created_date:"Created Date"
@@ -99,12 +102,23 @@ i18n
                 classroom:"Classroom",
                 pdf_content:"Pdf Content",
                 video_content:"Video Content",
-                assignment_file:"Assignment File",
-                assignment_solution:"Assignment Solution",
+                follow_up_file:"Follow-up File",
+                follow_up_solution:"Follow-up Solution",
                 published_date:"Published Date",
 
             },
         },
+         follow_ups:{
+             data_table:{
+                 layout_title:"Follow-up Submissions" ,
+                 student_name:"Student Name",
+                 solution:"Solution",
+                 comment:"Comment",
+                 score:"Score",
+                 total_score:"Total Score",
+                 submitted_date:"Submitted Date"
+             }
+          },
          assessment:{
                 data_table:{
                     layout_title:"Assessments",
@@ -114,8 +128,20 @@ i18n
                     answer_pdf:"Answer Pdf",
                     publish_date:"Publish Date",
                     created_date:"Created Date",
-                }
-            },
+                },
+             modal:{
+                 modal_title:"Add Assessment",
+                 title_label:"Title:",
+                 title_placeholder:"Exam Title",
+                 date_label:"Publish Date:",
+                 select_classroom_label:"Select Classroom:",
+                 upload_assessment_file_label:"Upload Assessment File:",
+                 upload_solution_file_label:"Upload Solution File:",
+                 publish_solution_date_label:"Publish Solution Date",
+                 create_content_button:"CREATE ASSESSMENT",
+             }
+
+         },
          assessment_submission:{
                 data_table:{
                     layout_title:"Assessment Submissions",
@@ -125,6 +151,9 @@ i18n
                     answer_pdf:"Answer Pdf",
                     submitted_date:"Submitted Date",
                     created_date:"Created Date",
+                    select_class:"Select Class",
+                    select_course_content:"Select Course Content",
+
                 }
             },
          assignment:{
@@ -162,9 +191,7 @@ i18n
                     status:"Status",
                     session_date:"Session Date",
                 }
-            }
-
-
+            },
         },
       },
 
@@ -243,6 +270,9 @@ i18n
                     title:"Vous avez: ",
                     title2:"Salle de Classe  ",
                     button:"Ajouter Une Salle",
+                    modal_title:"Ajouter Une Salle",
+                    modal_button:"CREER UNE SALLE",
+                    modal_placeholder:"Nom de la salle",
                     class_name:"Nom",
                     class_url:"Lien de la Classe",
                     created_date:"Date de Création"
@@ -256,11 +286,22 @@ i18n
                     classroom:"Salle de Classe",
                     pdf_content:"Contenu Pdf",
                     video_content:"Contenu vidéo",
-                    assignment_file:"Devoirs",
-                    assignment_solution:"Solution aux Devoirs",
+                    follow_up_file:"Fichier de suivi",
+                    follow_up_solution:"Solution de suivi",
                     published_date:"Date de Publication",
 
                 },
+            },
+            follow_ups:{
+                data_table:{
+                    layout_title:"Submission de suivis" ,
+                    student_name:"Etudiant(e)s",
+                    solution:"Solution",
+                    comment:"Commentaire",
+                    score:"Note",
+                    total_score:"Résultat Totale",
+                    submitted_date:"Date de soumission"
+                }
             },
             assessment:{
                 data_table:{
@@ -271,6 +312,17 @@ i18n
                     answer_pdf:"Pdf pour Solution",
                     publish_date:"Date de publication",
                     created_date:"Date de création",
+                },
+                modal:{
+                  modal_title:"Ajouter une évaluation",
+                  title_label:"Titre:",
+                  title_placeholder:"Titre de l'évaluation",
+                  date_label:"Date de publication:",
+                  select_classroom_label:"Choisir une salle:",
+                  upload_assessment_file_label:"Charger le fichier d'évaluation:",
+                  upload_solution_file_label:"Charger le fichier de solution:",
+                  publish_solution_date_label:"Date pour publier la solution",
+                 create_content_button:"Créer l'évaluation",
                 }
             },
             assessment_submission:{
@@ -282,6 +334,8 @@ i18n
                     answer_pdf:"Pdf pour Solution",
                     submitted_date:"Date de soumission",
                     created_date:"Date de création",
+                    select_class:"choisir le Cours",
+                    select_course_content:"Choisir le Contenu du Cours",
                 },
 
             },
@@ -320,8 +374,7 @@ i18n
                     status:"Statut",
                     session_date:"Date de séance",
                 }
-            }
-
+            },
         }
       },
     }

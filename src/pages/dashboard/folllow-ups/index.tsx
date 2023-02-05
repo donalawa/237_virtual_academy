@@ -25,40 +25,6 @@ import moment from 'moment';
 import {useTranslation} from "react-i18next";
 
 
-const rows: any = [
-    {
-        label: '#',
-        name: 'num'
-    },
-    {
-        label: 'Student Name',
-        name: 'name'
-    },
-    {
-        label: 'Solution',
-        name: 'name'
-    },
-    {
-        label: 'Comment',
-        name: 'name'
-    },
-    {
-        label: 'Score',
-        name: 'name'
-    },
-    {
-        label: 'Total Score',
-        name: 'name'
-    },
-    {
-        label: 'Submitted Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'action'
-    }
-]
 
 
 const override = {
@@ -80,7 +46,42 @@ function Index() {
     const [followUpScoreVals, setFollowUpScoreVals] = useState(null)
 
     const { t, i18n } = useTranslation();
-    
+
+    const rows: any = [
+        {
+            label: '#',
+            name: 'num'
+        },
+        {
+            label: (`${t('follow_ups.data_table.student_name')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('follow_ups.data_table.solution')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('follow_ups.data_table.comment')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('follow_ups.data_table.score')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('follow_ups.data_table.total_score')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('follow_ups.data_table.submitted_date')}`),
+            name: 'name'
+        },
+        {
+            label: 'Action',
+            name: 'action'
+        }
+    ]
+
     const handleGetClasses = ()  => {
 
         getClasses().then((res: any) => {
@@ -165,7 +166,7 @@ function Index() {
     },[]);
 
     return (
-        <Layout title="Follow-up Submissions">
+        <Layout title={t('follow_ups.data_table.layout_title')}>
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">

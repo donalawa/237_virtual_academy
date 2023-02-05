@@ -206,18 +206,18 @@ function Index() {
     },[]);
 
     return (
-        <Layout title="Assessment Submissions" pageTitle="Assessment Submissions">
+        <Layout title={t('assessment_submission.data_table.layout_title')} pageTitle={t('assessment_submission.data_table.layout_title')}>
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
                             <select value={seletedClass} onChange={(e: any) => handleGetContent(e.target.value)} className="select-field">
-                                <option  value="all">Select Class</option>
+                                <option  value="all">{t('assessment_submission.data_table.select_class')}</option>
                                 {classes.map((classData: any, index: any) => <option key={index} value={classData._id}>{classData.name}</option>)}
                             </select>
                             <select value={seletedContent} onChange={(e: any) => handleGetAssignmentSubs(e.target.value)}  className="select-field">
-                                <option value="all">Select Course Content</option>
+                                <option value="all">{t('assessment_submission.data_table.select_course_content')}</option>
                                 {contents.map((contentData: any, index: any) => <option key={index} value={contentData._id}>{contentData.title}</option>)}
                             </select>
                         </div>

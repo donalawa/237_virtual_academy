@@ -10,6 +10,7 @@ import { ImCancelCircle } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
 import { createClass, getClasses, deleteClass } from '../../../services/classroom';
+import {useTranslation} from "react-i18next";
 
 const initialValues= {
     name: '',
@@ -18,6 +19,7 @@ const initialValues= {
 
 function AddClassModal({ onClose, onClassAdded } : any) {
     const [error, setError] = useState(null);
+    const { t, i18n } = useTranslation();
 
 
     const validationSchema = Yup.object().shape({
@@ -57,7 +59,7 @@ function AddClassModal({ onClose, onClassAdded } : any) {
         <div>
             <div  className='add-modal-container adding-modal'>
                 <div className='modal-head'>
-                    <p className="modal-title">Add New Classroom</p>
+                    <p className="modal-title">{t('classroom.data_table.modal_title')}</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
@@ -70,9 +72,9 @@ function AddClassModal({ onClose, onClassAdded } : any) {
                     validationSchema={validationSchema}
                 >
 
-                        <FormField  name="name" type="general" placeholder="Classroom Name"/>
+                        <FormField  name="name" type="general" placeholder={t('classroom.data_table.modal_placeholder')}/>
 
-                        <Button isOutLined={true} isFullWidth={false} title="CREATE CLASSROOM"/>
+                        <Button isOutLined={true} isFullWidth={false} title={t('classroom.data_table.modal_button')} />
                         </Form>
                 </form>
                 </div>

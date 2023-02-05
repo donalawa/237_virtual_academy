@@ -21,44 +21,6 @@ import BeatLoader from "react-spinners/BeatLoader";
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 
-const rows: any = [
-    {
-        label: '#',
-        name: 'num'
-    },
-    {
-        label: 'Title',
-        name: 'name'
-    },
-    {
-        label: 'Classroom',
-        name: 'name'
-    },
-    {
-        label: 'Pdf Content',
-        name: 'name'
-    },
-    {
-        label: 'Video Content',
-        name: 'name'
-    },
-    {
-        label: 'Follow-up File',
-        name: 'name'
-    },
-    {
-        label: 'Follow-up Solution',
-        name: 'name'
-    },
-    {
-        label: 'Published Date',
-        name: 'name'
-    },
-    {
-        label: 'Action',
-        name: 'action'
-    }
-]
 
 
 const override = {
@@ -81,6 +43,44 @@ function Index() {
 
     const { t, i18n } = useTranslation();
 
+    const rows: any = [
+        {
+            label: '#',
+            name: 'num'
+        },
+        {
+            label: (`${t('course_content.data_table.title')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.classroom')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.pdf_content')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.video_content')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.follow_up_file')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.follow_up_solution')}`),
+            name: 'name'
+        },
+        {
+            label: (`${t('course_content.data_table.published_date')}`),
+            name: 'name'
+        },
+        {
+            label: 'Action',
+            name: 'action'
+        }
+    ]
 
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
