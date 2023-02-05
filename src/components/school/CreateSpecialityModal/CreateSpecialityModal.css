@@ -13,9 +13,16 @@
     overflow: scroll;
 }
 
-.adding-modal {
-    top:50%!important;
+.create-speciality-modal {
+    top: 65% !important;
 }
+
+.create-speciality-modal button{
+    color: #484848 !important; 
+    border-color: #484848 !important;
+
+}
+
 @keyframes fadein {
 	from {
 		opacity:0;
@@ -55,6 +62,10 @@
     padding: 20px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+}
+
+.create-speciality-modal .modal-head {
+    background-color: #484848 !important;
 }
 
 @media screen and  (max-width: 1043px) {

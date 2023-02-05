@@ -27,3 +27,11 @@ export { default as StudentAssignmentSubmissionPage } from './students/assignmen
 // SCHOOL
 export { default as SchoolHomePage } from './school/home/index';
 export { default as SchoolInfoPage } from './school/info/index';
+export { default as SchoolSpecialityPage } from './school/speciality/index';
+export { default as SchoolTeachersPage } from './school/teachers/index';
+export { default as SchoolStudentsPage } from './school/students/index';
+export { default as SchoolTimetablePage } from './school/time-table/index';
+export { default as SchoolAnouncementPage } from './school/anouncement/index';
+export { default as SchoolReportsPage } from './school/reports/index';
+export { default as SchoolStatisticsPage } from './school/statistics/index';
+export { default as SchoolPayFeesPage } from  './school/school-fees/index';

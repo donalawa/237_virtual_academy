@@ -3,11 +3,17 @@ import './SchoolLayout.css';
 import { removeToken } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
-import { MdContentPaste, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
-import { useTranslation } from 'react-i18next';
-import { GoDeviceCameraVideo } from 'react-icons/go';
+import { MdContentPaste, MdAssignmentTurnedIn,MdReportProblem, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
 import { BsInfoCircle } from 'react-icons/bs';
+import { SlCalender } from 'react-icons/sl';
+import { BsFillCalendar2CheckFill } from 'react-icons/bs';
+import { FaPeopleArrows } from 'react-icons/fa';
+import { GiMoneyStack } from 'react-icons/gi';
+import { TfiAnnouncement } from 'react-icons/tfi';
+import { BsFillPersonFill } from 'react-icons/bs';
+import { GoMortarBoard } from 'react-icons/go';
 
+import { useTranslation } from 'react-i18next';
 import { getUser } from '../../utils/storage';
 
 function SchoolLayout({ title, children, pageTitle } : any) {
@@ -80,18 +86,54 @@ function SchoolLayout({ title, children, pageTitle } : any) {
                         <span>Dashboard</span>
                     </NavLink>
 
-
-                    <NavLink className="link" to="/school/courses">
+                    <NavLink className="link" to="/school/speciality">
                     <i><MdContentPaste size={20}/></i>
-                        <span>School Courses</span>
+                        <span>School Specialities</span>
                     </NavLink>
-                    
+
+                    <NavLink className="link" to="/school/teachers">
+                    <i><GoMortarBoard size={20}/></i>
+                        <span>Teachers</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/school/students">
+                    <i><BsFillPersonFill size={20}/></i>
+                        <span>Students</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/school/time-table">
+                    <i><SlCalender size={20}/></i>
+                        <span>Timetable</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/school/anouncement">
+                    <i><TfiAnnouncement size={20}/></i>
+                        <span>Anouncement</span>
+                    </NavLink>
+    
+                    <NavLink className="link" to="/school/reports">
+                    <i><MdReportProblem size={20}/></i>
+                        <span>Reports</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/school/statistics">
+                    <i><MdAssessment size={20}/></i>
+                        <span>Statistic</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/school/fees">
+                    <i><GiMoneyStack size={20}/></i>
+                        <span>Fees Payments</span>
+                    </NavLink>
+    
                     <NavLink className="link" to="/school/info">
                     <i><BsInfoCircle size={20}/></i>
                         <span>School Info</span>
                     </NavLink>
+
+               
                 </div>
-    
+
             </div>
         </div>
         <div className={`main ${!showStudNav ? 'expand' : ''}`}>

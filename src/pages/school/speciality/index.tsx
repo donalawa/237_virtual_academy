@@ -1,25 +1,57 @@
 import React, { useState, useEffect } from 'react';
-import './classrooms.css';
+import './speciality.css';
 
 import Layout from '../../../components/Layout/Layout';
-import './classrooms.css';
-import { AddClassModal, DeleteModal } from '../../../components';
+import StudentLayout from '../../../components/StudentLayout/StudentLayout';
+import { AddClassModal, CreateSpecialityModal, DeleteModal } from '../../../components';
+import JoinClassModal from '../../../components/students/JoinClassModal/JoinClassModal';
 
 import { AiOutlineCopy } from 'react-icons/ai';
 
 import { toast } from 'react-toastify';
 
-import { useTranslation } from 'react-i18next';
-
-
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { getClasses, deleteClass } from '../../../services/classroom';
+import { getStudentsClasses, joinClass } from '../../../services/student';
+
 import BeatLoader from "react-spinners/BeatLoader";
+import {convertDate} from '../../../utils/date';
 
 import moment from 'moment';
-import { convertDate } from '../../../utils/date';
+import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
+import { deleteShoolSpeciality, getSchoolSpecialitis } from '../../../services/specialities';
+
+const rows: any = [
+    {
+        label: '#',
+        name: 'num'
+    },
+    {
+        label: 'Name',
+        name: 'name'
+    },
+    {
+        label: 'Speciality Code',
+        name: 'name'
+    },
+    {
+        label: 'Fees',
+        name: 'name'
+    },
+    {
+        label: 'Total Students',
+        name: 'name'
+    },
+    {
+        label: 'Created Date',
+        name: 'name'
+    },
+    {
+        label: 'Action',
+        name: 'name'
+    },
+]
 
 
 const override = {
@@ -28,59 +60,29 @@ const override = {
 
 
 function Index() {
-    const [ showAddModal, setShoowAddModal ] = useState(false);
+    const [ showCreateModal, setShowCreateModal ] = useState(false);
+
+    const [specialities, setSpecialities] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
 
-    const [classes, setClasses] = useState([]);
-    const [loading, setLoading] = useState(false);
-
-    const { t, i18n } = useTranslation();
-
-    const rows: any = [
-        {
-            label: '#',
-            name: 'num'
-        },
-        {
-            label: (`${t('classroom.data_table.class_name')}`),
-            name: 'name'
-        },
-        {
-            label: (`${t('classroom.data_table.class_url')}`),
-            name: 'name'
-        },
-        {
-            label: `Speciality`,
-            name: 'name'
-        },
-        {
-            label: `School`,
-            name: 'name'
-        },
-
-        {
-            label: 'Action',
-            name: 'action'
-        }
-    ]
-
-
     const toggleAddModal = () => {
-        setShoowAddModal(!showAddModal);
+        setShowCreateModal(!showCreateModal);
     }
 
     const toggleDeleteModal = () => {
         setShowDeleteModal(!deleteModal);
     }
 
-    const handleGetClasses = ()  => {
+
+    const handleGetSpecialities = ()  => {
         setLoading(true);
 
-        getClasses().then((res: any) => {
+        getSchoolSpecialitis().then((res: any) => {
             console.log('RESPONSE GET: ', res);
             if(res.ok) {
-                setClasses(res.data.data.reverse());
+                setSpecialities(res.data.data);
             }
             setLoading(false);
         }).catch(err => {
@@ -89,18 +91,17 @@ function Index() {
         })
     }
 
-    const handleDeleteClass = () => {
-        console.log('DELETE CLASS');
+    const handleDeleteSpeciality = () => {
+        console.log('DELETE SPECIALITY');
         console.log(deleteId)
-        deleteClass(deleteId).then((res: any) => {
+        deleteShoolSpeciality(deleteId).then((res: any) => {
             if(res.ok) {
                 toggleDeleteModal();
-                handleGetClasses();
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
-          
+                getSchoolSpecialitis();
             }else {
                 toast.error(res.data.message, {
                     pauseOnHover: false,
@@ -115,29 +116,31 @@ function Index() {
         })
     }
 
-    const handleClassAdded = ()  => {
-        handleGetClasses();
+ 
+
+    const handleSpecialityAdded = ()  => {
+        handleGetSpecialities();
         toggleAddModal();
     }
 
     useEffect(() => {
-        handleGetClasses();
+        handleGetSpecialities();
     },[]);
 
     return (
-        <Layout title={t('classroom.data_table.layout_title')}>
+        <SchoolLayout title="School Specialities" pageTitle="Specialities">
               <div className="section">
                         <div className="parent-con">
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>{t('classroom.data_table.title')} {classes.length} {t('classroom.data_table.title2')}</h1>
+                                        <h1>You have : {specialities.length} Specialities</h1>
                                     </div>
                                     {/* <form className="search">
                                         <input type="search" name="" id="" placeholder="Find ..." />
                                         <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
                                     </form> */}
-                                    <button onClick={toggleAddModal} className="btn btn-primary btn-add">{t('classroom.data_table.button')} <i className="fas fa-plus"></i></button>
+                                    <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button">Add Speciality  <i className="fas fa-plus"></i></button>
                                 </div>
                                 <div className="table-con">
                                 <div style={{textAlign: 'center',}}>
@@ -156,30 +159,30 @@ function Index() {
                                         </thead>
                                  
                                         <tbody>
-                                          {classes.map((data: any, index: any) => <tr>
+                                          {specialities.map((data: any, index: any) => <tr key={index}>
                                                 <td className="flex-center">{index + 1}</td>
+
                                                 <td className="flex-start">
-                                                    <p>{data.name}</p>
+                                                    <p>{data?.name}</p>
+                                                </td>
+
+                                                <td className="flex-start">
+                                                    <p>{data?.code}</p>
                                                 </td>
                                        
                                 
-                                                <td className="flex-start">{data._id}</td>
-
-                                               {data.specialities.length > 0 && <td className="flex-start">{data.specialities.map((sp:any ) => sp.name )}</td>}
-                                               {data.specialities.length <= 0 && <td className="flex-start">Private</td>}
-
-                                                <td className="flex-start">{data.school_id?.username ? data.school_id?.username : "Private"}</td>
-
+                                                <td className="flex-start">{data?.fees} CFA</td>
                                                 
-                                                <td className="flex-start">
-                                                    <p>{convertDate(data.createdAt)}</p>
-                                                </td>
+                                                <td className="flex-start">{data?.students?.length}</td>
 
+                                                <td className="flex-start">
+                                                    <p>{convertDate(data?.createdAt)}</p>
+                                                </td>
                                                 <td className="flex-center">
-                                                    <div className="action">
-                                                        <Tippy content="Copy Class Url"  animation="fade">
+                                        <div className="action">
+                                            <Tippy content="Copy Speciality Code"  animation="fade">
                                                         <a className="see"><AiOutlineCopy onClick={() => {
-                                                            navigator.clipboard.writeText(`${data._id}`);
+                                                            navigator.clipboard.writeText(`${data.code}`);
                                                             
                                                             toast.success("Copied To Clipboard", {
                                                                 pauseOnHover: false,
@@ -187,14 +190,16 @@ function Index() {
                                                             })
                                                         }} size={14}/></a>
                                                         </Tippy>
-                                                        <Tippy content="Delete Class"  animation="fade">
-                                                            <a onClick={() => {
-                                                                setDeleteId(data._id);
-                                                                toggleDeleteModal();
-                                                            }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
-                                                        </Tippy>
-                                                    </div>
-                                                </td>
+                                                <Tippy content="Delete Speciality"  animation="fade">
+                                                <a onClick={() => {
+                                                    setDeleteId(data?._id);
+                                                    toggleDeleteModal();
+                                                }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
+                                            </Tippy>
+    
+                                            </div>
+                                    </td>
+                                    
                                             </tr> )}
                                         </tbody>
                                     </table>
@@ -202,13 +207,12 @@ function Index() {
 
 
                             </div>
-                        
                         </div>
                     </div>
 
-                    {showAddModal &&  <AddClassModal onClassAdded={handleClassAdded} onClose={toggleAddModal} />}
-                    {deleteModal && <DeleteModal onAccept={handleDeleteClass} onCancel={toggleDeleteModal} />}
-        </Layout>
+                    {showCreateModal &&  <CreateSpecialityModal onSpecialityAdded={handleSpecialityAdded} onClose={toggleAddModal} />}
+                    {deleteModal && <DeleteModal onAccept={handleDeleteSpeciality} color={'#605E5A'} title="Are you sure you want to delete speciality" onCancel={toggleDeleteModal} />}
+        </SchoolLayout>
     );
 }
 

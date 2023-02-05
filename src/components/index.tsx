@@ -12,3 +12,7 @@ export { default as AssessmentScoreModal } from './ui/AssessmentScoreModal/Asses
 export { default as UpdateAssessmentmodal } from  './ui/UpdateAssessmentModal/UpdateAssessmentModal'
 export { default as AssignmentModal } from './ui/AssignmentModal/AssignmentModal';
 export { default as UpdateAssignmentModal } from './ui/UpdateAssignmentModal/UpdateAssignmentModal';
+
+
+// SCHOOL
+export {default as CreateSpecialityModal } from './school/CreateSpecialityModal/CreateSpecialityModal';
