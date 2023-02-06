@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './course-content.css';
 
 import Layout from '../../../components/Layout/Layout';
@@ -20,6 +20,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const rows: any = [
     {
@@ -73,6 +74,9 @@ function Index() {
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const [contents, setContents] = useState([]);
+    const [error, setError] = useState<any>(null)
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
+
 
     const [editData, setEditData] = useState(null);
 
@@ -120,6 +124,7 @@ function Index() {
                 })
           
             }else {
+                
                 toast.error(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
@@ -155,7 +160,7 @@ function Index() {
         console.log('USER EFFECT RAN')
         handleGetContent();
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <Layout title = {t('course_content.data_table.layout_title')} >

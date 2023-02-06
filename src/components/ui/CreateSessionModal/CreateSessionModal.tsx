@@ -58,7 +58,7 @@ function CreateSessionModal({ onClose, onSessionCreated } : any) {
                 return;
             }  
 
-            console.log('DATA: ', data);
+            // console.log('DATA: ', data);
 
             // CREATE LIVE SESSION
             createSession(data).then((res: any) => {
@@ -111,7 +111,7 @@ function CreateSessionModal({ onClose, onSessionCreated } : any) {
                            <p className="label-text">Select Classroom: </p>
                         <select onChange={(e: any) => setSelectedClassroom(e.target.value) } className="select-field-modal">
                             <option value="all">All</option>
-                            {classes.map((classData: any, key: any) => <option key={key} value={classData._id}>{classData.name}</option>)}
+                            {classes.map((classData: any, key: any) => <option key={key} value={classData?._id}>{classData?.name}</option>)}
                         </select>
 
                         <Button isOutLined={true} isFullWidth={false} title="CREATE SESSION"/>

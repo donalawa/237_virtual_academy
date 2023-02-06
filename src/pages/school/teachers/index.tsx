@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './teachers.css';
 
 import Tippy from '@tippyjs/react';
@@ -15,6 +15,8 @@ import { toast } from 'react-toastify';
 
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
 import { getTeachersClassReq } from '../../../services/classroom';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
+import { schoolAcceptTeachersRequest, schoolRejectTeachersRequest } from '../../../services/school';
 
 const rows: any = [
     {
@@ -57,6 +59,7 @@ function Index() {
     const [teachersRequests, setTeachersRequests] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedId, setSelectedId] = useState<any>(null);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const toggleAcceptModal = () => {
         setShowAcceptModal(!showAcceptModal);
@@ -67,11 +70,52 @@ function Index() {
     }
 
     const handleRejected = () => {
-
+        schoolRejectTeachersRequest(selectedId).then((res: any) => {
+            if(res.ok) {
+                toast.success(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+                handleGetTeachersReq();
+            }else {
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+            }
+        }).catch((error: any) => {
+            console.log('Error: ', error);
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        })
+        toggleRejectModal();
     }
 
     const handleAccepted = () => {
-
+        schoolAcceptTeachersRequest(selectedId).then((res: any) => {
+            if(res.ok) {
+                toast.success(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+                handleGetTeachersReq();
+            }else {
+                toast.error(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+            }
+        }).catch((error: any) => {
+            console.log('Error: ', error);
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        })
+        
+        toggleAcceptModal();
     }
 
 
@@ -94,7 +138,7 @@ function Index() {
 
     useEffect(() => {
         handleGetTeachersReq();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <SchoolLayout title="School Teachers" pageTitle="Home">
@@ -157,18 +201,18 @@ function Index() {
                                                 <td className="flex-center">
 
                                                 <div className="action">
-                                                    <Tippy content="Accept"  animation="fade">
+                                                {data?.status != 'accepted' &&    <Tippy content="Accept"  animation="fade">
                                                                 <a className="see" onClick={() => {
                                                                     setSelectedId(data?._id);
                                                                     toggleAcceptModal();
                                                                 }}><AiOutlineCheckSquare size={14}/></a>
-                                                                </Tippy>
-                                                        <Tippy content="Reject"  animation="fade">
+                                                                </Tippy>  }
+                                                {data?.status != 'rejected' &&     <Tippy content="Reject"  animation="fade">
                                                         <a onClick={() => {
                                                              setSelectedId(data?._id);
                                                              toggleRejectModal();
                                                         }} className="delete"><MdOutlineCancelPresentation /></a>
-                                                    </Tippy>
+                                                    </Tippy> }
             
                                                     </div>
                                             </td>

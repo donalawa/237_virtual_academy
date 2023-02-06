@@ -1,8 +1,9 @@
 import api from "./apiClient";
-
+import { getAcademicYear } from "../utils/storage";
 
 const getPassExamContents = () => {
-    return api.get('/pass-exams');
+    let accademicYear = getAcademicYear();
+    return api.get(`/pass-exams/${accademicYear}`);
 }
 
 const addPassExamContent = (data: any) => {

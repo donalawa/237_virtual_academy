@@ -232,7 +232,7 @@ function AssessmentModal({ onClose, onContentAdded, assessmentVals } : any) {
     
     return (
         <div>
-            <div  className='modal-container add-assessment-modal'>
+            <div  className='modal-container create-assessment-modal'>
                 <div className='modal-head'>
                     <p className="modal-title">Add Assessment</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>

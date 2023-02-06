@@ -187,6 +187,13 @@ function AssignmentModal({ onClose, onContentAdded } : any) {
             return;
         }
 
+        if(assignmentSolutionUrl.length > 2) {
+            if(data.publish_answers_date.length < 2) {
+                setError('Select date to publish assignment solution.');
+                return;
+            }
+        }
+
         // console.log('ALL DATA: ', data);
         // return;
         createAssignment(data).then((res: any) => {

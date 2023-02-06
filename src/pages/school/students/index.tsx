@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './students.css';
 
 
@@ -19,6 +19,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { getTotalAssessments } from '../../../services/assessment';
 import { convertDate } from '../../../utils/date';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const rows: any = [
     {
@@ -71,6 +72,7 @@ function Index() {
     const [ showAcceptModal, setShowAcceptModal ] = useState(false);
     const [ showRejectModal, setShowRejectModal ] = useState(false);
     const [ showSuspendedModal, setShowSuspendedModal ] = useState(false);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const [selectedId, setSelectedId] = useState<any>(null);
 
@@ -179,7 +181,7 @@ function Index() {
     useEffect(() => {
         console.log('USER EFFECT RAN')
         handleGetStudents();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <SchoolLayout title="Students" pageTitle="Students">
@@ -218,13 +220,13 @@ function Index() {
                                 {schoolStudents?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data?.username}</p>
+                                        <p>{data?.student_id?.username}</p>
                                     </td>
                                     <td className="flex-start">
                                       {data?.speciality_id?.name}
                                     </td>
                                     <td className="flex-start">
-                                      {data?.email}
+                                      {data?.student_id?.email}
                                     </td>
 
                                     <td className="flex-start">
@@ -248,21 +250,21 @@ function Index() {
                                     <td className="flex-center">
                                         <div className="action">
                                         
-                                       {data.student_status != 'accepted' &&    <Tippy content="Activate"  animation="fade">
+                                       {data.status != 'accepted' &&    <Tippy content="Activate"  animation="fade">
                                                     <a className="see" onClick={() => {
                                                         setSelectedId(data?._id);
                                                         toggleAcceptModal();
                                                     }}><AiOutlineCheckSquare size={14}/></a>
                                                     </Tippy>}
 
-                                          {data.student_status == 'pending' &&   <Tippy content="Reject"  animation="fade">
+                                          {data.status == 'pending' &&   <Tippy content="Reject"  animation="fade">
                                             <a onClick={() => {
                                                     setSelectedId(data?._id);
                                                     toggleRejectModal();
                                             }} className="delete"><MdOutlineCancelPresentation /></a>
                                         </Tippy>}
 
-                                       {data.student_status == 'accepted' &&  <Tippy content="Suspend"  animation="fade">
+                                       {data.status == 'accepted' &&  <Tippy content="Suspend"  animation="fade">
                                             <a onClick={() => {
                                                     setSelectedId(data?._id);
                                                     toggleSuspendModal();

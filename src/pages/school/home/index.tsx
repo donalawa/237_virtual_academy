@@ -1,9 +1,6 @@
 import React,{ useEffect, useState } from 'react';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
-
-import { getClasses } from '../../../services/classroom';
-import { getCourseContents } from '../../../services/courseContent';
-import { getAllApplications, acceptApplication, rejectApplication } from '../../../services/applications';
+import './home.css';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -14,9 +11,9 @@ import { BsCheck2Square } from 'react-icons/bs';
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
-import { DeleteModal } from '../../../components';
+import { CreateAcademicYearModal, DeleteModal } from '../../../components';
 import { toast } from 'react-toastify';
-import { schoolGetAcceptedStudents, schoolGetAcceptedTeachers } from '../../../services/school';
+import { schoolGetAcademicYears, schoolGetAcceptedStudents, schoolGetAcceptedTeachers, schoolStopAcademicYear } from '../../../services/school';
 import { getSchoolSpecialitis } from '../../../services/specialities';
 
 const rows: any = [
@@ -25,11 +22,15 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Student',
+        label: 'Title',
         name: 'name'
     },
     {
-        label: 'Class Name',
+        label: 'Start',
+        name: 'name'
+    },
+    {
+        label: 'End',
         name: 'name'
     },
     {
@@ -37,7 +38,7 @@ const rows: any = [
         name: 'name'
     },
     {
-        label: 'Submited Date',
+        label: 'Created At',
         name: 'name'
     },
     {
@@ -57,6 +58,9 @@ function Index() {
     const [specialities, setSpecialities] = useState([]);
     const [reminders, setReminders] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [academicYears, setAcademicYears] = useState([]);
 
     const [selectedId, setSelectedId] = useState<any>(null);
     const [showConfirmAcceptModal, setShowConfirmAcceptModal] = useState(false);
@@ -82,68 +86,60 @@ function Index() {
             }
         })
 
-
     }
 
-    const handleGetStudentsApplications = () => {
-        getAllApplications().then((res: any) => {
-            if(res.ok) {
-                console.log('RESPONSE: ', res);
-                setSpecialities(res.data.data);
-            }
-        })
-    }
-
-
-    // Accept
-    const handleSetSelectedId = (id: any, type: any) => {
-        setSelectedId(id);
-        if(type == 'accepted') {
-            toggleAcceptModal();
-        }else {
-            toggleRejectModal();
+    const handleGetAcademicYears = () => {
+        try {
+            schoolGetAcademicYears().then((res: any) => {
+                if(res.ok) {
+                    setAcademicYears(res?.data?.data)
+                }
+            })
+        } catch (error) {
+            console.log(error);
         }
+    }
+
+
+
+
+    const toggleCreateModal = ()  => {
+        setShowCreateModal(!showCreateModal);
+    }
+
+    const handleContentAdded = () => {
+        // CALL METHOD TO GET ALL ACADEMIC YEARS
+        toggleCreateModal();
+        handleGetAcademicYears();
+      
+    }   
+    
+    // Accept
+    const handleSetSelectedId = (id: any) => {
+        setSelectedId(id);
+        toggleStopAcademicYearModal();
        
     }
 
-    const toggleAcceptModal = () => {
-        setShowConfirmAcceptModal(!showConfirmAcceptModal);
-    }
 
-    const toggleRejectModal = () => {
+    const toggleStopAcademicYearModal = () => {
         setShowRejectModal(!showRejectModal);
     }
 
-    const handleAcceptApplications = async () => {
+    const handleStopAcademicYear = async () => {
         try {
-            toggleAcceptModal();
-            await acceptApplication(selectedId);
-
-            handleGetStudentsApplications();
-
-            toast.success("Application Accepted", {
-                pauseOnHover: false,
-                closeOnClick: true,
+            toggleStopAcademicYearModal();
+            schoolStopAcademicYear(selectedId).then((res: any) => {
+                if(res.ok) {
+                    handleGetAcademicYears();
+                    toast.success(res.data.message, {
+                        pauseOnHover: false,
+                        closeOnClick: true,
+                    })
+                }
             })
-        } catch (error) {
-            toast.error("ERROR", {
-                pauseOnHover: false,
-                closeOnClick: true,
-            })
-        }
-    }
 
-    const handleRejectApplications = async () => {
-        try {
-            toggleRejectModal();
-            await rejectApplication(selectedId);
-
-            handleGetStudentsApplications();
-
-            toast.success("Application Rejected", {
-                pauseOnHover: false,
-                closeOnClick: true,
-            })
+            
         } catch (error) {
             toast.error("ERROR", {
                 pauseOnHover: false,
@@ -155,6 +151,7 @@ function Index() {
 
     useEffect(() => {
         handleGetData();
+        handleGetAcademicYears();
     }, [])
 
     return (
@@ -185,9 +182,10 @@ function Index() {
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>School Reminders</h1>
+                                        <h1>Academic Years</h1>
                                     </div>
-                            
+
+                                    <button onClick={toggleCreateModal} className="btn btn-primary btn-add school-create-button">Create Academic Year <i className="fas fa-plus"></i></button>
                                 </div>
                                 <div className="table-con">
                                 <div style={{textAlign: 'center',}}>
@@ -206,14 +204,16 @@ function Index() {
                                         </thead>
                                  
                                         <tbody>
-                                          {reminders.map((data: any, index: any) => <tr>
+                                          {academicYears.map((data: any, index: any) => <tr>
                                                 <td className="flex-center">{index + 1}</td>
                                                 <td className="flex-start">
-                                                    <p>{data?.student_id?.username}</p>
+                                                    <p>{data?.title}</p>
                                                 </td>
                                        
                                 
-                                                <td className="flex-start">{data?.class_id?.name}</td>
+                                                <td className="flex-start">{data?.start}</td>
+
+                                                <td className="flex-start">{data?.end}</td>
 
                                                 <td className="flex-start">{data?.status}</td>
                                                 
@@ -223,11 +223,8 @@ function Index() {
 
                                                 <td className="flex-center">
                                                     <div className="action">
-                                                        <Tippy content="Accept"  animation="fade">
-                                                        <a className="see"><BsCheck2Square onClick={() => handleSetSelectedId(data._id, 'accepted')} size={14}/></a>
-                                                        </Tippy>
-                                                        <Tippy content="Reject"  animation="fade">
-                                                            <a onClick={() => handleSetSelectedId(data._id, 'rejected')} className="delete"><RxCross2 size={14} /></a>
+                                                        <Tippy content="End Academic Year"  animation="fade">
+                                                            <a onClick={() => handleSetSelectedId(data._id)} className="delete"><RxCross2 size={14} /></a>
                                                         </Tippy>
                                                     </div>
                                                 </td>
@@ -242,8 +239,8 @@ function Index() {
                     </div>
                         
             </div>
-            {showConfirmAcceptModal && <DeleteModal title={'Are you sure you want to accept application ?'} onAccept={handleAcceptApplications} onCancel={toggleAcceptModal} />}
-            {showRejectModal && <DeleteModal title={'Are you sure you want to reject application ?'} onAccept={handleRejectApplications} onCancel={toggleRejectModal} />}
+            {showCreateModal &&  <CreateAcademicYearModal onContentAdded={handleContentAdded} onClose={toggleCreateModal} />}
+            {showRejectModal && <DeleteModal  color={'#605E5A'}  title={'Are you sure you want to end academic year ?'} onAccept={handleStopAcademicYear} onCancel={toggleStopAcademicYearModal} />}
         </SchoolLayout>
     );
 }

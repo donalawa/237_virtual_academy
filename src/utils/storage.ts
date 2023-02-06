@@ -18,6 +18,22 @@ const getToken = () => {
     }
 }
 
+const storeAcademicYear = (yearId: string) => {
+    try {
+        localStorage.setItem('academic_year_id', yearId);
+    } catch (error) {
+        console.log('ERROR SAVING CODE');
+    }
+}
+
+const getAcademicYear = () => {
+    try {
+        return localStorage.getItem('academic_year_id');
+    } catch (error) {
+        console.log('ERROR SAVING CODE');
+    }
+}
+
 const getUser = () => {
     const token: any =  getToken();
     // console.log('STUDENT DATA: ', jwtDecode(token));
@@ -47,5 +63,6 @@ const removeToken = async ()=> {
     }
 }
 
-export { getUser, getToken, removeToken, storeToken, isTeacher, isStudent }
+
+export { getUser, getToken, removeToken, storeToken, isTeacher, isStudent, storeAcademicYear, getAcademicYear }
 

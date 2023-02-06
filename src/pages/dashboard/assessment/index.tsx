@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './assessment.css';
 
 import Layout from '../../../components/Layout/Layout';
@@ -23,6 +23,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import moment from 'moment';
 import {useTranslation} from "react-i18next";
 import { convertDate } from '../../../utils/date';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 
 
@@ -52,6 +53,7 @@ function Index() {
 
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [selectedAssessment, setSelectedAssessment] = useState(null);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const { t, i18n } = useTranslation();
   
@@ -197,7 +199,7 @@ function Index() {
         console.log('USER EFFECT RAN')
         handleGetAssessments();
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <Layout title={t('assessment.data_table.layout_title')}>

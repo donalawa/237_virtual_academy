@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './assessment-submissions.css';
 
 import Layout from '../../../components/Layout/Layout';
@@ -25,6 +25,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import moment from 'moment';
 import { convertDate } from '../../../utils/date';
 import { useTranslation } from 'react-i18next';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const rows: any = [
     {
@@ -79,6 +80,7 @@ function Index() {
     const [selectedSolutionId, setSelectedSolutionId] = useState(null);
 
     const [submissionVals, setSubmissionVals] = useState(null);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
 
     const { t, i18n } = useTranslation();
@@ -119,6 +121,11 @@ function Index() {
     ]
 
     const handleGetClasses = ()  => {
+        setSolutions([]);
+        setSelectedContent('all')
+        setSelectedClass('all');
+        setClasses([]);
+        setContents([]);
 
         getClasses().then((res: any) => {
             if(res.ok) {
@@ -203,7 +210,7 @@ function Index() {
     useEffect(() => {
         console.log('USER EFFECT RAN')
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <Layout title="Assessment Submissions" pageTitle="Assessment Submissions">

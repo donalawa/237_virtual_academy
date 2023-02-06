@@ -1,3 +1,4 @@
+import { getAcademicYear } from "../utils/storage";
 import api from "./apiClient";
 
 const createCourseContent = (data: any) => {
@@ -5,11 +6,14 @@ const createCourseContent = (data: any) => {
 }
 
 const getCourseContents = () => {
-    return api.get('/course-contents');
+    let accademicYear = getAcademicYear();
+
+    return api.get(`/course-contents/${accademicYear}`);
 }
 
 const getClassCourseContents = (classId: string) => {
-    return api.get(`/course-contents/class/${classId}`);
+    let accademicYear = getAcademicYear();
+    return api.get(`/course-contents/class/${classId}/${accademicYear}`);
 }
 
 const deleteCourseContent = (id: any) => {

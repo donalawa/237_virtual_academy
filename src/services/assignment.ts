@@ -1,3 +1,4 @@
+import { getAcademicYear } from "../utils/storage";
 import api from "./apiClient";
 
 const createAssignment = (data: any) => {
@@ -9,11 +10,15 @@ const updateAssignment = (id: any, data: any) => {
 }
 
 const getAssignments = () => {
-    return api.get('/assignments');
+    let accademicYear = getAcademicYear();
+
+    return api.get(`/assignments/${accademicYear}`);
 }
 
 const getClassAssignments = (classId: any)  => {
-    return api.get(`/assignment/${classId}`);
+    let accademicYear = getAcademicYear();
+
+    return api.get(`/assignment/${classId}/${accademicYear}`);
 }
 
 const studentGetAssignments = (classId: any) => {

@@ -13,8 +13,8 @@
     overflow: scroll;
 }
 
-.adding-modal {
-    top:50%!important;
+.add-class-modal {
+    top:70%!important;
 }
 @keyframes fadein {
 	from {

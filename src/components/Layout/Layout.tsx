@@ -1,24 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './Layout.css';
-import { isStudent, removeToken } from '../../utils/storage';
+import { getAcademicYear, isStudent, removeToken, storeAcademicYear } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
 import { MdOutlineContentPaste, MdAssignmentTurnedIn, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
 import { GoDeviceCameraVideo } from 'react-icons/go';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from "react-router";
+import AcademicYearContext from '../../contexts/AcademicYearContext';
 
 import { getUser, isTeacher } from '../../utils/storage';
+import { teachersGetAcademicYears } from '../../services/teachers';
 
 function Layout({ title, children, pageTitle = '' } : any) {
     const { t, i18n } = useTranslation();
     let [lang, setLang] = useState<any>(null);
+
+    const [academicYears, setAcademicYears] = useState([]);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
+
 
     const navigate = useNavigate();
     const [user, setUser] = useState<any>(null);
 
     const [showNav, setShowNav] = useState(true);
     const [showUserMenu, setShowUserMenu] = useState(false);
+
+    const handleGetAcademicYears = () => {
+        teachersGetAcademicYears().then((res: any) => {
+            if(res.ok) {
+                if(!getAcademicYear()) {
+                    setActiveAcademyYear(res?.data?.data[0]._id);
+                    storeAcademicYear(res?.data?.data[0]._id);
+                }else {
+                    setActiveAcademyYear(getAcademicYear())
+                }
+                setAcademicYears(res?.data?.data);
+            }
+        })
+    }
+
+
+    const handleAccademicYearChange = (e: any) => {
+        setActiveAcademyYear(e.target.value);
+        storeAcademicYear(e.target.value);
+
+    }
 
     const handleLogout = () => {
         removeToken();
@@ -64,6 +91,10 @@ function Layout({ title, children, pageTitle = '' } : any) {
         setUser(usr);
     }, [])
 
+    useEffect(() => {
+        handleGetAcademicYears();
+    },[])
+
         
     if(isStudent()) {
         // console.log('STUDENT');
@@ -75,6 +106,7 @@ function Layout({ title, children, pageTitle = '' } : any) {
         return <Navigate to="/" replace/>
     }
 
+    
     return (
         <div className="dashboard-grid">
         <div className={`sidebar ${!showNav ? 'show' : ''}`}>
@@ -156,6 +188,11 @@ function Layout({ title, children, pageTitle = '' } : any) {
                         <i className="fa fa-bars" aria-hidden="true"></i>
                     </div>
                     <span>
+                    <select onChange={handleAccademicYearChange} value={activeAcademyYear} id="" className="language-dashboard">
+                           {academicYears.map((acca: any) => <option value={acca._id}>{acca?.title}</option> )}
+                           <option value='hghhfhffgggdgd'>Test</option>
+                    </select>
+                    <div className="divider"></div>
                         <select value={lang} onChange={(e: any) => setLang(e.target.value)} id="" className="language-dashboard">
                             <option value="en">🏴󠁧󠁢󠁥󠁮󠁧󠁿 EN</option>
                             <option value="fr">🇫🇷 FR</option>

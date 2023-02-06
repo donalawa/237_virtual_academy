@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './assignment.css';
 
 import Layout from '../../../components/Layout/Layout';
@@ -24,6 +24,7 @@ import moment from 'moment';
 import {useTranslation} from "react-i18next";
 import { convertDate } from '../../../utils/date';
 import { deleteAssignments, getAssignments } from '../../../services/assignment';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 
 
@@ -53,6 +54,8 @@ function Index() {
 
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [selectedAssignment, setSelectedAssignment] = useState(null);
+
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const { t, i18n } = useTranslation();
   
@@ -169,7 +172,7 @@ function Index() {
 
 
     const handleGetAssignments = () => {
-        setLoading(true);
+
         getAssignments().then((res: any) => {
             console.log("ASSIGNMENT CONTENT:  ",res);
             setLoading(false);
@@ -198,7 +201,7 @@ function Index() {
         console.log('USER EFFECT RAN')
         handleGetAssignments();
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <Layout title="Assignments">
@@ -268,7 +271,7 @@ function Index() {
                                                 <a className="see"><BsPencilSquare onClick={() => handleSetSelectedData(data)} size={16}/></a>
                                             </Tippy>
 
-                                            <Tippy content="Delete Assessment"  animation="fade">
+                                            <Tippy content="Delete Assignment"  animation="fade">
                                                 <a onClick={() => {
                                                     setDeleteId(data?._id);
                                                     toggleDeleteModal();

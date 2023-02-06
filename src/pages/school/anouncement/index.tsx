@@ -3,12 +3,13 @@ import './anouncement.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 
-import { EditCourseContentModal, DeleteModal  } from '../../../components';
+import { EditCourseContentModal, DeleteModal, MakeAnnouncementModal  } from '../../../components';
 import UploadAssessmentSolutionModal from '../../../components/students/UploadAssessmentSolutionModal/UploadAssessmentSolution';
 import {  BsPencilSquare } from 'react-icons/bs';
 
 import { IoMdCloudDownload } from 'react-icons/io';
 import { AiFillEye } from 'react-icons/ai';
+import { TfiAnnouncement } from 'react-icons/tfi';
 
 import { toast } from 'react-toastify';
 
@@ -32,31 +33,19 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Class',
+        label: 'Subject',
         name: 'name'
     },
     {
-        label: 'Name',
+        label: 'Message',
         name: 'name'
     },
     {
-        label: 'Teacher',
-        name: 'name'
-    },
-    {
-        label: 'Solution File',
-        name: 'name'
-    },
-    {
-        label: 'Question File',
+        label: 'Speciality',
         name: 'name'
     },
     {
         label: 'Created Date',
-        name: 'name'
-    },
-    {
-        label: 'Sumission Deadline',
         name: 'name'
     },
     {
@@ -163,7 +152,7 @@ function Index() {
                             </select>
                         </div>
                 
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button"> Upload Time Table <i className="fas fa-plus"></i></button>
+                        <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button">Create Anouncement  <i> <TfiAnnouncement /> </i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -233,8 +222,7 @@ function Index() {
             </div>
         </div>
 
-        {showAddModal &&  <UploadAssessmentSolutionModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
-        {showVideoModal && <VideoPlayerModal video={videoUrl} onClose={toggleVideoModal}/>}
+        {showAddModal &&  <MakeAnnouncementModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         </SchoolLayout>
     );
 }

@@ -35,8 +35,6 @@ const Index = () => {
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(`${t('username_required_error')}`),
         email: Yup.string().email(`${t('email_valid_error')}`).required(`${t('email_required_error')}`),
-        school_code: Yup.string(),
-        speciality_code: Yup.string(),
         password: Yup.string().min(4, `${t('password_length_error')}`).required(`${t('password_required_error')}`),
         confirm_password: Yup.string().min(4, `${t('password_length_error')}`).required(`${t('c_password_required_error')}`)
     })
@@ -69,15 +67,6 @@ const Index = () => {
             password: values.password,
             confirm_password: values.confirm_password,
             account_type: accountType,
-        }
-
-        if(accountType == 'student') {
-            if(values.speciality_code.length < 2 || values.school_code.length < 2) {
-                setError('You Need To Enter School and Speciality Code')
-                return;
-            }
-            data.speciality_code = values.speciality_code;
-            data.school_code = values.school_code
         }
 
         // console.log('REGISTER DATA: ', data);
@@ -144,11 +133,7 @@ const Index = () => {
                             <option value="school">School</option>
                         </select>
                         </div>
-
-                       {accountType == 'student' && <FormField  name="school_code" type="general" placeholder="School Code"/>}
-
-                        {accountType == 'student' && <FormField  name="speciality_code" type="general" placeholder="Speciality Code"/>}
-
+                        
                         <FormField  name="password" type="password" placeholder={`${t('password_label')}`}/>
 
                         <FormField  name="confirm_password" type="password" placeholder={`${t('c_password_label')}`}/>

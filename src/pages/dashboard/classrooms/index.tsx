@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './classrooms.css';
 
 import Layout from '../../../components/Layout/Layout';
@@ -20,6 +20,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
 import { convertDate } from '../../../utils/date';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 
 const override = {
@@ -31,6 +32,7 @@ function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -126,7 +128,7 @@ function Index() {
 
     useEffect(() => {
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <Layout title={t('classroom.data_table.layout_title')}>

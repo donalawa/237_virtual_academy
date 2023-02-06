@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './assignment.css';
 
 import Layout from '../../../components/Layout/Layout';
@@ -23,6 +23,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
 import {useTranslation} from "react-i18next";
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 
 const rows: any = [
@@ -77,12 +78,20 @@ function Index() {
     const [showFollowUpScoreModal, setShowFollowUpScoreModal] = useState(false);
     const [selectedSolutionId, setSelectedSolutionId] = useState(null);
 
-    const [followUpScoreVals, setFollowUpScoreVals] = useState(null)
+    const [followUpScoreVals, setFollowUpScoreVals] = useState(null);
+
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
+
 
     const { t, i18n } = useTranslation();
     
     const handleGetClasses = ()  => {
-
+        setClasses([]);
+        setContents([]);
+        setSolutions([]);
+        setSelectedClass('all');
+        setSelectedContent('all');
+        
         getClasses().then((res: any) => {
             if(res.ok) {
                 setClasses(res.data.data);
@@ -162,7 +171,7 @@ function Index() {
     useEffect(() => {
         console.log('USER EFFECT RAN')
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <Layout title="Follow-up Submissions">

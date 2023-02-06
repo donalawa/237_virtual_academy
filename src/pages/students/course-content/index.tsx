@@ -113,7 +113,6 @@ function Index() {
             if(res.ok) {
                 setClasses(res.data.data);
             }
-
         }).catch(err => {
             console.log('error: ', err);
         })

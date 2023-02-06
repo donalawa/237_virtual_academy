@@ -1,4 +1,5 @@
 import api from "./apiClient";
+import { getAcademicYear } from "../utils/storage";
 
 const createSession = (data: any) => {
     return api.post(`/session/create`, data);
@@ -11,7 +12,9 @@ const endSession = (data: any) => {
 }
 
 const getAllSessions= () => {
-    return api.get('/sessions');
+    let accademicYear = getAcademicYear();
+    
+    return api.get(`/sessions/${accademicYear}`);
 }
 
 const joinSession = (data: any) => {

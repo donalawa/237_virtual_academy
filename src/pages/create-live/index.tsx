@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout/Layout';
 
@@ -20,6 +20,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 
 import { getAllSessions, endSession } from '../../services/liveSession';
 import {useTranslation} from "react-i18next";
+import AcademicYearContext from '../../contexts/AcademicYearContext';
 
 
 const override = {
@@ -38,6 +39,8 @@ function Index() {
     const [selectedSessionId, setSelectedSessionid] = useState<any>(null);
 
     const { t, i18n } = useTranslation();
+
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const rows: any = [
         {
@@ -134,7 +137,7 @@ function Index() {
 
     useEffect(() => {
         handleFetchAllSessions();
-    }, [])
+    }, [activeAcademyYear])
 
     return (
         <Layout title={t('create_live.data_table.layout_title')}

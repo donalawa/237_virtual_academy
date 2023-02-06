@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { getStudentsClasses, joinClass } from '../../../services/student';
+import { getStudentApplications, getStudentsClasses, joinClass } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 import {convertDate} from '../../../utils/date';
@@ -26,15 +26,23 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Name',
+        label: 'School Name',
         name: 'name'
     },
     {
-        label: 'Class ID',
+        label: 'Speciality',
         name: 'name'
     },
     {
-        label: 'Teacher',
+        label: 'Academic Year',
+        name: 'name'
+    },
+    {
+        label: 'Fees Paid',
+        name: 'name'
+    },
+    {
+        label: 'Total Fees',
         name: 'name'
     },
     {
@@ -56,7 +64,7 @@ const override = {
 function Index() {
     const [ showJoinModal, setShowJoinModal ] = useState(false);
 
-    const [classes, setClasses] = useState([]);
+    const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const toggleAddModal = () => {
@@ -64,13 +72,13 @@ function Index() {
     }
 
 
-    const handleGetClasses = ()  => {
+    const handleGetApplications = ()  => {
         setLoading(true);
 
-        getStudentsClasses().then((res: any) => {
+        getStudentApplications().then((res: any) => {
             console.log('RESPONSE GET: ', res);
             if(res.ok) {
-                setClasses(res.data.data);
+                setApplications(res.data.data);
             }
             setLoading(false);
         }).catch(err => {
@@ -82,12 +90,12 @@ function Index() {
  
 
     const handleClassAdded = ()  => {
-        handleGetClasses();
+        handleGetApplications();
         toggleAddModal();
     }
 
     useEffect(() => {
-        handleGetClasses();
+        handleGetApplications();
     },[]);
 
     return (
@@ -97,13 +105,13 @@ function Index() {
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>You have : {classes.length} Classroom</h1>
+                                        <h1>Academic Years</h1>
                                     </div>
                                     {/* <form className="search">
                                         <input type="search" name="" id="" placeholder="Find ..." />
                                         <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
                                     </form> */}
-                                    <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button">Join Classroom  <i className="fas fa-plus"></i></button>
+                                    <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button">Join School  <i className="fas fa-plus"></i></button>
                                 </div>
                                 <div className="table-con">
                                 <div style={{textAlign: 'center',}}>
@@ -122,19 +130,22 @@ function Index() {
                                         </thead>
                                  
                                         <tbody>
-                                          {classes.map((data: any, index: any) => <tr key={index}>
+                                          {applications.map((data: any, index: any) => <tr key={index}>
                                                 <td className="flex-center">{index + 1}</td>
 
                                                 <td className="flex-start">
-                                                    <p>{data?.class_id?.name}</p>
+                                                    <p>{data?.school_id?.username}</p>
                                                 </td>
 
                                                 <td className="flex-start">
-                                                    <p>{data?.class_id?._id}</p>
+                                                    <p>{data?.speciality_id?.name}</p>
                                                 </td>
-                                       
-                                
-                                                <td className="flex-start">{data?.teacher_id?.username}</td>
+                                    
+                                                <td className="flex-start">{data?.academic_year?.title}</td>
+                                                
+                                                <td className="flex-start">{data?.fees_paid}</td>
+
+                                                <td className="flex-start">{data?.total_fees}</td>
                                                 
                                                 <td className="flex-start">{data?.status}</td>
 

@@ -1,3 +1,4 @@
+import { getAcademicYear } from "../utils/storage";
 import api from "./apiClient";
 
 const getStudentsClasses = () => {
@@ -10,6 +11,14 @@ const getAcceptedClasses = () => {
 
 const joinClass = (data: any) => {
     return api.post('/applications', data);
+}
+
+const joinSchool = (data: any) => {
+    return api.post('/school/students/apply', data);
+}
+
+const getStudentApplications = () => {
+    return api.get('/student/applications');
 }
 
 const getCourseContent = (id: any) =>  {
@@ -37,7 +46,9 @@ const studentGetPassExams = (classId: any) => {
 
 // SCHOOOL
 const schoolGetStudents = () => {
-    return api.get('/school/students');
+    let academicYear = getAcademicYear();
+
+    return api.get(`/school/students/${academicYear}`);
 }
 
 const schoolAcceptStudent = (studId: any) => {
@@ -64,6 +75,8 @@ export {
     schoolGetStudents,
     schoolAcceptStudent,
     schoolRejectStudent,
-    schoolSuspendStudent
+    schoolSuspendStudent,
+    joinSchool,
+    getStudentApplications
 }
 

@@ -73,7 +73,7 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Class Name is required'),
-        publish_date: Yup.string(),
+        publish_date: Yup.string().required('Select date to publish content'),
         publish_solution_date: Yup.string(),
     })
 
@@ -237,6 +237,13 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
             return;
         }
 
+        if(data.followup_solution_url.length > 2) {
+            if(data.publish_solution_date.length < 2) {
+                setError('You have to select a date to publish solution');
+                return;
+            }
+        }
+
         createCourseContent(data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
@@ -246,6 +253,7 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
                 onContentAdded();
             }else {
                 console.log(res)
+                setError(res.data.message);
                 toast.error(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,

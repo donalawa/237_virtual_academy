@@ -40,6 +40,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Protected from './components/form/Protected';
 import { useTranslation } from 'react-i18next';
+import AcademicYearContext from './contexts/AcademicYearContext';
+import { getAcademicYear } from './utils/storage';
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -65,7 +67,12 @@ function App() {
       localStorage.setItem('locale', lang)
       handleTrans();
     }
-  }
+  } 
+
+  // let academicYear = getAcademicYear();
+
+  const [activeAcademyYear, setActiveAcademyYear] = useState<any>(null);
+
   
   useEffect(() => {
     handleLangInit();
@@ -78,7 +85,7 @@ function App() {
     <div className="App">
       {/* <HomePage /> */}
       {/* <LoginPage /> */}
-
+    <AcademicYearContext.Provider value={{activeAcademyYear, setActiveAcademyYear}}>
       <BrowserRouter>
         <Routes>
             <Route path="/" element={(<HomePage />)} />
@@ -123,6 +130,7 @@ function App() {
 
         </Routes>
       </BrowserRouter>
+      </AcademicYearContext.Provider>
       <ToastContainer />
     </div>
   );

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './SchoolLayout.css';
-import { removeToken } from '../../utils/storage';
+import { getAcademicYear, removeToken, storeAcademicYear } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
 import { MdContentPaste, MdAssignmentTurnedIn,MdReportProblem, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
@@ -15,6 +15,8 @@ import { GoMortarBoard } from 'react-icons/go';
 
 import { useTranslation } from 'react-i18next';
 import { getUser } from '../../utils/storage';
+import { schoolGetAcademicYears } from '../../services/school';
+import AcademicYearContext from '../../contexts/AcademicYearContext';
 
 function SchoolLayout({ title, children, pageTitle } : any) {
     const { t, i18n } = useTranslation();
@@ -23,13 +25,37 @@ function SchoolLayout({ title, children, pageTitle } : any) {
     const navigate = useNavigate();
     const [user, setUser] = useState<any>(null);
 
+    const [academicYears, setAcademicYears] = useState([]);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
+
     const [showStudNav,setShowStudNav] = useState(true);
     const [showUserMenu, setShowUserMenu] = useState(false);
+
+    const handleGetAcademicYears = () => {
+        schoolGetAcademicYears().then((res: any) => {
+            if(res.ok) {
+                if(!getAcademicYear()) {
+                    setActiveAcademyYear(res?.data?.data[0]._id);
+                    storeAcademicYear(res?.data?.data[0]._id);
+                }else {
+                    setActiveAcademyYear(getAcademicYear())
+                }
+                setAcademicYears(res?.data?.data);
+            }
+        })
+    }
+
+    const handleAccademicYearChange = (e: any) => {
+        setActiveAcademyYear(e.target.value);
+        storeAcademicYear(e.target.value);
+
+    }
 
     const handleLogout = () => {
         removeToken();
         navigate('/');
     }
+
 
     const toggleNav = () => {
         console.log('toggle nav')
@@ -71,6 +97,10 @@ function SchoolLayout({ title, children, pageTitle } : any) {
         let usr = getUser();
         setUser(usr);
     }, [])
+
+    useEffect(() => {
+        handleGetAcademicYears();
+    },[])
 
     return (
         <div className="dashboard-grid">
@@ -125,6 +155,7 @@ function SchoolLayout({ title, children, pageTitle } : any) {
                     <i><GiMoneyStack size={20}/></i>
                         <span>Fees Payments</span>
                     </NavLink>
+                    
     
                     <NavLink className="link" to="/school/info">
                     <i><BsInfoCircle size={20}/></i>
@@ -143,6 +174,11 @@ function SchoolLayout({ title, children, pageTitle } : any) {
                         <i className="fa fa-bars" aria-hidden="true"></i>
                     </div>
                     <span>
+                    <select onChange={handleAccademicYearChange} value={activeAcademyYear} id="" className="language-dashboard">
+                           {academicYears.map((acca: any) => <option value={acca._id}>{acca?.title}</option> )}
+                           <option value='hghhfhffgggdgd'>Test</option>
+                    </select>
+                    <div className="divider"></div>
                         <select value={lang} onChange={(e: any) => setLang(e.target.value)} id="" className="language-dashboard">
                             <option value="en">🏴󠁧󠁢󠁥󠁮󠁧󠁿 EN</option>
                             <option value="fr">🇫🇷 FR</option>

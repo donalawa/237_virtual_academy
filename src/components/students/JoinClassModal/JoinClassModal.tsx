@@ -9,10 +9,11 @@ import { ImCancelCircle } from 'react-icons/im';
 
 import { toast } from 'react-toastify';
 
-import { joinClass } from '../../../services/student';
+import { joinClass, joinSchool } from '../../../services/student';
 
 const initialValues= {
-    class_id: '',
+    school_code: '',
+    speciality_code: ''
 }
 
 
@@ -21,17 +22,19 @@ function JoinClassModal({ onClose, onClassAdded } : any) {
 
 
     const validationSchema = Yup.object().shape({
-        class_id: Yup.string().required('Class Id is required'),
+        school_code: Yup.string().required('School code is required'),
+        speciality_code: Yup.string().required('Speciality code is required'),
     })
 
 
-    const handleJoinClass = (values: any) => {
-        console.log('CLASS NAME: ', values);
+    const handleJoinSchool = (values: any) => {
+        console.log('DETAILS: ', values);
         let data = {    
-            class_id: values.class_id,
+            ...values,
             status: "pending"
         }   
-        joinClass(data).then((res: any) => {
+
+        joinSchool(data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
@@ -40,6 +43,7 @@ function JoinClassModal({ onClose, onClassAdded } : any) {
                 onClassAdded();
             }else {
                 console.log(res)
+                setError(res.data.message)
                 toast.error(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
@@ -61,7 +65,7 @@ function JoinClassModal({ onClose, onClassAdded } : any) {
         <div>
             <div  className='add-modal-container join-modal'>
                 <div className='modal-head'>
-                    <p className="modal-title">Enter Class Id</p>
+                    <p className="modal-title">Apply For Ongoing Academic Year</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
@@ -70,11 +74,13 @@ function JoinClassModal({ onClose, onClassAdded } : any) {
                 {error && <ErrorMessage error={error} visible={true} />}
                 <Form 
                     initialValues={initialValues}
-                    onSubmit={handleJoinClass}
+                    onSubmit={handleJoinSchool}
                     validationSchema={validationSchema}
                 >
 
-                        <FormField  name="class_id" type="general" placeholder="Classroom Id"/>
+                        <FormField  name="school_code" type="general" placeholder="School Code"/>
+
+                        <FormField  name="speciality_code" type="general" placeholder="Speciality Code"/>
 
                         <Button isOutLined={true} isFullWidth={false} title="APPLY"/>
                         </Form>

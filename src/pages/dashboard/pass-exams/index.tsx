@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './pass-exams.css';
 
 import Layout from '../../../components/Layout/Layout';
@@ -22,6 +22,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import moment from 'moment';
 import {useTranslation} from "react-i18next";
 import { convertDate } from '../../../utils/date';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 
 
@@ -44,6 +45,8 @@ function Index() {
     const [loading, setLoading] = useState(false);
 
     const { t, i18n } = useTranslation();
+
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const rows: any = [
         {
@@ -168,7 +171,7 @@ function Index() {
         console.log('USER EFFECT RAN')
         handleGetContent();
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <Layout title={t('pass_exams.data_table.layout_title')}>

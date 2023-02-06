@@ -155,7 +155,7 @@ i18n
                 data_table:{
                     layout_title:"Live Sessions",
                     heading:"All Live Sessions",
-                    button:"Creer Une séance",
+                    button:"Create Live Session",
                     meeting_code: "Meeting Code",
                     class:"Class",
                     participants: "#Participants",
