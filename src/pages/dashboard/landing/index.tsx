@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from 'react';
+import React,{ useContext, useEffect, useState } from 'react';
 import Layout from '../../../components/Layout/Layout';
 
 import { getClasses } from '../../../services/classroom';
@@ -18,6 +18,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import moment from 'moment';
 import { DeleteModal } from '../../../components';
 import { toast } from 'react-toastify';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 
 const override = {
@@ -33,6 +34,7 @@ function Index() {
 
     const { t, i18n } = useTranslation();
 
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const [selectedId, setSelectedId] = useState<any>(null);
     const [showConfirmAcceptModal, setShowConfirmAcceptModal] = useState(false);
@@ -153,7 +155,7 @@ function Index() {
         handleGetClasses();
         handleGetCourseContents();
         handleGetStudentsApplications();
-    }, [])
+    }, [activeAcademyYear])
 
     return (
         <Layout title={t('landing.data_table.layout_title')}>

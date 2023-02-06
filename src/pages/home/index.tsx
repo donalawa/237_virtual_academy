@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { CiFacebook } from 'react-icons/ci';
@@ -13,6 +13,8 @@ function Index() {
     const { t, i18n } = useTranslation();
     
     let [lang, setLang] = useState<any>(null);
+
+
 
     const handleTrans = () => {
       i18n.changeLanguage(lang);
