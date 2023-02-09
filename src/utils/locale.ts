@@ -201,7 +201,12 @@ i18n
                     participants: "#Participants",
                     status:"Status",
                     session_date:"Session Date",
-                }
+                },
+            modal:{
+                title:"CREATE A LIVE CLASS SESSION",
+                select_classroom:"Select Classroom",
+                button:"CREATE SESSION"
+            }
             },
         },
       },
@@ -395,6 +400,11 @@ i18n
                     participants: "#Participant(e)s",
                     status:"Statut",
                     session_date:"Date de séance",
+                },
+                modal:{
+                    title:"CRÉER UNE SESSION DE CLASSE EN DIRECT",
+                    select_classroom:"Choisir la salle de classe",
+                    button:"CRÉER UNE SESSION"
                 }
             },
         }

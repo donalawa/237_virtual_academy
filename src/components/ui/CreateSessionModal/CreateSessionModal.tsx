@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 // import { submitAssignmentSolution } from '../../../services/student';
 import { getClasses } from '../../../services/classroom';
 import { createSession } from '../../../services/liveSession';
+import {useTranslation} from "react-i18next";
 
 const initialValues= {
 }
@@ -23,6 +24,8 @@ function CreateSessionModal({ onClose, onSessionCreated } : any) {
     const [classes, setClasses] = useState([]);
     const [error, setError] = useState<any>(null);
     const [selectedClassroom, setSelectedClassroom] = useState<any>('all');
+
+    const { t, i18n } = useTranslation();
 
     const validationSchema = Yup.object().shape({
       
@@ -96,7 +99,7 @@ function CreateSessionModal({ onClose, onSessionCreated } : any) {
         <div>
             <div  className='modal-container'>
                 <div className='modal-head'>
-                    <p className="modal-title">CREATE A LIVE CLASS SESSION</p>
+                    <p className="modal-title">{t('create_live.modal.title')}</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
@@ -108,13 +111,13 @@ function CreateSessionModal({ onClose, onSessionCreated } : any) {
                     onSubmit={handleCreateSession}
                     validationSchema={validationSchema}
                 >
-                           <p className="label-text">Select Classroom: </p>
+                           <p className="label-text">{t('create_live.modal.select_classroom')} :</p>
                         <select onChange={(e: any) => setSelectedClassroom(e.target.value) } className="select-field-modal">
                             <option value="all">All</option>
                             {classes.map((classData: any, key: any) => <option key={key} value={classData._id}>{classData.name}</option>)}
                         </select>
 
-                        <Button isOutLined={true} isFullWidth={false} title="CREATE SESSION"/>
+                        <Button isOutLined={true} isFullWidth={false} title={t('create_live.modal.button')}/>
 
                         </Form>
                 </form>
