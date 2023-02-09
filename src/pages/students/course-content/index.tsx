@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './coursecontent.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
@@ -22,6 +22,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { convertDate } from '../../../utils/date';
 
 import moment from 'moment';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const rows: any = [
     {
@@ -69,7 +70,7 @@ function Index() {
     const [selectedClass, setSelectedClass] = useState("all");
 
     // END
-
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
     const [ showAddModal, setShoowAddModal ] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false); 
     const [deleteModal, setShowDeleteModal] = useState(false);
@@ -106,6 +107,9 @@ function Index() {
     }
 
     const handleGetValidClasses = ()  => {
+        setContents([]);
+        setClasses([]);
+        setSelectedClass('all');
 
         getAcceptedClasses().then((res: any) => {
             console.log('RES ACCEPTED: ', res);
@@ -172,7 +176,7 @@ function Index() {
     useEffect(() => {
         console.log('USER EFFECT RAN')
         handleGetValidClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <StudentLayout title="Course Content" pageTitle="Course Content">
@@ -184,9 +188,9 @@ function Index() {
                             <select value={selectedClass} onChange={(e) => {
                                 setSelectedClass(e.target.value);
                                 handleGetContent(e.target.value);
-                            }} className="select-field student-select">
+                            }} className="select-field" id="student-select-new">
                                 <option value="all">Select Classroom</option>
-                                {classes.map((classData: any, index: any) => <option key={index} value={classData?.class_id?._id}>{classData?.class_id?.name}</option>)}
+                                {classes.map((classData: any, index: any) => <option key={index} value={classData?._id}>{classData?.name}</option>)}
                             </select>
                         </div>
                         {/* <form className="search">

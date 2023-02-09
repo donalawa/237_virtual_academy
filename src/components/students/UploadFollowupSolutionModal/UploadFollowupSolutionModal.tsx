@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './UploadFollowupSolutionModal.css';
 import * as Yup from 'yup';
 import Form from '../../form/components/Form/Form';
@@ -21,10 +21,11 @@ import { createCourseContent } from '../../../services/courseContent';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
 import { addPassExamContent } from '../../../services/passExams';
-import { getStudentsClasses, getCourseContent,  submitFollowupSolution } from '../../../services/student';
+import { getStudentsClasses, getCourseContent,  submitFollowupSolution, getAcceptedClasses } from '../../../services/student';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const initialValues= {
     comment: '',
@@ -47,6 +48,7 @@ function UploadFollowupSolutionModal({ onClose, onContentAdded } : any) {
     const [solutionPdfUrl, setSolutionPdfUrl] = useState('');
     const [solutionPdfProgress,  setSolutionPdfProgress] = useState(0);
     const [isUploadingSolutionPdf, setIsUploadingSolutionPdf] = useState(false);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     // END OF ASSIGNEMTN
     const storage = getStorage(firebaseApp);
@@ -60,8 +62,9 @@ function UploadFollowupSolutionModal({ onClose, onContentAdded } : any) {
     })
 
     const handleGetClasses = ()  => {
-
-        getStudentsClasses().then((res: any) => {
+        setClasses([]);
+        setCourseContents([]);
+        getAcceptedClasses().then((res: any) => {
             console.log('RESPONSE GET: ', res);
             if(res.ok) {
                 setClasses(res.data.data);
@@ -177,7 +180,7 @@ function UploadFollowupSolutionModal({ onClose, onContentAdded } : any) {
 
     useEffect(() => {
         handleGetClasses();
-    },[])
+    },[activeAcademyYear])
 
     
     return (
@@ -204,7 +207,7 @@ function UploadFollowupSolutionModal({ onClose, onContentAdded } : any) {
                         <p className="label-text">Select Classroom: </p>
                         <select value={selectedClassroom} onChange={(e: any) => handleSetSelectedClass(e.target.value)} className="select-field-modal">
                             <option value="all">Select Class</option>
-                            {classes.map((classData: any, key: any) => <option key={key} value={classData.class_id._id}>{classData?.class_id?.name}</option>)}
+                            {classes.map((classData: any, key: any) => <option key={key} value={classData?._id}>{classData?.name}</option>)}
                         </select>
 
 

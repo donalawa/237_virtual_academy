@@ -20,6 +20,7 @@ import { getTotalAssessments } from '../../../services/assessment';
 import { convertDate } from '../../../utils/date';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
 import AcademicYearContext from '../../../contexts/AcademicYearContext';
+import { getSchoolSpecialitis } from '../../../services/specialities';
 
 const rows: any = [
     {
@@ -73,6 +74,7 @@ function Index() {
     const [ showRejectModal, setShowRejectModal ] = useState(false);
     const [ showSuspendedModal, setShowSuspendedModal ] = useState(false);
     const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
+    const [schoolSpecialities, setSchoolSpecialites] = useState([]);
 
     const [selectedId, setSelectedId] = useState<any>(null);
 
@@ -176,11 +178,25 @@ function Index() {
     }
 
 
+    const handleGetSpecialities = ()  => {
+
+        getSchoolSpecialitis().then((res: any) => {
+            console.log('RESPONSE GET: ', res);
+            if(res.ok) {
+                setSchoolSpecialites(res.data.data);
+            }
+        }).catch(err => {
+            console.log('error: ', err);
+        })
+    }
+
+
 
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
         handleGetStudents();
+        handleGetSpecialities();
     },[activeAcademyYear]);
 
     return (
@@ -195,6 +211,10 @@ function Index() {
                                 <option value='active'>Active</option>
                                 <option value='pending'>Pending</option>
                                 <option value='suspended'>Suspended</option>
+                            </select>
+                            <select name="" id="" onChange={(e: any) => null} className="select-field school-student-select">
+                                <option value="all">Fillter By Speciality</option>
+                               {schoolSpecialities?.map((sp: any) => <option value={sp._id}>{sp?.name}</option>)}
                             </select>
                         </div>
                 
@@ -238,7 +258,7 @@ function Index() {
                                     </td>
 
                                     <td className="flex-start">
-                                      {data?.student_status ? data?.student_status : 'Pending'}
+                                      {data?.status ? data?.status : 'Pending'}
                                     </td>
 
                                     <td className="flex-start">

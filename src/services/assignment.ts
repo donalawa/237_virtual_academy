@@ -30,7 +30,9 @@ const deleteAssignments = (id: any) => {
 }
 
 const submitAssignmentSolution = (data: any) => {
-    return api.post('/student/assignment', data);
+    let accademicYear = getAcademicYear();
+
+    return api.post(`/student/assignment/${accademicYear}`, data);
 } 
 
 const submitAssignmentScore = (assessmentSolId: any, data: any) => {

@@ -131,6 +131,12 @@ function SchoolLayout({ title, children, pageTitle } : any) {
                         <span>Students</span>
                     </NavLink>
 
+
+                    <NavLink className="link" to="/school/students/results">
+                    <i><GoMortarBoard size={20}/></i>
+                        <span>Student Results</span>
+                    </NavLink>
+
                     <NavLink className="link" to="/school/time-table">
                     <i><SlCalender size={20}/></i>
                         <span>Timetable</span>

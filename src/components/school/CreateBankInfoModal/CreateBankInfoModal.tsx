@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './AddClassModal.css';
+import './CreateBankInfoModal.css';
 import * as Yup from 'yup';
 import Form from '../../form/components/Form/Form';
 import FormField from '../../form/components/FormField/FormField';
@@ -9,48 +9,39 @@ import { ImCancelCircle } from 'react-icons/im';
 
 import { toast } from 'react-toastify';
 
-import { createClass, getClasses, deleteClass } from '../../../services/classroom';
+import { createSpeciality } from '../../../services/specialities';
+import { schoolCreateBankInfo } from '../../../services/bankInfo';
 
 const initialValues= {
     name: '',
-    school_code: '',
-    specialities: ''
+    account_number: ''
 }
 
 
-function AddClassModal({ onClose, onClassAdded } : any) {
-    const [error, setError] = useState<any>(null);
-
+function CreateBankInfoModal({ onClose, onContentAdded } : any) {
+    const [error, setError] = useState(null);
 
     const validationSchema = Yup.object().shape({
-        name: Yup.string().required('Class Name is required'),
-        school_code: Yup.string(),
-        specialities: Yup.string(),
+        name: Yup.string().required('Bank name is required'),
+        account_number: Yup.string().required('Bank account number is required'),
     })
 
-    const handleAddClass = (values: any) => {
-        console.log('CLASS NAME: ', values);
+    const handleCreateBankInfo = (values: any) => {
+        console.log('SPECIALITY VALS: ', values);
+        let data = {    
+            name: values.name,
+            account_number: values.account_number
+        }   
 
-        if(values.school_code.length > 2 && values.specialities.length < 2) {
-            setError("If you entered school code you need to specify speciality code too");
-            return;
-        }
-
-        let data = {
-            ...values,
-            specialities: values.specialities.split(',')
-        }
-
-        createClass(data).then((res: any) => {
+        schoolCreateBankInfo(data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
-                onClassAdded();
+                onContentAdded();
             }else {
                 console.log(res)
-                setError(res.data.message);
                 toast.error(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
@@ -65,14 +56,12 @@ function AddClassModal({ onClose, onClassAdded } : any) {
         })
 
     }
-
-
     
     return (
         <div>
-            <div  className='add-modal-container adding-modal add-class-modal'>
+            <div  className='add-modal-container create-speciality-modal'>
                 <div className='modal-head'>
-                    <p className="modal-title">Add New Classroom</p>
+                    <p className="modal-title">Add Bank Information</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
@@ -81,19 +70,16 @@ function AddClassModal({ onClose, onClassAdded } : any) {
                 {error && <ErrorMessage error={error} visible={true} />}
                 <Form 
                     initialValues={initialValues}
-                    onSubmit={handleAddClass}
+                    onSubmit={handleCreateBankInfo}
                     validationSchema={validationSchema}
                 >
 
-                    <FormField  name="name" type="general" placeholder="Classroom Name"/>
-                    <label>Enter School Code(Optional)</label>
-                    <br />
-                    <FormField  name="school_code" type="general" placeholder="School Code"/>
-                    <label>Enter Speciality Code(Optional)</label>
-                    <br />
-                    <FormField  name="specialities" type="general" placeholder="Speciality Code"/>
-                    <Button isOutLined={true} isFullWidth={false} title="CREATE CLASSROOM"/>
-                    </Form>
+                        <FormField  name="name" type="general" placeholder="Bank Name"/>
+                        
+                        <FormField  name="account_number" type="general" placeholder="Account Number"/>
+
+                        <Button isOutLined={true} isFullWidth={false} title="CREATE"/>
+                        </Form>
                 </form>
                 </div>
             </div>
@@ -104,4 +90,4 @@ function AddClassModal({ onClose, onClassAdded } : any) {
     );
 }
 
-export default AddClassModal;
+export default CreateBankInfoModal;

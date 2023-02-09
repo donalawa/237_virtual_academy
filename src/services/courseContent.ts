@@ -13,6 +13,7 @@ const getCourseContents = () => {
 
 const getClassCourseContents = (classId: string) => {
     let accademicYear = getAcademicYear();
+  
     return api.get(`/course-contents/class/${classId}/${accademicYear}`);
 }
 

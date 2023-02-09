@@ -153,7 +153,10 @@ function Index() {
                                     <div className="span">
                                         <select name="" id="" onChange={(e: any) => null} className="select-field school-student-select">
                                             <option value="all">Select Status</option>
-                                            {teachersRequests.map((classData: any, index: any) => <option key={index} value={classData?.class_id?._id}>{classData?.class_id?.name}</option>)}
+                                            <option value="active">Active</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="rejected">Rejected</option>
+
                                         </select>
                                     </div>
                                     {/* <form className="search">

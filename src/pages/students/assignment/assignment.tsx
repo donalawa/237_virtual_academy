@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './assignment.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
@@ -16,7 +16,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { deletePassExamContent } from '../../../services/passExams';
-import { getStudentSolutions, getStudentsClasses } from '../../../services/student';
+import { getStudentSolutions, getStudentsClasses, getAcceptedClasses } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -25,6 +25,7 @@ import { getTotalAssessments } from '../../../services/assessment';
 import { VideoPlayerModal } from '../../../components';
 import { convertDate } from '../../../utils/date';
 import { getTotalAssignments } from '../../../services/assignment';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const rows: any = [
     {
@@ -79,6 +80,8 @@ function Index() {
     const [deleteId, setDeleteId] = useState(null);
     const [assignments, setAssignments] = useState([]);
     const [showVideoModal, setShowVideoModal] = useState(false);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
+
 
     const [editData, setEditData] = useState(null);
 
@@ -93,8 +96,10 @@ function Index() {
 
     const handleGetClasses = ()  => {
 
+        setClasses([])
+        setAssignments([]);
 
-        getStudentsClasses().then((res: any) => {
+        getAcceptedClasses().then((res: any) => {
             if(res.ok) {
                 setClasses(res.data.data);
             }
@@ -117,7 +122,7 @@ function Index() {
     }
 
 
-    const handleGetAssessments = (classId: any) => {
+    const handleGetAssignments = (classId: any) => {
         setLoading(true);
         getTotalAssignments(classId).then((res: any) => {
             console.log("STUDENT assignments RES: ",res);
@@ -137,7 +142,7 @@ function Index() {
                 return;
             }
 
-            handleGetAssessments(value);
+            handleGetAssignments(value);
         } catch (error) {
             console.log('error: ', error)
         }
@@ -148,7 +153,7 @@ function Index() {
     useEffect(() => {
         console.log('USER EFFECT RAN')
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <StudentLayout title="Assignments" pageTitle="Assignments">
@@ -157,9 +162,9 @@ function Index() {
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                            <select name="" id="" onChange={(e: any) => handleClassSelected(e.target.value)} className="select-field student-select">
+                            <select name="" id="student-select-new" onChange={(e: any) => handleClassSelected(e.target.value)} className="select-field student-select">
                                 <option value="all">Select Class</option>
-                                {classes.map((classData: any, index: any) => <option key={index} value={classData.class_id._id}>{classData.class_id.name}</option>)}
+                                {classes.map((classData: any, index: any) => <option key={index} value={classData?._id}>{classData?.name}</option>)}
                             </select>
                         </div>
                         {/* <form className="search">

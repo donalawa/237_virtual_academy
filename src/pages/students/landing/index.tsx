@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './landing.css';
 
 import Layout from '../../../components/Layout/Layout';
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 import { AddClassModal, DeleteModal } from '../../../components';
 import JoinClassModal from '../../../components/students/JoinClassModal/JoinClassModal';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 import { AiOutlineCopy } from 'react-icons/ai';
 
@@ -63,7 +64,7 @@ const override = {
 
 function Index() {
     const [ showJoinModal, setShowJoinModal ] = useState(false);
-
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -74,7 +75,7 @@ function Index() {
 
     const handleGetApplications = ()  => {
         setLoading(true);
-
+        setApplications([]);
         getStudentApplications().then((res: any) => {
             console.log('RESPONSE GET: ', res);
             if(res.ok) {
@@ -96,7 +97,7 @@ function Index() {
 
     useEffect(() => {
         handleGetApplications();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <StudentLayout title="Class Rooms" pageTitle="Home">

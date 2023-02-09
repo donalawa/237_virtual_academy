@@ -21,7 +21,7 @@ import { createCourseContent } from '../../../services/courseContent';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
 import { addPassExamContent } from '../../../services/passExams';
-import { getStudentsClasses, getCourseContent } from '../../../services/student';
+import { getStudentsClasses, getCourseContent, getAcceptedClasses } from '../../../services/student';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -63,7 +63,7 @@ function SubmitAssignmentModal({ onClose, onContentAdded } : any) {
 
     const handleGetClasses = ()  => {
 
-        getStudentsClasses().then((res: any) => {
+        getAcceptedClasses().then((res: any) => {
             console.log('RESPONSE GET: ', res);
             if(res.ok) {
                 setClasses(res.data.data);
@@ -210,7 +210,7 @@ function SubmitAssignmentModal({ onClose, onContentAdded } : any) {
                         <p className="label-text">Select Classroom: </p>
                         <select value={selectedClassroom} onChange={(e: any) => handleSetSelectedClass(e.target.value)} className="select-field-modal">
                             <option value="all">Select Class</option>
-                            {classes.map((classData: any, key: any) => <option key={key} value={classData.class_id._id}>{classData?.class_id?.name}</option>)}
+                            {classes.map((classData: any, key: any) => <option key={key} value={classData._id}>{classData?.name}</option>)}
                         </select>
 
 

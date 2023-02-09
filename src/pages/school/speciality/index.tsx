@@ -140,7 +140,7 @@ function Index() {
                                         <input type="search" name="" id="" placeholder="Find ..." />
                                         <button type="submit"><i className="fa fa-search" aria-hidden="true"></i></button>
                                     </form> */}
-                                    <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button">Add Speciality  <i className="fas fa-plus"></i></button>
+                                    <button onClick={toggleAddModal} className="btn btn-primary btn-add school-button">Add Speciality  <i className="fas fa-plus"></i></button>
                                 </div>
                                 <div className="table-con">
                                 <div style={{textAlign: 'center',}}>
@@ -180,7 +180,7 @@ function Index() {
                                                 </td>
                                                 <td className="flex-center">
                                         <div className="action">
-                                            <Tippy content="Copy Speciality Code"  animation="fade">
+                                            {/* <Tippy content="Copy Speciality Code"  animation="fade">
                                                         <a className="see"><AiOutlineCopy onClick={() => {
                                                             navigator.clipboard.writeText(`${data.code}`);
                                                             
@@ -189,7 +189,7 @@ function Index() {
                                                                 closeOnClick: true,
                                                             })
                                                         }} size={14}/></a>
-                                                        </Tippy>
+                                                        </Tippy> */}
                                                 <Tippy content="Delete Speciality"  animation="fade">
                                                 <a onClick={() => {
                                                     setDeleteId(data?._id);

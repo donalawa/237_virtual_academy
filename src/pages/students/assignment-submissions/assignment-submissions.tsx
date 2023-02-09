@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './/assignment-submissions.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
@@ -15,7 +15,7 @@ import 'tippy.js/dist/tippy.css';
 
 import { getClasses, deleteClass } from '../../../services/classroom';
 import { getPassExamContents, deletePassExamContent } from '../../../services/passExams';
-import { getStudentSolutions, getStudentsClasses } from '../../../services/student';
+import { getStudentSolutions, getStudentsClasses, getAcceptedClasses } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -23,6 +23,7 @@ import moment from 'moment';
 import { convertDate } from '../../../utils/date';
 import { getStudentsAssessmentSolutions } from '../../../services/assessment';
 import { getStudentsAssignmentSolutions } from '../../../services/assignment';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const rows: any = [
     {
@@ -79,6 +80,8 @@ function Index() {
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const [solutions, setSolutions] = useState([]);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
+
 
     const [editData, setEditData] = useState(null);
 
@@ -91,9 +94,9 @@ function Index() {
     }
 
     const handleGetClasses = ()  => {
+        setClasses([])
 
-
-        getStudentsClasses().then((res: any) => {
+        getAcceptedClasses().then((res: any) => {
             if(res.ok) {
                 setClasses(res.data.data);
             }
@@ -121,7 +124,7 @@ function Index() {
         console.log('USER EFFECT RAN')
         handleGetSolutions();
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <StudentLayout title="Assignment Submissions" pageTitle="Assignment Submissions">
@@ -130,9 +133,9 @@ function Index() {
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                            <select name="" id="" className="select-field student-select">
+                            <select name="" id="student-select-new" className="select-field student-select">
                                 <option value="all">All</option>
-                                {classes.map((classData: any, index: any) => <option key={index} value={classData.class_id._id}>{classData.class_id.name}</option>)}
+                                {classes.map((classData: any, index: any) => <option key={index} value={classData?._id}>{classData?.name}</option>)}
                             </select>
                         </div>
                         {/* <form className="search">

@@ -38,6 +38,8 @@ const schoolGetAcademicYears = () => {
     return  api.get('/school/academic-years');
 }
 
+
+
 export {
     schoolGetAcceptedStudents,
     schoolGetAcceptedTeachers,

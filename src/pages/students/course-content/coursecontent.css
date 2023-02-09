@@ -1,10 +1,11 @@
 
 
-.student-select {
-    background-color: var(--secondary-color) !important;
-}
 
 .student-link {
     color: var(--primary-color);
     cursor: pointer;
+}
+
+#student-select-new{
+    background-color: var(--secondary-color) !important;
 }

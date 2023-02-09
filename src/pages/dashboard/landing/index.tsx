@@ -45,11 +45,7 @@ function Index() {
             name: 'num'
         },
         {
-            label: (`${t('landing.data_table.student_name')}`),
-            name: 'name'
-        },
-        {
-            label: (`${t('landing.data_table.class_name')}`),
+            label: "Scchool name",
             name: 'name'
         },
         {
@@ -185,7 +181,7 @@ function Index() {
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>{t('landing.data_table.title')}</h1>
+                                        <h1>Schools</h1>
                                     </div>
                             
                                 </div>
@@ -222,14 +218,14 @@ function Index() {
                                                 </td>
 
                                                 <td className="flex-center">
-                                                    <div className="action">
+                                                    {/* <div className="action">
                                                         <Tippy content="Accept"  animation="fade">
                                                         <a className="see"><BsCheck2Square onClick={() => handleSetSelectedId(data._id, 'accepted')} size={14}/></a>
                                                         </Tippy>
                                                         <Tippy content="Reject"  animation="fade">
                                                             <a onClick={() => handleSetSelectedId(data._id, 'rejected')} className="delete"><RxCross2 size={14} /></a>
                                                         </Tippy>
-                                                    </div>
+                                                    </div> */}
                                                 </td>
                                             </tr> )}
                                         </tbody>

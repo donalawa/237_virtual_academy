@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './assessment.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
@@ -16,7 +16,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { deletePassExamContent } from '../../../services/passExams';
-import { getStudentSolutions, getStudentsClasses } from '../../../services/student';
+import { getStudentSolutions, getStudentsClasses, getAcceptedClasses } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -24,6 +24,7 @@ import moment from 'moment';
 import { getTotalAssessments } from '../../../services/assessment';
 import { VideoPlayerModal } from '../../../components';
 import { convertDate } from '../../../utils/date';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const rows: any = [
     {
@@ -78,6 +79,8 @@ function Index() {
     const [deleteId, setDeleteId] = useState(null);
     const [assessments, setAssessments] = useState([]);
     const [showVideoModal, setShowVideoModal] = useState(false);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
+
 
     const [editData, setEditData] = useState(null);
 
@@ -91,9 +94,10 @@ function Index() {
     }
 
     const handleGetClasses = ()  => {
+        setClasses([]);
+        setAssessments([]);
 
-
-        getStudentsClasses().then((res: any) => {
+        getAcceptedClasses().then((res: any) => {
             if(res.ok) {
                 setClasses(res.data.data);
             }
@@ -147,18 +151,18 @@ function Index() {
     useEffect(() => {
         console.log('USER EFFECT RAN')
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
-        <StudentLayout title="Submitted Assessment assessments" pageTitle="Assessment">
+        <StudentLayout title="Assessments" pageTitle="Assessment">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                            <select name="" id="" onChange={(e: any) => handleClassSelected(e.target.value)} className="select-field student-select">
+                            <select name=""  id="student-select-new" onChange={(e: any) => handleClassSelected(e.target.value)} className="select-field student-select">
                                 <option value="all">Select Class</option>
-                                {classes.map((classData: any, index: any) => <option key={index} value={classData.class_id._id}>{classData.class_id.name}</option>)}
+                                {classes.map((classData: any, index: any) => <option key={index} value={classData?._id}>{classData?.name}</option>)}
                             </select>
                         </div>
                 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './passexam-content.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { getStudentsClasses, studentGetPassExams } from '../../../services/student';
+import { getAcceptedClasses, getStudentsClasses, studentGetPassExams } from '../../../services/student';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -24,6 +24,7 @@ import { getTotalAssessments, studentGetAssessments } from '../../../services/as
 import { VideoPlayerModal } from '../../../components';
 import { getPassExamContents } from '../../../services/passExams';
 import { convertDate } from '../../../utils/date';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const rows: any = [
     {
@@ -71,6 +72,7 @@ function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
     const [passexams, setPassExams] = useState([]);
     const [showVideoModal, setShowVideoModal] = useState(false);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const [videoUrl, setVideoUrl] = useState('');
 
@@ -83,8 +85,10 @@ function Index() {
 
     const handleGetClasses = ()  => {
 
-
-        getStudentsClasses().then((res: any) => {
+        setClasses([]);
+        setPassExams([]);
+        
+        getAcceptedClasses().then((res: any) => {
             if(res.ok) {
                 setClasses(res.data.data);
             }
@@ -137,18 +141,18 @@ function Index() {
     useEffect(() => {
         console.log('USER EFFECT RAN')
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
-        <StudentLayout title="Asssessment Submissions" pageTitle="Pass Exam">
+        <StudentLayout title="Pass Exams And Solutions" pageTitle="Pass Exam">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                            <select name="" id="" onChange={(e: any) => handleClassSelected(e.target.value)} className="select-field student-select">
+                            <select name="" id="student-select-new" onChange={(e: any) => handleClassSelected(e.target.value)} className="select-field student-select">
                                 <option value="all">Select Class</option>
-                                {classes.map((classData: any, index: any) => <option key={index} value={classData?.class_id._id}>{classData?.class_id?.name}</option>)}
+                                {classes.map((classData: any, index: any) => <option key={index} value={classData?._id}>{classData?.name}</option>)}
                             </select>
                         </div>
                         {/* <form className="search">

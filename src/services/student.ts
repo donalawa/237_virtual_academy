@@ -6,7 +6,9 @@ const getStudentsClasses = () => {
 }
 
 const getAcceptedClasses = () => {
-    return api.get('/student/classes');
+    let academicYear = getAcademicYear();
+
+    return api.get(`/student/classes/${academicYear}`);
 }
 
 const joinClass = (data: any) => {
@@ -18,22 +20,31 @@ const joinSchool = (data: any) => {
 }
 
 const getStudentApplications = () => {
-    return api.get('/student/applications');
+    let academicYear = getAcademicYear();
+    // alert(academicYear);
+    return api.get(`/student/applications/${academicYear}`);
 }
 
 const getCourseContent = (id: any) =>  {
-    return api.get(`/course-contents/student/${id}`);
+    let academicYear = getAcademicYear();
+
+    return api.get(`/course-contents/student/${id}/${academicYear}`);
 }
 
 const submitFollowupSolution = (data: any) => {
-    return api.post(`/followup/solution`, data);
+    let academicYear = getAcademicYear();
+    
+    return api.post(`/followup/solution/${academicYear}`, data);
 }
 
 const getStudentSolutions = () => {
-    return api.get('/followup/student/solutions');
+    let academicYear = getAcademicYear();
+
+    return api.get(`/followup/student/solutions/${academicYear}`);
 }
 
 const getAllStudentSolutions = (courseContentId: any) => {
+ 
     return api.get(`/followup/solutions/${courseContentId}`)
 }
 
@@ -41,7 +52,10 @@ const studentGetPassExams = (classId: any) => {
     return api.get(`/students/passexams/${classId}`);
 }
 
-
+// ACADEMIC YEARS
+const studentGetAcademicYears = () => {
+    return  api.get('/students/academic-years');
+}
 
 
 // SCHOOOL
@@ -52,15 +66,21 @@ const schoolGetStudents = () => {
 }
 
 const schoolAcceptStudent = (studId: any) => {
-    return api.post(`/school/student/accept/${studId}`, {student_status: 'accepted'});
+    let academicYear = getAcademicYear();
+
+    return api.post(`/school/student/accept/${studId}/${academicYear}`, {status: 'accepted'});
 }
 
 const schoolRejectStudent = (studId: any) => {
-    return api.post(`/school/student/reject/${studId}`, {student_status: 'rejected'});
+    let academicYear = getAcademicYear();
+
+    return api.post(`/school/student/reject/${studId}/${academicYear}`, {status: 'rejected'});
 }
 
 const schoolSuspendStudent = (studId: any) => {
-    return api.post(`/school/student/suspend/${studId}`, {student_status: 'suspended'});
+    let academicYear = getAcademicYear();
+
+    return api.post(`/school/student/suspend/${studId}/${academicYear}`, {status: 'suspended'});
 }
 
 export {
@@ -77,6 +97,7 @@ export {
     schoolRejectStudent,
     schoolSuspendStudent,
     joinSchool,
-    getStudentApplications
+    getStudentApplications,
+    studentGetAcademicYears
 }
 

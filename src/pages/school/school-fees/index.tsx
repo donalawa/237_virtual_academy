@@ -3,8 +3,6 @@ import './school-fees.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 
-import { EditCourseContentModal, DeleteModal  } from '../../../components';
-import UploadAssessmentSolutionModal from '../../../components/students/UploadAssessmentSolutionModal/UploadAssessmentSolution';
 import {  BsPencilSquare } from 'react-icons/bs';
 
 import { IoMdCloudDownload } from 'react-icons/io';
@@ -21,10 +19,12 @@ import { getStudentSolutions, getStudentsClasses } from '../../../services/stude
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
-import { getTotalAssessments } from '../../../services/assessment';
 import { VideoPlayerModal } from '../../../components';
 import { convertDate } from '../../../utils/date';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
+import CreateBankInfoModal from '../../../components/school/CreateBankInfoModal/CreateBankInfoModal';
+import { schoolGetBankInfos } from '../../../services/bankInfo';
+import { FaTrash } from 'react-icons/fa';
 
 const rows: any = [
     {
@@ -32,31 +32,15 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Class',
+        label: 'Bank Name',
         name: 'name'
     },
     {
-        label: 'Name',
-        name: 'name'
-    },
-    {
-        label: 'Teacher',
-        name: 'name'
-    },
-    {
-        label: 'Solution File',
-        name: 'name'
-    },
-    {
-        label: 'Question File',
+        label: 'Account Number',
         name: 'name'
     },
     {
         label: 'Created Date',
-        name: 'name'
-    },
-    {
-        label: 'Sumission Deadline',
         name: 'name'
     },
     {
@@ -77,30 +61,17 @@ function Index() {
     const [showEditModal, setShowEditModal] = useState(false); 
     const [deleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
-    const [assessments, setAssessments] = useState([]);
+    const [bankInfos, setBankInfos] = useState([]);
     const [showVideoModal, setShowVideoModal] = useState(false);
 
     const [editData, setEditData] = useState(null);
 
     const [videoUrl, setVideoUrl] = useState('');
 
-    const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
-    }
-
-    const handleGetClasses = ()  => {
-
-
-        getStudentsClasses().then((res: any) => {
-            if(res.ok) {
-                setClasses(res.data.data);
-            }
-        }).catch(err => {
-            console.log('error: ', err);
-        })
     }
 
     const toggleVideoModal = () => {
@@ -114,40 +85,26 @@ function Index() {
 
     const handleContentAdded = ()  => {
         toggleAddModal();
+        handleGetbankinfos();
     }
 
 
-    const handleGetAssessments = (classId: any) => {
+    const handleGetbankinfos = () => {
         setLoading(true);
-        getTotalAssessments(classId).then((res: any) => {
-            console.log("STUDENT assessments RES: ",res);
+        schoolGetBankInfos().then((res: any) => {
+            console.log("STUDENT bankInfos RES: ",res);
             setLoading(false);
-            setAssessments(res.data.data);
+            setBankInfos(res.data.data);
         }).catch((err: any) => {
             console.log('Error: ', err);
             setLoading(false);
         })
     }
 
-    const handleClassSelected = (value: any) => {
-        try {
-            console.log('CLASS ID:' , value)
-            if(value == 'all') {
-                setAssessments([]);
-                return;
-            }
-
-            handleGetAssessments(value);
-        } catch (error) {
-            console.log('error: ', error)
-        }
-    }
-
-
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
-        handleGetClasses();
+        handleGetbankinfos();
     },[]);
 
     return (
@@ -157,13 +114,10 @@ function Index() {
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                            <select name="" id="" onChange={(e: any) => handleClassSelected(e.target.value)} className="select-field school-student-select">
-                                <option value="all">Select Speciality</option>
-                                {classes.map((classData: any, index: any) => <option key={index} value={classData.class_id._id}>{classData.class_id.name}</option>)}
-                            </select>
+                       
                         </div>
                 
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button"> Upload Time Table <i className="fas fa-plus"></i></button>
+                        <button onClick={toggleAddModal} className="btn btn-primary btn-add school-button"> Add Bank Info <i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -182,34 +136,34 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {assessments?.map((data: any, index: any) => <tr>
+                                {bankInfos?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data?.class_room_id?.name}</p>
+                                        <p>{data?.name}</p>
                                     </td>
                                     <td className="flex-start">
-                                      {data?.title}
+                                      {data?.account_number}
                                     </td>
-                                    <td className="flex-start">
-                                      {data?.teacher_id?.username}
-                                    </td>
-                    
-                                  {data?.answers_file.length > 2 &&  <td className="flex-start"><a>Available</a></td>}
-
-                                  {data?.answers_file.length < 2 &&  <td className="flex-start"><a>Not Available</a></td>}
-                                    
-                                    <td className="flex-start"><a href={data?.assessment_file} target="_blank" download>Questions</a></td>
-                                
+                      
                                     <td className="flex-start">
                                         <p>{convertDate(data?.createdAt)}</p>
                                     </td>
 
-                                     
-                                    <td className="flex-start">
-                                        <p>{data?.publish_answers_date}</p>
-                                    </td>
-
                                     <td className="flex-center">
+                                        <div className="action">
+                                            <Tippy content="Edit Account"  animation="fade">
+                                            <a onClick={() => {
+                                                // handleSetVideoUrl(data.answers_file)
+                                            }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
+                                            </Tippy>
+                                            <Tippy content="Delete Info"  animation="fade">
+                                            <a onClick={() => {
+                                                // handleSetVideoUrl(data.answers_file)
+                                            }} className="delete"><FaTrash onClick={() => null} size={14}/></a>
+                                            </Tippy>
+                                        </div>
+                                    </td>
+                                    {/* <td className="flex-center">
                                         <div className="action">
                                        {data?.answers_file.length > 2 && <>{data?.answers_file_type == 'video' && <Tippy content="View Video Solution"  animation="fade">
                                             <a onClick={() => {
@@ -223,7 +177,7 @@ function Index() {
                                             <a href={data?.assessment_file} target="_blank" download className="see orange"><IoMdCloudDownload onClick={() => null} size={14}/></a>
                                             </Tippy>}
                                         </div>
-                                    </td>
+                                    </td> */}
                                 </tr> )}
                             </tbody>
                         </table>
@@ -233,7 +187,7 @@ function Index() {
             </div>
         </div>
 
-        {showAddModal &&  <UploadAssessmentSolutionModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
+        {showAddModal &&  <CreateBankInfoModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         {showVideoModal && <VideoPlayerModal video={videoUrl} onClose={toggleVideoModal}/>}
         </SchoolLayout>
     );

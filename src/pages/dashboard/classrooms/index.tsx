@@ -49,7 +49,7 @@ function Index() {
             name: 'name'
         },
         {
-            label: (`${t('classroom.data_table.class_url')}`),
+            label: 'Class Code',
             name: 'name'
         },
         {
@@ -66,7 +66,7 @@ function Index() {
         },
 
         {
-            label: 'Action',
+            label: 'Applied Date',
             name: 'action'
         }
     ]
@@ -185,7 +185,7 @@ function Index() {
 
                                                 <td className="flex-center">
                                                     <div className="action">
-                                                        <Tippy content="Copy Class Url"  animation="fade">
+                                                        {/* <Tippy content="Copy Class Url"  animation="fade">
                                                         <a className="see"><AiOutlineCopy onClick={() => {
                                                             navigator.clipboard.writeText(`${data._id}`);
                                                             
@@ -200,7 +200,7 @@ function Index() {
                                                                 setDeleteId(data._id);
                                                                 toggleDeleteModal();
                                                             }} className="delete"><i className="fa fa-trash" aria-hidden="true"></i></a>
-                                                        </Tippy>
+                                                        </Tippy> */}
                                                     </div>
                                                 </td>
                                             </tr> )}
