@@ -1,6 +1,6 @@
-.modal-container {
+.add-modal-container {
     position: absolute !important;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10000000000000;
@@ -13,9 +13,16 @@
     overflow: scroll;
 }
 
-.modal-delete {
+.join-modal {
     top: 60% !important;
 }
+
+
+.textarea {
+    width: 100%;
+    border: 1px solid var(--secondary-color);
+}
+
 
 @keyframes fadein {
 	from {
@@ -43,16 +50,11 @@
 
 }
 
-.delete.modal-content {
+.modal-content {
     padding-top: 40px;
     padding: 20px;
-    display: flex;
-    justify-content: center;
 }
-.modal-buttons {
-    display: flex;
-    gap: 16px;
-}
+
 .modal-head {
     display: flex;
     justify-content: space-between;
@@ -61,6 +63,10 @@
     padding: 20px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+}
+
+.join-modal .modal-head {
+    background-color: var(--secondary-color);
 }
 
 @media screen and  (max-width: 1043px) {

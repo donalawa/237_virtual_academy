@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './statistics.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
@@ -25,6 +25,7 @@ import { getTotalAssessments } from '../../../services/assessment';
 import { VideoPlayerModal } from '../../../components';
 import { convertDate } from '../../../utils/date';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const rows: any = [
     {
@@ -79,6 +80,7 @@ function Index() {
     const [deleteId, setDeleteId] = useState(null);
     const [assessments, setAssessments] = useState([]);
     const [showVideoModal, setShowVideoModal] = useState(false);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const [editData, setEditData] = useState(null);
 
@@ -93,7 +95,8 @@ function Index() {
 
     const handleGetClasses = ()  => {
 
-
+        setClasses([]);
+        
         getStudentsClasses().then((res: any) => {
             if(res.ok) {
                 setClasses(res.data.data);
@@ -148,7 +151,7 @@ function Index() {
     useEffect(() => {
         console.log('USER EFFECT RAN')
         handleGetClasses();
-    },[]);
+    },[activeAcademyYear]);
 
     return (
         <SchoolLayout title="Statistics" pageTitle="Statistics">
@@ -163,7 +166,7 @@ function Index() {
                             </select>
                         </div>
                 
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add student-button"> Upload Time Table <i className="fas fa-plus"></i></button>
+                        <button onClick={toggleAddModal} className="btn btn-primary btn-add school-button"> Upload Time Table <i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>

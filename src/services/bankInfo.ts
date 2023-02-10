@@ -1,3 +1,4 @@
+import { getAcademicYear } from "../utils/storage";
 import api from "./apiClient";
 
 const schoolCreateBankInfo = (data: any) => {
@@ -6,6 +7,12 @@ const schoolCreateBankInfo = (data: any) => {
 
 const schoolGetBankInfos= () => {
     return api.get('/school/bank-infos');
+}
+
+const studentGetBankInfos= () => {
+    let academicYear = getAcademicYear();
+
+    return api.get(`/student/bank-infos/${academicYear}`);
 }
 
 const schoolUpdateBankInfos= (id:any, data: any) => {
@@ -21,5 +28,6 @@ export {
     schoolCreateBankInfo,
     schoolGetBankInfos,
     schoolUpdateBankInfos,
-    schoolDeleteBankInfo
+    schoolDeleteBankInfo,
+    studentGetBankInfos
 }

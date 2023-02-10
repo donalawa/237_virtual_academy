@@ -1,3 +1,4 @@
+import { getAcademicYear } from "../utils/storage";
 import api from "./apiClient";
 
 const schoolGetAcceptedStudents = () => {
@@ -17,12 +18,53 @@ const schoolGetAcceptedTeachers = () => {
     return api.get('/school/teachers/all');
 }
 
+const schooolGetReceipts = () => {
+    let academicYear = getAcademicYear();
+
+    return api.get(`/school/receipts/${academicYear}`);
+}
+
+const schooolAcceptReceipts = (id: any) => {
+    let academicYear = getAcademicYear();
+
+    return api.post(`/school/accept-receipts/${academicYear}/${id}`, {});
+}
+
+const schooolRejectReceipts = (id: any) => {
+    let academicYear = getAcademicYear();
+
+    return api.post(`/school/reject-receipts/${academicYear}/${id}`, {});
+}
+
 const schoolCreateTimetable = (data: any) => {
-    return api.post('/school/timetable', data);
+    let academicYear = getAcademicYear();
+
+    return api.post(`/school/timetable/${academicYear}`, data);
 }
 
 const schoolGetAllTimetables = () => {
-    return api.get('/school/timetables');
+    let academicYear = getAcademicYear();
+
+    return api.get(`/school/timetables/${academicYear}`);
+}
+
+const schoolGetReoports = () => {
+    let academicYear = getAcademicYear();
+
+    return api.get(`/school/reports/${academicYear}`);
+}
+
+// ANNOUNCEMENT
+const schoolCreateAnnouncement = (data: any) => {
+    let academicYear = getAcademicYear();
+
+    return api.post(`/school/announcements/${academicYear}`, data);
+}
+
+const schoolGetAllAnnouncement = () => {
+    let academicYear = getAcademicYear();
+
+    return api.get(`/school/announcements/${academicYear}`);
 }
 
 const schoolCreateAcademicYear = (data: any) => {
@@ -49,6 +91,12 @@ export {
     schoolGetAcademicYears,
     schoolStopAcademicYear,
     schoolAcceptTeachersRequest,
-    schoolRejectTeachersRequest
+    schoolRejectTeachersRequest,
+    schoolCreateAnnouncement,
+    schoolGetAllAnnouncement,
+    schoolGetReoports,
+    schooolGetReceipts,
+    schooolAcceptReceipts,
+    schooolRejectReceipts
 }
 

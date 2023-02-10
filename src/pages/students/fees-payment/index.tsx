@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useContext }  from 'react';
-import './time-table.css';
+import './fees-payment.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
+import { StudensReportmodal } from '../../../components/index';
 
-import { UploadTimeTableModal  } from '../../../components';
-
-
-import { IoMdCloudDownload } from 'react-icons/io';
 import { AiFillEye } from 'react-icons/ai';
 
 import { toast } from 'react-toastify';
@@ -14,12 +11,16 @@ import { toast } from 'react-toastify';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
+
+import {  getStudentReports, getStudentTimetables, studentGetReceipts } from '../../../services/student';
+
 import BeatLoader from "react-spinners/BeatLoader";
 
+
 import { convertDate } from '../../../utils/date';
-import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
-import { schoolGetAllTimetables } from '../../../services/school';
 import AcademicYearContext from '../../../contexts/AcademicYearContext';
+import { FaTrash } from 'react-icons/fa';
+import UploadPaymentReceipt from '../../../components/students/UploadPaymentReceipt/UploadPaymentReceipt';
 
 const rows: any = [
     {
@@ -27,19 +28,19 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Title',
+        label: 'Schhol\'s Name',
         name: 'name'
     },
     {
-        label: 'Specialities',
+        label: 'Speciality',
         name: 'name'
     },
     {
-        label: 'Active From',
+        label: 'Amount',
         name: 'name'
     },
     {
-        label: 'Active To',
+        label: 'Status',
         name: 'name'
     },
     {
@@ -61,64 +62,53 @@ const override = {
 
 function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
-    const [deleteModal, setShowDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const [timetables, setTimetables] = useState([]);
     const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
-    const [showVideoModal, setShowVideoModal] = useState(false);
 
+
+    const [receipts, setReceipts] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
     }
 
-    const handleGetTimetables = ()  => {
-        setTimetables([]);
+
+    const handleGetReceipts = ()  => {
         setLoading(true);
-        schoolGetAllTimetables().then((res: any) => {
+
+        setReceipts([]);
+
+        studentGetReceipts().then((res: any) => {
             if(res.ok) {
-                console.log('timetables: ', res.data)
-                setTimetables(res.data.data);
+                setReceipts(res.data.data);
             }
-            console.log(res)
-            setLoading(false)
-        }).catch(err => {
-            console.log('error: ', err);
             setLoading(false);
+        }).catch(err => {
+            setLoading(false);
+            console.log('error: ', err);
         })
     }
 
-
-
-
     const handleContentAdded = ()  => {
-        handleGetTimetables();
+        handleGetReceipts();
         toggleAddModal();
     }
 
-
-
-
     useEffect(() => {
-        console.log('USER EFFECT RAN')
-        handleGetTimetables();
+        handleGetReceipts();
     },[activeAcademyYear]);
 
     return (
-        <SchoolLayout title="Time Table" pageTitle="Time Table">
+        <StudentLayout title="Payment Receipts" pageTitle="Payments">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                            <select name="" id="" onChange={(e: any) => null} className="select-field school-student-select">
-                                <option value="all">Filter by Speciality</option>
-                                 <option value=''>Testing</option>
-                            </select>
+
                         </div>
-                
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add school-button"> Upload Time Table <i className="fas fa-plus"></i></button>
+
+                        <button onClick={() => toggleAddModal()} className="btn btn-primary btn-add student-button">Upload Payment Receipts <i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -137,36 +127,36 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {timetables?.map((data: any, index: any) => <tr>
+                                {receipts?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data?.name}</p>
+                                        <p>{data?.school_id?.username}</p>
                                     </td>
-                                    <td className="flex-start specialities-table-data">
-                                        <p>{data?.specialities?.map((sp: any) => `${sp.name}, `)}</p>
+                                    <td>
+                                        <p>{data?.speciality?.name}</p>
                                     </td>
-                                    <td className="flex-start">
-                                        <p>{data?.active_from}</p>
-                                    </td>
+                                    <td className="flex-start">{data?.amount}</td>
 
-                                    <td className="flex-start">
-                                        <p>{data?.active_to}</p>
-                                    </td>
-
-
+                                    <td className="flex-start">{data?.status}</td>
+                                
                                     <td className="flex-start">
                                         <p>{convertDate(data?.createdAt)}</p>
                                     </td>
-
-                                    
+                                     
+            
                                     <td className="flex-center">
                                         <div className="action">
-                                        <Tippy content="Download Timetable File"  animation="fade">
-                                            <a target="_blank" href={data?.file_url} download className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                        <Tippy  content="View Receipt File"  animation="fade">
+                                        <a onClick={() => {
+                                               
+                                            }} className="see">
+                                            <AiFillEye onClick={() => null} size={14}/>
+                                            </a>
                                         </Tippy>
-                                      
-                                        </div>
+                                       
+                                    </div>
                                     </td>
+
                                 </tr> )}
                             </tbody>
                         </table>
@@ -176,8 +166,8 @@ function Index() {
             </div>
         </div>
 
-        {showAddModal &&  <UploadTimeTableModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
-        </SchoolLayout>
+        {showAddModal &&  <UploadPaymentReceipt contentAdded={handleContentAdded} onClose={toggleAddModal} />}
+        </StudentLayout>
     );
 }
 

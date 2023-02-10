@@ -18,12 +18,10 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/
 import { firebaseApp } from '../../../utils/firebaseConfig';
 
 import { getSchoolSpecialitis } from '../../../services/specialities';
-import { schoolCreateTimetable } from '../../../services/school';
+import { schoolCreateAnnouncement, schoolCreateTimetable } from '../../../services/school';
 
 const initialValues= {
-    name: '',
-    active_from: '',
-    active_to: ''
+    subject: '',
 }
 
 const override = {
@@ -36,9 +34,10 @@ function MakeAnnouncementModal({ onClose, onContentAdded } : any) {
     const [specialities, setSpecialities] = useState([]);
     const [error, setError] = useState<any>(null);
     const [selectedSpecialities, setSelectedSpecialities] = useState<any>([]);
+    const [message, setMessage] = useState('');
 
     // TIMETABLE
-    const [timetablePdfUrl, setTimetablePdfUrl] = useState('');
+    const [announcementPdfUrl, setAnnouncementPdfUrl] = useState('');
     const [timetablePdfProgress,  setTimetablePdfProgress] = useState(0);
     const [isUploadingTimetablePdf, setIsUploadingTimetablePdf] = useState(false);
 
@@ -47,12 +46,10 @@ function MakeAnnouncementModal({ onClose, onContentAdded } : any) {
     
 
     // good
-    const timetableFileRef: any = useRef(null);
+    const announcementFileRef: any = useRef(null);
 
     const validationSchema = Yup.object().shape({
-        name: Yup.string().required('Timetable title required'),
-        active_from: Yup.string(),
-        active_to: Yup.string()
+        subject: Yup.string().required('Subject is required'),
     })
 
     const handleGetSpecialities = ()  => {
@@ -85,7 +82,7 @@ function MakeAnnouncementModal({ onClose, onContentAdded } : any) {
         console.log(error);
     },()=> {
          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setTimetablePdfUrl(downloadURL);
+            setAnnouncementPdfUrl(downloadURL);
             console.log('PDF  URL: ', downloadURL);
             setIsUploadingTimetablePdf(false);
         });
@@ -107,7 +104,7 @@ function MakeAnnouncementModal({ onClose, onContentAdded } : any) {
         setSelectedSpecialities(selected);
     }
 
-    const handleSubmitTimetable = (values: any) => {
+    const handleCreateAnnouncement = (values: any) => {
         // console.log(values);
         // console.log('SELECTED SPECIALITIES: ', selectedSpecialities);
         setError(null);
@@ -117,34 +114,26 @@ function MakeAnnouncementModal({ onClose, onContentAdded } : any) {
             return;
         }
 
-        if(timetablePdfUrl.length < 2) {
-            setError('You must select a timetable file')
+        if(message.length < 2) {
+            setError('You must enter message for announcement')
             return;
         }
 
-        if(values.name.length < 2) {
-            setError('You must enter a title for timetable')
-            return;
-        }
-
-        if(values.active_from.length < 2) {
-            setError('Select the active from date')
-            return;
-        }
-
-        if(values.active_to.length < 2) {
-            setError('Select the active to date')
+        if(values.subject.length < 2) {
+            setError('You must enter a subject for announcement')
             return;
         }
 
         let data = {
             ...values,
-            file_url: timetablePdfUrl,
-            specialities: selectedSpecialities
+            file_url: announcementPdfUrl,
+            specialities: selectedSpecialities,
+            message: message
         }
 
+   
             // console.log("FINAL CONTENT: ",data)
-            schoolCreateTimetable(data).then((res: any) => {
+            schoolCreateAnnouncement(data).then((res: any) => {
                 if(res.ok) {
                     toast.success(res.data.message, {
                         pauseOnHover: false,
@@ -188,14 +177,9 @@ function MakeAnnouncementModal({ onClose, onContentAdded } : any) {
                 {error && <ErrorMessage error={error} visible={true} />}
                 <Form 
                     initialValues={initialValues}
-                    onSubmit={handleSubmitTimetable}
+                    onSubmit={handleCreateAnnouncement}
                     validationSchema={validationSchema}
                 >
-    
-                        <p className="label-text">Title </p>
-                        <FormField  name="name" type="text" placeholder="Timetable title "/>
-
-
                         <p className="label-text">Select Specialities: </p>
                         <div className="specialities-container">
                            {specialities.map((sp: any) => <div className="check-container">
@@ -204,26 +188,23 @@ function MakeAnnouncementModal({ onClose, onContentAdded } : any) {
                             </div>)}
            
                         </div>
+    
+                        <p className="label-text">Subject </p>
+                        <FormField  name="subject" type="general" placeholder="Enter Subject "/>
+
+                        <p className="label-text">Message: </p>
+                        <textarea rows={8} onChange={(e: any) => setMessage(e.target.value)} value={message} className="textarea"></textarea>
+                        <br />
+                        <br />
                         {/* <br /> */}
 
-                        <div className="timetable-dates">
-                            <div className="from">
-                                <label>Active From</label>
-                                <FormField  name="active_from" type="date" placeholder=""/>
-                            </div>
-                            <div className="to">
-                                <label>Active To</label>
-                                <FormField  name="active_to" type="date" placeholder=""/>
-                            </div>
-                        </div>
- 
                         <div className='upload-content-container'>
 
-                          {timetablePdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
-                            <p className="label-text">Upload Timetable Pdf: </p>
-                            <div className="file-drop-upload" onClick={() => timetableFileRef.current.click()}>
+                          {announcementPdfUrl.length < 2 &&  <div className="form-field-upload content-upload-right">
+                            <p className="label-text">Upload Announcement Pdf: (optional) </p>
+                            <div className="file-drop-upload" onClick={() => announcementFileRef.current.click()}>
                             {!isUploadingTimetablePdf && <FaCloudUploadAlt size={35} color="#FFA500" />}
-                                <input ref={timetableFileRef} onChange={uploadTimetablePdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
+                                <input ref={announcementFileRef} onChange={uploadTimetablePdf} type="file" style={{width: '100%', height: '100%', display: 'none'}} accept="application/pdf,application/vnd.ms-excel"/>
                                 {isUploadingTimetablePdf &&  <div style={{width: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                               <BeatLoader
                                     color="#623d91" 
@@ -239,7 +220,7 @@ function MakeAnnouncementModal({ onClose, onContentAdded } : any) {
                             </div>
                         </div>}
 
-                        {timetablePdfUrl.length > 2 &&
+                        {announcementPdfUrl.length > 2 &&
                             <div className="form-field-upload content-upload-right">
                             <p className="label-text" style={{textAlign: 'center'}}>Done</p>
                             </div>

@@ -16,6 +16,13 @@
     gap: 6px;
 }
 
+
+.textarea {
+    width: 100%;
+    border: 1px solid var(--secondary-color);
+}
+
+
 .teacher-modal-timetable button {
     border-color: #484848 !important;
     color: #484848 !important;

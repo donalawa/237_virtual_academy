@@ -21,7 +21,7 @@ const joinSchool = (data: any) => {
 
 const getStudentApplications = () => {
     let academicYear = getAcademicYear();
-    // alert(academicYear);
+
     return api.get(`/student/applications/${academicYear}`);
 }
 
@@ -30,6 +30,46 @@ const getCourseContent = (id: any) =>  {
 
     return api.get(`/course-contents/student/${id}/${academicYear}`);
 }
+
+const getStudentTimetables = () => {
+    let academicYear = getAcademicYear();
+
+    return api.get(`/student/timetables/${academicYear}`);
+}
+
+const getStudentAnnouncements = () => {
+    let academicYear = getAcademicYear();
+
+    return api.get(`/student/announcements/${academicYear}`);
+}
+
+const getStudentReports = () => {
+    let academicYear = getAcademicYear();
+
+    return api.get(`/student/reports/${academicYear}`);
+}
+
+const createReport = (data: any) => {
+    let academicYear = getAcademicYear();
+
+    return api.post(`/student/report/${academicYear}`, data);
+}
+
+const submitStudentReceipt = (data: any) => {
+    let academicYear = getAcademicYear();
+
+    return api.post(`/student/receipt/${academicYear}`, data);
+}
+
+
+const studentGetReceipts = () => {
+    let academicYear = getAcademicYear();
+
+    return api.get(`/student/receipts/${academicYear}`);
+}
+
+
+
 
 const submitFollowupSolution = (data: any) => {
     let academicYear = getAcademicYear();
@@ -98,6 +138,12 @@ export {
     schoolSuspendStudent,
     joinSchool,
     getStudentApplications,
-    studentGetAcademicYears
+    studentGetAcademicYears,
+    getStudentTimetables,
+    getStudentAnnouncements,
+    createReport,
+    getStudentReports,
+    submitStudentReceipt,
+    studentGetReceipts
 }
 

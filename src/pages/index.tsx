@@ -23,6 +23,11 @@ export { default as StudentAssessmentSubmissionsPage } from './students/assessme
 export { default as PassexamContentPage } from './students/passexam-content/index';
 export { default as StudentAssignmentPage } from './students/assignment/assignment';
 export { default as StudentAssignmentSubmissionPage } from './students/assignment-submissions/assignment-submissions';
+export { default as StudentsAnnouncementsPage } from  './students/announcements/index';
+export { default as StudentsTimeTablePage } from './students/time-table/index';
+export { default as StudentsReportsPage } from './students/reports/index';
+export { default as StudentsFeesPaymentPage } from './students/fees-payment/index';
+export { default as StudentSchooolBanksPage } from './students/school-banks/index';
 
 // SCHOOL
 export { default as SchoolHomePage } from './school/home/index';
@@ -35,3 +40,5 @@ export { default as SchoolAnouncementPage } from './school/anouncement/index';
 export { default as SchoolReportsPage } from './school/reports/index';
 export { default as SchoolStatisticsPage } from './school/statistics/index';
 export { default as SchoolPayFeesPage } from  './school/school-fees/index';
+export { default as SchoolFeesPaymentsPage } from  './school/fees-payments/index';
+export { default as SchoolStudentResultsPage } from  './school/student-results/index';

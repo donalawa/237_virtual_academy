@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext }  from 'react';
-import './students.css';
+import './student-results.css';
 
 
 import { toast } from 'react-toastify';
@@ -82,7 +82,6 @@ function Index() {
 
     const handleGetStudents = ()  => {
 
-        setSchoolStudents([]);
 
         schoolGetStudents().then((res: any) => {
             if(res.ok) {
@@ -180,7 +179,7 @@ function Index() {
 
 
     const handleGetSpecialities = ()  => {
-        setSchoolSpecialites([]);
+
         getSchoolSpecialitis().then((res: any) => {
             console.log('RESPONSE GET: ', res);
             if(res.ok) {
@@ -201,7 +200,7 @@ function Index() {
     },[activeAcademyYear]);
 
     return (
-        <SchoolLayout title="Students" pageTitle="Students">
+        <SchoolLayout title="Student Results" pageTitle="Results">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">

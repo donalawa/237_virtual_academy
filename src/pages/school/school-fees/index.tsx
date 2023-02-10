@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import './school-fees.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
@@ -25,6 +25,7 @@ import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
 import CreateBankInfoModal from '../../../components/school/CreateBankInfoModal/CreateBankInfoModal';
 import { schoolGetBankInfos } from '../../../services/bankInfo';
 import { FaTrash } from 'react-icons/fa';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
 
 const rows: any = [
     {
@@ -63,6 +64,7 @@ function Index() {
     const [deleteId, setDeleteId] = useState(null);
     const [bankInfos, setBankInfos] = useState([]);
     const [showVideoModal, setShowVideoModal] = useState(false);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const [editData, setEditData] = useState(null);
 
@@ -90,6 +92,7 @@ function Index() {
 
 
     const handleGetbankinfos = () => {
+        setBankInfos([]);
         setLoading(true);
         schoolGetBankInfos().then((res: any) => {
             console.log("STUDENT bankInfos RES: ",res);

@@ -14,6 +14,8 @@ export { default as AssignmentModal } from './ui/AssignmentModal/AssignmentModal
 export { default as UpdateAssignmentModal } from './ui/UpdateAssignmentModal/UpdateAssignmentModal';
 
 
+// STUDENT
+export { default as StudensReportmodal } from './students/ReportModal/ReportModal';
 // SCHOOL
 export {default as CreateSpecialityModal } from './school/CreateSpecialityModal/CreateSpecialityModal';
 export {default as UploadTimeTableModal } from './school/UploadTimeTableModal/UploadTimeTableModal';

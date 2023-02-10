@@ -12,7 +12,7 @@ import { TfiAnnouncement } from 'react-icons/tfi';
 import { useTranslation } from 'react-i18next';
 import { GoDeviceCameraVideo } from 'react-icons/go';
 import AcademicYearContext from '../../contexts/AcademicYearContext';
-
+import { BsBank2 } from 'react-icons/bs';
 
 import { getUser } from '../../utils/storage';
 import { studentGetAcademicYears } from '../../services/student';
@@ -161,22 +161,22 @@ function StudentLayout({ title, children, pageTitle } : any) {
                     </NavLink>
 
 
-                    <NavLink className="link" to="/students/report">
+                    <NavLink className="link" to="/students/time-table">
                     <i><SlCalender size={20}/></i>
                         <span>Time Table</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/students/report">
+                    <NavLink className="link" to="/students/announcements">
                     <i><TfiAnnouncement size={20}/></i>
                         <span>Anouncements</span>
                     </NavLink>
                     
-                    <NavLink className="link" to="/students/report">
+                    <NavLink className="link" to="/students/peers-group">
                     <i><FaPeopleArrows size={20}/></i>
                         <span>Peers Groups</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/students/report">
+                    <NavLink className="link" to="/students/todos">
                     <i><BsFillCalendar2CheckFill size={20}/></i>
                         <span>Personal Todos</span>
                     </NavLink>
@@ -187,11 +187,18 @@ function StudentLayout({ title, children, pageTitle } : any) {
                         <span>Submit Report</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/students/fees">
+                    <NavLink className="link" to="/students/fees-payment">
                     <i><GiMoneyStack size={20}/></i>
                         <span>Fees Payment</span>
                     </NavLink>
                     
+                    
+                    <NavLink className="link" to="/students/school-banks">
+                    <i><BsBank2 size={20}/></i>
+                        <span>School Banks</span>
+                    </NavLink>
+
+                
                 </div>
     
             </div>

@@ -12,6 +12,7 @@ import { GiMoneyStack } from 'react-icons/gi';
 import { TfiAnnouncement } from 'react-icons/tfi';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { GoMortarBoard } from 'react-icons/go';
+import { BsBank2 } from 'react-icons/bs';
 
 import { useTranslation } from 'react-i18next';
 import { getUser } from '../../utils/storage';
@@ -132,7 +133,7 @@ function SchoolLayout({ title, children, pageTitle } : any) {
                     </NavLink>
 
 
-                    <NavLink className="link" to="/school/students/results">
+                    <NavLink className="link" to="/school/students-results">
                     <i><GoMortarBoard size={20}/></i>
                         <span>Student Results</span>
                     </NavLink>
@@ -157,10 +158,18 @@ function SchoolLayout({ title, children, pageTitle } : any) {
                         <span>Statistic</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/school/fees">
+                    <NavLink className="link" to="/school/fees-payments">
                     <i><GiMoneyStack size={20}/></i>
                         <span>Fees Payments</span>
                     </NavLink>
+                    
+
+                    <NavLink className="link" to="/school/fees">
+                    <i><BsBank2 size={20}/></i>
+                        <span>Fees Accounts</span>
+                    </NavLink>
+
+               
                     
     
                     <NavLink className="link" to="/school/info">

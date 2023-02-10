@@ -33,7 +33,14 @@ import {
   SchoolAnouncementPage,
   SchoolReportsPage,
   SchoolStatisticsPage,
-  SchoolPayFeesPage
+  SchoolPayFeesPage,
+  StudentsAnnouncementsPage,
+  StudentsFeesPaymentPage,
+  StudentsReportsPage,
+  StudentsTimeTablePage,
+  SchoolFeesPaymentsPage,
+  StudentSchooolBanksPage,
+  SchoolStudentResultsPage
 } from './pages';
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -102,11 +109,15 @@ function App() {
             <Route path="/pass-exams" element={(<Protected > <PassExamsPage  /> </Protected>)} />
 
             <Route path="/live-session" element={(<Protected > <CreateSessionPage  /> </Protected>)} />
-          
+
             <Route path="/live-session/:roomID" element={(<Protected > <LiveSessionPage  /> </Protected>)} />
 
 
             <Route path="/students/home" element={(<Protected > <StudentsLandingPage /> </Protected>)} />
+            <Route path="/students/time-table" element={(<Protected > <StudentsTimeTablePage /> </Protected>)} />
+            <Route path="/students/report" element={(<Protected > <StudentsReportsPage /> </Protected>)} />
+            <Route path="/students/fees-payment" element={(<Protected > <StudentsFeesPaymentPage /> </Protected>)} />
+            <Route path="/students/announcements" element={(<Protected > <StudentsAnnouncementsPage /> </Protected>)} />
             <Route  path="/students/course-contents" element={(<Protected> <StudentCourseContentPage /> </Protected>)} />
             <Route  path="/students/followups" element={(<Protected> <StudentFollowUpPage /> </Protected>)} />
             <Route  path="/students/assessments" element={(<Protected> <StudentAssessmentPage /> </Protected>)} />
@@ -115,6 +126,7 @@ function App() {
             <Route  path="/students/live-session" element={(<Protected> <JoinLiveSessionPage /> </Protected>)} />
             <Route  path="/students/assignments" element={(<Protected> <StudentAssignmentPage /> </Protected>)} />
             <Route  path="/students/assignment-submissions" element={(<Protected> <StudentAssignmentSubmissionPage /> </Protected>)} />
+            <Route  path="/students/school-banks" element={(<Protected> <StudentSchooolBanksPage /> </Protected>)} />
 
 
             <Route  path="/school/home" element={(<Protected> <SchoolHomePage /> </Protected>)} />
@@ -127,6 +139,8 @@ function App() {
             <Route  path="/school/reports" element={(<Protected> <SchoolReportsPage /> </Protected>)} />
             <Route  path="/school/statistics" element={(<Protected> <SchoolStatisticsPage /> </Protected>)} />
             <Route  path="/school/fees" element={(<Protected> <SchoolPayFeesPage /> </Protected>)} />
+            <Route  path="/school/fees-payments" element={(<Protected> <SchoolFeesPaymentsPage /> </Protected>)} />
+            <Route  path="/school/students-results" element={(<Protected> <SchoolStudentResultsPage /> </Protected>)} />
 
         </Routes>
       </BrowserRouter>
