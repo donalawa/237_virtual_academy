@@ -14,4 +14,3 @@ export {
     getPublicSchools,
     getPublicSpecialities
 }
-

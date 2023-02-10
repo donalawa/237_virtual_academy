@@ -32,4 +32,3 @@ export {
     deleteCourseContent,
     submitStudentFollowUpScore
 }
-

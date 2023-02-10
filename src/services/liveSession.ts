@@ -28,4 +28,3 @@ export {
     getAllSessions,
     joinSession
 }
-
