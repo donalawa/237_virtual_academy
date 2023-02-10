@@ -74,89 +74,11 @@ const override = {
 
 
 function Index() {
-    const [ showAddModal, setShoowAddModal ] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false); 
-    const [deleteModal, setShowDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const [assessments, setAssessments] = useState([]);
-    const [showVideoModal, setShowVideoModal] = useState(false);
-    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
-
-    const [editData, setEditData] = useState(null);
-
-    const [videoUrl, setVideoUrl] = useState('');
-
-    const [classes, setClasses] = useState([]);
-    const [loading, setLoading] = useState(false);
-
-    const toggleAddModal = () => {
-        setShoowAddModal(!showAddModal);
-    }
-
-    const handleGetClasses = ()  => {
-
-        setClasses([]);
-        
-        getStudentsClasses().then((res: any) => {
-            if(res.ok) {
-                setClasses(res.data.data);
-            }
-        }).catch(err => {
-            console.log('error: ', err);
-        })
-    }
-
-    const toggleVideoModal = () => {
-        setShowVideoModal(!showVideoModal);
-    }
-
-    const handleSetVideoUrl = (url: any) =>  {
-        setVideoUrl(url);
-        toggleVideoModal();
-    }  
-
-    const handleContentAdded = ()  => {
-        toggleAddModal();
-    }
-
-
-    const handleGetAssessments = (classId: any) => {
-        setLoading(true);
-        getTotalAssessments(classId).then((res: any) => {
-            console.log("STUDENT assessments RES: ",res);
-            setLoading(false);
-            setAssessments(res.data.data);
-        }).catch((err: any) => {
-            console.log('Error: ', err);
-            setLoading(false);
-        })
-    }
-
-    const handleClassSelected = (value: any) => {
-        try {
-            console.log('CLASS ID:' , value)
-            if(value == 'all') {
-                setAssessments([]);
-                return;
-            }
-
-            handleGetAssessments(value);
-        } catch (error) {
-            console.log('error: ', error)
-        }
-    }
-
-
-
-    useEffect(() => {
-        console.log('USER EFFECT RAN')
-        handleGetClasses();
-    },[activeAcademyYear]);
 
     return (
         <SchoolLayout title="Statistics" pageTitle="Statistics">
       <div className="section">
-            <div className="parent-con">
+            {/* <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
@@ -233,13 +155,14 @@ function Index() {
                     </div>
 
                 </div>
-            </div>
+            </div> */}
         </div>
 
-        {showAddModal &&  <UploadAssessmentSolutionModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
-        {showVideoModal && <VideoPlayerModal video={videoUrl} onClose={toggleVideoModal}/>}
+        {/* {showAddModal &&  <UploadAssessmentSolutionModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
+        {showVideoModal && <VideoPlayerModal video={videoUrl} onClose={toggleVideoModal}/>} */}
         </SchoolLayout>
     );
 }
 
 export default Index;
+

@@ -141,7 +141,7 @@ function UploadPaymentReceipt({ onClose, contentAdded } : any) {
     
     return (
         <div>
-            <div  className='modal-container student-modal-assignment'>
+            <div  className='modal-container student-modal-assignment payment-recipt-modal'>
                 <div className='modal-head'>
                     <p className="modal-title">Payment Receipts</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>

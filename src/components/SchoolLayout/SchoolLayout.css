@@ -864,7 +864,7 @@ section {
 }
 
 .section .stat-card:hover {
-    border: 2px solid var(--primary-color);
+    /* border: 2px solid var(--primary-color); */
 }
 
 .section .stat-card .stat-name {
@@ -884,7 +884,7 @@ section {
 
 .section .stat-card:hover .stat-name,
 .section .stat-card:hover .stat-value {
-    color: var(--primary-color);
+    /* color: var(--primary-color); */
 }
 
 .stat-con {

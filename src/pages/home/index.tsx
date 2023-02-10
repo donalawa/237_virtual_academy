@@ -5,16 +5,65 @@ import { CiFacebook } from 'react-icons/ci';
 import { BsCheck2Circle }  from 'react-icons/bs';
 import './home.css';
 import { Link } from "react-router-dom";
-import { IoLanguageOutline } from 'react-icons/io5';
+import { MdContentCopy } from 'react-icons/md';
+
+
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+
 
 import { useTranslation } from 'react-i18next';
+import { getPublicSchools, getPublicSpecialities } from '../../services/public';
+
+import { FaRegEdit } from 'react-icons/fa';
+
+import BeatLoader from "react-spinners/BeatLoader";
+
+const override = {
+  marginTop: '20px'
+};
+
+
+
+const rows: any = [
+  {
+      label: '#',
+      name: 'num'
+  },
+  {
+      label: 'Speciality Name',
+      name: 'name'
+  },
+  {
+      label: 'Speciality Code',
+      name: 'name'
+  },
+  {
+      label: 'School',
+      name: 'name'
+  },
+  {
+      label: 'Fees',
+      name: 'name'
+  },
+  {
+      label: 'Action',
+      name: 'name'
+  },
+]
+
 
 function Index() {
     const { t, i18n } = useTranslation();
     
     let [lang, setLang] = useState<any>(null);
 
+    const [schools, setSchools] = useState([]);
+    const [specialities, setSpecialities] = useState([]);
+    const [selectedSchool, setSelectedSchooll] = useState('all');
+    const [selectedSchoolCode, setSchoolSelectedCode] = useState('none');
 
+    const [loading, setLoading] = useState(false);
 
     const handleTrans = () => {
       i18n.changeLanguage(lang);
@@ -31,15 +80,55 @@ function Index() {
       }
     }
 
+    const handleSelectedSchool = (_id: any) => {
+     
+      let foundMatch = false;
+
+      schools.map((data: any) => {
+        console.log(data);
+        if(data._id == _id) {
+          setSchoolSelectedCode(data.school_code);
+          foundMatch = true;
+        }
+      })
+
+
+      if(!foundMatch) {
+        setSchoolSelectedCode('none');
+      }
+
+      setSelectedSchooll(_id);
+      handleGetSpecialities(_id);
+
+    }
+
+
+    const handleGetSpecialities = (schoolId: any) => {
+      getPublicSpecialities(schoolId).then((res: any) => {
+        setSpecialities(res.data.data);
+      }).catch((error: any) => {
+        console.log('ERROR');
+      })
+    }
+
     const changeLang = () => {
       if(lang != null) {
         localStorage.setItem('locale', lang)
         handleTrans();
       }
     }
+
+    const getSchools = () => {
+      getPublicSchools().then((res: any) => {
+        setSchools(res.data.data);
+      }).catch((err: any) => {
+
+      })
+    }
     
     useEffect(() => {
       handleLangInit();
+      getSchools();
     },[])
 
     useEffect(() => {
@@ -144,6 +233,97 @@ function Index() {
               </div>
             </div>
           </div>
+        </section>
+
+        <section >
+        <div className="con school-info-container">
+          <h1 className="home-school-sec-title">Select School To Get Code And Specialities</h1>
+          <br />
+          <div className="home-speciality-title">
+              <p>School Code: {selectedSchoolCode}</p>
+          </div>
+        <div className="data-table">
+                    <div className="top">
+                        <div className="span">
+                        
+                            <select name="" id="" onChange={(e: any) => handleSelectedSchool(e.target.value)} value={selectedSchool} className="select-field">
+                                <option value="all">Select School</option>
+                               {schools?.map((sp: any) => <option value={sp._id}>{sp?.name}</option>)}
+                            </select>
+                        </div>
+                
+                    </div>
+                    <div className="table-con">
+                    <div style={{textAlign: 'center',}}>
+                        <BeatLoader
+                                color="#623d91" 
+                                loading={loading}
+                                cssOverride={override}
+                        />
+                    </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    {rows.map((row: any, index: any) => <th key={index} className={row.name}>{row.label}</th>)}
+                                    
+                                </tr>
+                            </thead>
+                        
+                            <tbody>
+                                {specialities?.map((data: any, index: any) => <tr>
+                                    <td className="flex-center">{index + 1}</td>
+                                    <td className="flex-start">
+                                        <p>{data?.name}</p>
+                                    </td>
+                                    <td className="flex-start">
+                                      {data?.code}
+                                    </td>
+                                    <td className="flex-start">
+                                      {data?.school_id?.username}
+                                    </td>
+
+                                    <td className="flex-start">
+                                      {data?.fees}
+                                    </td>
+
+                                    <td className="flex-center">
+                                        <div className="action">
+
+                                        <Tippy content="Copy Code"  animation="fade">
+                                            <a className="see" onClick={() => {
+                                                
+                                            }}><MdContentCopy size={14}/></a>
+                                            </Tippy>
+{/*                                         
+                                       {data.status != 'accepted' &&    <Tippy content="Activate"  animation="fade">
+                                                    <a className="see" onClick={() => {
+                                                        setSelectedId(data?._id);
+                                                        toggleAcceptModal();
+                                                    }}><AiOutlineCheckSquare size={14}/></a>
+                                                    </Tippy>}
+
+                                          {data.status == 'pending' &&   <Tippy content="Reject"  animation="fade">
+                                            <a onClick={() => {
+                                                    setSelectedId(data?._id);
+                                                    toggleRejectModal();
+                                            }} className="delete"><MdOutlineCancelPresentation /></a>
+                                        </Tippy>}
+
+                                       {data.status == 'accepted' &&  <Tippy content="Suspend"  animation="fade">
+                                            <a onClick={() => {
+                                                    setSelectedId(data?._id);
+                                                    toggleSuspendModal();
+                                            }} className="delete"><MdOutlineCancelPresentation /></a>
+                                        </Tippy>} */}
+                                        </div>
+                                    </td>
+                                </tr> )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                </div>
         </section>
     
         <section className="footer">

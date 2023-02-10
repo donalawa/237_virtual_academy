@@ -38,3 +38,59 @@ body {
 .VsTVUAD89KWleD0YRVsD {
   background-color: var(--primary-color) !important;
 }
+
+.add-modal-container,.modal-container {
+  width: 60vw !important;
+}
+
+
+@media screen and (max-width: 890px) {
+  .add-modal-container,.modal-container {
+    width: 80vw !important;
+  }
+  
+}
+
+
+
+
+
+.school-info-container {
+  padding: 0 79px;
+}
+
+
+.home-school-sec-title {
+  color: var(--secondary-color);
+  text-align: center;
+  font-size: 2em;
+}
+
+.home-speciality-title {
+  color: var(--secondary-color);
+  text-align: center;
+  font-size: 1.5em;
+}
+
+@media screen and (max-width: 700px) {
+
+  
+.school-info-container {
+  padding: 0 19px;
+}
+
+
+
+}
+
+@media screen and (max-width: 500px) {
+  .add-modal-container,.modal-container {
+    width: 90vw !important;
+  }
+
+  .home-school-sec-title {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+  }
+  
+}

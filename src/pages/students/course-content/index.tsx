@@ -3,7 +3,7 @@ import './coursecontent.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 
-import { AssessmentModal, EditCourseContentModal, DeleteModal, PassExammodal, VideoPlayerModal  } from '../../../components';
+import { AssessmentModal, EditCourseContentModal, DeleteModal, PassExammodal, VideoPlayerModal, PreviewPdfModal  } from '../../../components';
 import UploadFollowupSolutionModal from '../../../components/students/UploadFollowupSolutionModal/UploadFollowupSolutionModal';
 import { AiFillEye } from 'react-icons/ai';
 import {  BsPencilSquare } from 'react-icons/bs';
@@ -84,6 +84,7 @@ function Index() {
 
     const [showVideoModal, setShowVideoModal] = useState(false);
     const [videoUrl, setVideoUrl] = useState('');
+
 
     const toggleVideoModal = () => {
         setShowVideoModal(!showVideoModal);
@@ -236,7 +237,7 @@ function Index() {
                                             </Tippy>}
                                         {
                                             data?.pdf_file_url.length > 2 && <Tippy content="Pdf Content"  animation="fade">
-                                            <a onClick={() => handleSetVideoUrl(data?.video_url)} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
+                                            <a href={data?.pdf_file_url}  download target="_blank" className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
                                             </Tippy>}
                                         </div>
                                     </td>
@@ -251,6 +252,7 @@ function Index() {
             </div>
         </div>
 
+       
         {showAddModal &&  <UploadFollowupSolutionModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         {showEditModal &&  <EditCourseContentModal data={editData} onContentAdded={handleContentAdded} onClose={toggleEditModal} />}
         {deleteModal && <DeleteModal onAccept={handleDeleteCourseExamContent} onCancel={toggleDeleteModal} />}

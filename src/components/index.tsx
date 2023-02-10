@@ -14,6 +14,8 @@ export { default as AssignmentModal } from './ui/AssignmentModal/AssignmentModal
 export { default as UpdateAssignmentModal } from './ui/UpdateAssignmentModal/UpdateAssignmentModal';
 
 
+export  { default as PreviewPdfModal } from  './ui/PreviewPdfModal/PreviewPdfModal';
+
 // STUDENT
 export { default as StudensReportmodal } from './students/ReportModal/ReportModal';
 // SCHOOL
