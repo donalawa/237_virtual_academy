@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "./PreviewPdfModal.css";
 import * as Yup from 'yup';
 import { ImCancelCircle } from 'react-icons/im';
-import DocViewer from "react-doc-viewer";
+
 
 function JoinClassModal({ onClose, onClassAdded } : any) {
     const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ function JoinClassModal({ onClose, onClassAdded } : any) {
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                     <div className='modal-content'>
-                <DocViewer documents={docs} />;
+
                 </div>
             </div>
             <div className="modal-shadow" onClick={onClose}>
