@@ -42,3 +42,4 @@ export { default as SchoolStatisticsPage } from './school/statistics/index';
 export { default as SchoolPayFeesPage } from  './school/school-fees/index';
 export { default as SchoolFeesPaymentsPage } from  './school/fees-payments/index';
 export { default as SchoolStudentResultsPage } from  './school/student-results/index';
+export { default as SchoolResultTypesPage } from  './school/results-type/index';

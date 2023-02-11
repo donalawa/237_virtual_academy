@@ -81,6 +81,21 @@ const schoolGetAcademicYears = () => {
 }
 
 
+const schoolCreateResultType = (data: any) => {
+    return  api.post('/school/result-type', data);
+}
+
+
+const schoolGetResultsTypes = () => {
+    return  api.get('/school/result-types');
+}
+
+
+const schoolDeleteResultsTypes = (id: any) => {
+    return  api.delete(`/school/result-type/${id}`);
+}
+
+
 
 export {
     schoolGetAcceptedStudents,
@@ -97,5 +112,8 @@ export {
     schoolGetReoports,
     schooolGetReceipts,
     schooolAcceptReceipts,
-    schooolRejectReceipts
+    schooolRejectReceipts,
+    schoolCreateResultType,
+    schoolGetResultsTypes,
+    schoolDeleteResultsTypes
 }

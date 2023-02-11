@@ -21,6 +21,7 @@ import { convertDate } from '../../../utils/date';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
 import AcademicYearContext from '../../../contexts/AcademicYearContext';
 import { getSchoolSpecialitis } from '../../../services/specialities';
+import CreateResultType from '../../../components/school/CreateResultsType/CreateResultsType';
 
 const rows: any = [
     {
@@ -77,6 +78,9 @@ function Index() {
     const [schoolSpecialities, setSchoolSpecialites] = useState([]);
 
     const [selectedId, setSelectedId] = useState<any>(null);
+
+    // NEW
+    let [showCreateResultTypeModal, setShowCreateResultTypeModal] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -191,6 +195,15 @@ function Index() {
     }
 
 
+    const handleContentAdded = () => {
+
+    }
+
+    const toggleShowCreateResultTypeModal = () => {
+        setShowCreateResultTypeModal(!showCreateResultTypeModal);
+    }
+
+
 
 
     useEffect(() => {
@@ -301,6 +314,8 @@ function Index() {
             </div>
         </div>
 
+         {showCreateResultTypeModal &&  <CreateResultType onContentAdded={handleContentAdded} onClose={toggleShowCreateResultTypeModal} />}
+           
         {showRejectModal && <DeleteModal color={'#605E5A'} title="Are you sure you  want to reject request ?" onAccept={handleRejected} onCancel={toggleRejectModal} />}
         
         {showSuspendedModal && <DeleteModal color={'#605E5A'} title="Are you sure you  want to suspend student ?" onAccept={handleSuspend} onCancel={toggleSuspendModal} />}

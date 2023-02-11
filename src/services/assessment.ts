@@ -30,7 +30,9 @@ const deleteAssessment = (id: any) => {
 }
 
 const submitAssessmentSolution = (data: any) => {
-    return api.post('/student/assessment', data);
+    let accademicYear = getAcademicYear();
+
+    return api.post(`/student/assessment/${accademicYear}`, data);
 } 
 
 const submitAssessmentScore = (assessmentSolId: any, data: any) => {
@@ -38,11 +40,15 @@ const submitAssessmentScore = (assessmentSolId: any, data: any) => {
 }
 
 const getAllAssessmentSolutions = (assessmentId: any) => {
-    return api.get(`/assessment/solutions/${assessmentId}`);
+    let accademicYear = getAcademicYear();
+
+    return api.get(`/assessment/solutions/${assessmentId}/${accademicYear}`);
 }
 
 const getStudentsAssessmentSolutions = () => {
-    return api.get('/student/assessment/solutions');
+    let accademicYear = getAcademicYear();
+
+    return api.get(`/student/assessment/solutions/${accademicYear}`);
 }
 
 const getTotalAssessments = (classId: any) => {
