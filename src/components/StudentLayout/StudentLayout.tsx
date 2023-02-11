@@ -183,10 +183,10 @@ function StudentLayout({ title, children, pageTitle } : any) {
                         <span>Peers</span>
                     </NavLink>
 
-                    <NavLink className="link" to="/students/todos">
+                    {/* <NavLink className="link" to="/students/todos">
                     <i><BsFillCalendar2CheckFill size={20}/></i>
                         <span>Personal Todos</span>
-                    </NavLink>
+                    </NavLink> */}
 
 
                     <NavLink className="link" to="/students/report">
