@@ -13,6 +13,7 @@ import { TfiAnnouncement } from 'react-icons/tfi';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { GoMortarBoard } from 'react-icons/go';
 import { BsBank2 } from 'react-icons/bs';
+import { GiTimeBomb } from 'react-icons/gi';
 
 import { useTranslation } from 'react-i18next';
 import { getUser } from '../../utils/storage';
@@ -173,6 +174,10 @@ function SchoolLayout({ title, children, pageTitle } : any) {
                         <span>Fees Accounts</span>
                     </NavLink>
 
+                    <NavLink className="link" to="/school/fees-deadlines">
+                    <i><GiTimeBomb size={20}/></i>
+                        <span>Fees Deadlines</span>
+                    </NavLink>
                
                     
     

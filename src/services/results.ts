@@ -8,8 +8,15 @@ const createStudentResults = (studentId: any, data:any) => {
     return api.post(`/school/student-result/${studentId}/${academicYear}`, data);
 }
 
+const getStudentResults = () => {
+    let academicYear = getAcademicYear();
+
+    return api.get(`/student-results/${academicYear}`);
+}
+
 
 
 export {
-    createStudentResults
+    createStudentResults,
+    getStudentResults
 }

@@ -6,7 +6,7 @@ import {SiGoogleclassroom} from 'react-icons/si';
 import { MdContentPaste, MdAssignmentTurnedIn,MdReportProblem, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
 import { SlCalender } from 'react-icons/sl';
 import { BsFillCalendar2CheckFill } from 'react-icons/bs';
-import { FaPeopleArrows } from 'react-icons/fa';
+import { FaPeopleArrows,FaSchool } from 'react-icons/fa';
 import { GiMoneyStack } from 'react-icons/gi';
 import { TfiAnnouncement } from 'react-icons/tfi';
 import { useTranslation } from 'react-i18next';
@@ -154,6 +154,12 @@ function StudentLayout({ title, children, pageTitle } : any) {
                     <i><MdAssessment size={20}/></i>
                         <span>Pass Exams</span>
                     </NavLink>
+
+
+                    <NavLink className="link" to="/students/results">
+                    <i><FaSchool size={20}/></i>
+                        <span>School Results</span>
+                    </NavLink>
                     
                     <NavLink className="link" to="/students/live-session">
                     <i><GoDeviceCameraVideo size={20}/></i>
@@ -165,6 +171,7 @@ function StudentLayout({ title, children, pageTitle } : any) {
                     <i><SlCalender size={20}/></i>
                         <span>Time Table</span>
                     </NavLink>
+
 
                     <NavLink className="link" to="/students/announcements">
                     <i><TfiAnnouncement size={20}/></i>
