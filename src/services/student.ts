@@ -20,9 +20,7 @@ const joinSchool = (data: any) => {
 }
 
 const getStudentApplications = () => {
-    let academicYear = getAcademicYear();
-
-    return api.get(`/student/applications/${academicYear}`);
+    return api.get(`/student/applications`);
 }
 
 const getCourseContent = (id: any) =>  {

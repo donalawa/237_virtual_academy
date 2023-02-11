@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { getClasses, deleteClass } from '../../../services/classroom';
+import { getClasses, deleteClass, getTeachersPendingClassRequest } from '../../../services/classroom';
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
@@ -49,11 +49,7 @@ function Index() {
             name: 'name'
         },
         {
-            label: 'Class Code',
-            name: 'name'
-        },
-        {
-            label: `Speciality`,
+            label: `Speciality\'s`,
             name: 'name'
         },
         {
@@ -83,7 +79,7 @@ function Index() {
     const handleGetClasses = ()  => {
         setLoading(true);
 
-        getClasses().then((res: any) => {
+        getTeachersPendingClassRequest().then((res: any) => {
             console.log('RESPONSE GET: ', res);
             if(res.ok) {
                 setClasses(res.data.data.reverse());
@@ -128,7 +124,7 @@ function Index() {
 
     useEffect(() => {
         handleGetClasses();
-    },[activeAcademyYear]);
+    },[]);
 
     return (
         <Layout title={t('classroom.data_table.layout_title')}>
@@ -137,7 +133,7 @@ function Index() {
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>{t('classroom.data_table.title')} {classes.length} {t('classroom.data_table.title2')}</h1>
+                                        <h1>Pending {classes.length} Class Request </h1>
                                     </div>
                                     {/* <form className="search">
                                         <input type="search" name="" id="" placeholder="Find ..." />
@@ -168,10 +164,9 @@ function Index() {
                                                     <p>{data.name}</p>
                                                 </td>
                                        
-                                
-                                                <td className="flex-start">{data._id}</td>
+                        
 
-                                               {data.specialities.length > 0 && <td className="flex-start">{data.specialities.map((sp:any ) => sp.name )}</td>}
+                                               {data.specialities.length > 0 && <td className="flex-start">{data.specialities.map((sp:any ) => `${sp.name}, ` )}</td>}
                                                {data.specialities.length <= 0 && <td className="flex-start">Private</td>}
 
                                                <td className="flex-start">{data?.school_id?.username ? data?.school_id?.username : "Private"}</td>

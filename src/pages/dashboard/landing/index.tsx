@@ -1,7 +1,7 @@
 import React,{ useContext, useEffect, useState } from 'react';
 import Layout from '../../../components/Layout/Layout';
 
-import { getClasses } from '../../../services/classroom';
+import { getClasses, getTeachersSchools } from '../../../services/classroom';
 import { getCourseContents } from '../../../services/courseContent';
 import { getAllApplications, acceptApplication, rejectApplication } from '../../../services/applications';
 
@@ -28,6 +28,7 @@ const override = {
 
 function Index() {
     const [classes, setClasses] = useState([]);
+    const [schools, setSchools] = useState([]);
     const [courseContents, setCourseContents] = useState([]);
     const [studentsApplicatins, setStudentsApplications] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -49,15 +50,11 @@ function Index() {
             name: 'name'
         },
         {
-            label: (`${t('landing.data_table.status')}`),
+            label: "Scchool Email",
             name: 'name'
         },
         {
-            label: (`${t('landing.data_table.submitted_date')}`),
-            name: 'name'
-        },
-        {
-            label: 'Action',
+            label: "Role",
             name: 'name'
         },
     ]
@@ -67,6 +64,15 @@ function Index() {
         getClasses().then((res: any) => {
             if(res.ok) {
                 setClasses(res?.data?.data)
+            }
+        })
+    }
+
+    const handleGetTeacherSchools = () => {
+        getTeachersSchools().then((res: any) => {
+            if(res.ok) {
+                console.log('RESPONSE: ', res);
+                setSchools(res?.data?.data);
             }
         })
     }
@@ -151,6 +157,7 @@ function Index() {
         handleGetClasses();
         handleGetCourseContents();
         handleGetStudentsApplications();
+        handleGetTeacherSchools();
     }, [activeAcademyYear])
 
     return (
@@ -166,8 +173,8 @@ function Index() {
                         <div className="stat-value">{courseContents.length}</div>
                     </a>
                     <a className="stat-card">
-                        <div className="stat-name">{t('landing.cards.stat_card_application')}</div>
-                        <div className="stat-value">{studentsApplicatins?.length}</div>
+                        <div className="stat-name">Total Schools</div>
+                        <div className="stat-value">{schools?.length}</div>
                     </a>
                     <a className="stat-card">
                         <div className="stat-name">{t('landing.cards.stat_card_assessments')}</div>
@@ -202,30 +209,18 @@ function Index() {
                                         </thead>
                                  
                                         <tbody>
-                                          {studentsApplicatins.map((data: any, index: any) => <tr>
+                                          {schools.map((data: any, index: any) => <tr>
                                                 <td className="flex-center">{index + 1}</td>
                                                 <td className="flex-start">
-                                                    <p>{data?.student_id?.username}</p>
+                                                    <p>{data?.username}</p>
                                                 </td>
-                                       
-                                
-                                                <td className="flex-start">{data?.class_id?.name}</td>
-
-                                                <td className="flex-start">{data?.status}</td>
-                                                
+                                      
                                                 <td className="flex-start">
-                                                    <p>{moment(new Date(data?.createdAt)).format('MMMM d, YYYY')}</p>
+                                                    <p>{data?.email}</p>
                                                 </td>
 
-                                                <td className="flex-center">
-                                                    {/* <div className="action">
-                                                        <Tippy content="Accept"  animation="fade">
-                                                        <a className="see"><BsCheck2Square onClick={() => handleSetSelectedId(data._id, 'accepted')} size={14}/></a>
-                                                        </Tippy>
-                                                        <Tippy content="Reject"  animation="fade">
-                                                            <a onClick={() => handleSetSelectedId(data._id, 'rejected')} className="delete"><RxCross2 size={14} /></a>
-                                                        </Tippy>
-                                                    </div> */}
+                                                <td className="flex-start">
+                                                    <p>Teacher</p>
                                                 </td>
                                             </tr> )}
                                         </tbody>

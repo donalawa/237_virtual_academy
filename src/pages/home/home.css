@@ -2,9 +2,16 @@
   margin: 0 auto;
   
 }
+
+
 section {
   padding: 3em 0;
   
+}
+
+.home-speciality-title p span{
+  color: var(--primary-color);
+  font-weight: 600;
 }
 @media only screen and (max-width: 767px) {
   .con {

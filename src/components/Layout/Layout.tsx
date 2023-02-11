@@ -171,14 +171,7 @@ function Layout({ title, children, pageTitle = '' } : any) {
                     
                     
                 </div>
-                <div className="sub-menu">
-                    <div className="title">LABELS</div>
-                    <a className="link label" href="">
-                        <i className="fa fa-file" aria-hidden="true"></i>
-                        {/* <img src="./assets/images/icons/label.svg" alt=""> */}
-                        <span>Admin</span>
-                    </a>
-                </div>
+               
             </div>
         </div>
         <div className={`main ${!showNav ? 'expand' : ''}`}>

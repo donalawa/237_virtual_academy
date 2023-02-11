@@ -11,6 +11,17 @@ const getClasses = () => {
     return api.get(`/classes/${academicYear}`);
 }
 
+const getTeachersPendingClassRequest = () => {
+    return api.get('/teacher/classes/request');
+}
+
+
+const getTeachersSchools = () => {
+    let academicYear  = getAcademicYear();
+
+    return api.get(`/teacher/schools/${academicYear}`);
+}
+
 const getTeachersClassReq = () => {
     let academicYear = getAcademicYear();
     return api.get(`/school/class-request/${academicYear}`);
@@ -25,6 +36,8 @@ export {
     createClass,
     getClasses,
     deleteClass,
-    getTeachersClassReq
+    getTeachersClassReq,
+    getTeachersPendingClassRequest,
+    getTeachersSchools
 }
 

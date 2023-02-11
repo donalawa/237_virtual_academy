@@ -240,7 +240,7 @@ function Index() {
           <h1 className="home-school-sec-title">Select School To Get Code And Specialities</h1>
           <br />
           <div className="home-speciality-title">
-              <p>School Code: {selectedSchoolCode}</p>
+              <p>School Code: <span>{selectedSchoolCode}</span></p>
           </div>
         <div className="data-table">
                     <div className="top">

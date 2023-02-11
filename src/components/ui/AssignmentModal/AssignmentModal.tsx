@@ -228,7 +228,7 @@ function AssignmentModal({ onClose, onContentAdded } : any) {
     
     return (
         <div>
-            <div  className='modal-container add-assignment-modal'>
+            <div  className='modal-container teacher-add-assignment-modal'>
                 <div className='modal-head'>
                     <p className="modal-title">Create Assignment</p>
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>

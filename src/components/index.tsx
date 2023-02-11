@@ -24,3 +24,4 @@ export {default as UploadTimeTableModal } from './school/UploadTimeTableModal/Up
 export { default as MakeAnnouncementModal } from './school/MakeAnnouncementModal/MakeAnnouncementModal';
 export { default as CreateAcademicYearModal } from  './school/CreateAcademicYearModal/CreateAcademicYearModal';
 export { default as CreateResultTypeModal } from  './school/CreateResultsType/CreateResultsType';
+export { default as UploadResultsModal } from  './school/UploadResultsModal/UploadResultsModal';
