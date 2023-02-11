@@ -18,6 +18,7 @@ export  { default as PreviewPdfModal } from  './ui/PreviewPdfModal/PreviewPdfMod
 
 // STUDENT
 export { default as StudensReportmodal } from './students/ReportModal/ReportModal';
+export { default as PeersCard } from './students/PeersCard/PeersCard';
 // SCHOOL
 export {default as CreateSpecialityModal } from './school/CreateSpecialityModal/CreateSpecialityModal';
 export {default as UploadTimeTableModal } from './school/UploadTimeTableModal/UploadTimeTableModal';

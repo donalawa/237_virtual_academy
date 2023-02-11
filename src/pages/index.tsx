@@ -29,7 +29,7 @@ export { default as StudentsReportsPage } from './students/reports/index';
 export { default as StudentsFeesPaymentPage } from './students/fees-payment/index';
 export { default as StudentSchooolBanksPage } from './students/school-banks/index';
 export { default as StudentSchooolResultsPage } from './students/school-results/index';
-
+export { default as StudentPeersPage } from './students/peers/index';
 
 // SCHOOL
 export { default as SchoolHomePage } from './school/home/index';

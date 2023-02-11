@@ -42,7 +42,8 @@ import {
   StudentSchooolBanksPage,
   SchoolStudentResultsPage,
   SchoolResultTypesPage,
-  StudentSchooolResultsPage
+  StudentSchooolResultsPage,
+  StudentPeersPage
 } from './pages';
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -130,6 +131,7 @@ function App() {
             <Route  path="/students/assignment-submissions" element={(<Protected> <StudentAssignmentSubmissionPage /> </Protected>)} />
             <Route  path="/students/school-banks" element={(<Protected> <StudentSchooolBanksPage /> </Protected>)} />
             <Route  path="/students/results" element={(<Protected> <StudentSchooolResultsPage /> </Protected>)} />
+            <Route  path="/students/peers" element={(<Protected> <StudentPeersPage /> </Protected>)} />
 
 
             <Route  path="/school/home" element={(<Protected> <SchoolHomePage /> </Protected>)} />

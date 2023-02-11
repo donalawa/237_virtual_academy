@@ -76,7 +76,7 @@ function Index() {
 
         getStudentResults().then((res: any) => {
             if(res.ok) {
-                console.log('RESULTS:', res)
+                // console.log('RESULTS:', res)
                 setAnnouncements(res.data.data);
             }
             setLoading(false);

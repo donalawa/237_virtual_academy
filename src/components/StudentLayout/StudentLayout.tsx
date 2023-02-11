@@ -178,9 +178,9 @@ function StudentLayout({ title, children, pageTitle } : any) {
                         <span>Anouncements</span>
                     </NavLink>
                     
-                    <NavLink className="link" to="/students/peers-group">
+                    <NavLink className="link" to="/students/peers">
                     <i><FaPeopleArrows size={20}/></i>
-                        <span>Peers Groups</span>
+                        <span>Peers</span>
                     </NavLink>
 
                     <NavLink className="link" to="/students/todos">
