@@ -26,3 +26,4 @@ export { default as MakeAnnouncementModal } from './school/MakeAnnouncementModal
 export { default as CreateAcademicYearModal } from  './school/CreateAcademicYearModal/CreateAcademicYearModal';
 export { default as CreateResultTypeModal } from  './school/CreateResultsType/CreateResultsType';
 export { default as UploadResultsModal } from  './school/UploadResultsModal/UploadResultsModal';
+export { default as CreateFeesDeadlineModal } from './school/CreateFeesDeadlineModal/CreateFeesDeadlineModal';

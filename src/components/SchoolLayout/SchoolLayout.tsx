@@ -105,7 +105,7 @@ function SchoolLayout({ title, children, pageTitle } : any) {
     },[])
 
     return (
-        <div className="dashboard-grid">
+        <div className="dashboard-grid school-dashboard">
         <div className={`sidebar-student student school-dashboard-sidebar  ${!showStudNav ? 'show' : ''}`}>
             <div className="logo" style={{cursor: 'pointer'}}>
                 <a onClick={() => navigate('/')}><img src={require('../../assets/images/logo/logo-light.png')} alt=" " /></a>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import './StudentLayout.css';
 import { getAcademicYear, removeToken, storeAcademicYear } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
-import {SiGoogleclassroom} from 'react-icons/si';
+import {GiTimeBomb} from 'react-icons/gi';
 import { MdContentPaste, MdAssignmentTurnedIn,MdReportProblem, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
 import { SlCalender } from 'react-icons/sl';
 import { BsFillCalendar2CheckFill } from 'react-icons/bs';
@@ -192,6 +192,11 @@ function StudentLayout({ title, children, pageTitle } : any) {
                     <NavLink className="link" to="/students/report">
                     <i><MdReportProblem size={20}/></i>
                         <span>Submit Report</span>
+                    </NavLink>
+
+                    <NavLink className="link" to="/students/fees-deadlines">
+                    <i><GiTimeBomb size={20}/></i>
+                        <span>Fees Deadlines</span>
                     </NavLink>
 
                     <NavLink className="link" to="/students/fees-payment">

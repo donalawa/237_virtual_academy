@@ -43,7 +43,9 @@ import {
   SchoolStudentResultsPage,
   SchoolResultTypesPage,
   StudentSchooolResultsPage,
-  StudentPeersPage
+  StudentPeersPage,
+  SchoolFeesDeadlinePage,
+  StudentFeesdeadlinePage
 } from './pages';
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -132,6 +134,7 @@ function App() {
             <Route  path="/students/school-banks" element={(<Protected> <StudentSchooolBanksPage /> </Protected>)} />
             <Route  path="/students/results" element={(<Protected> <StudentSchooolResultsPage /> </Protected>)} />
             <Route  path="/students/peers" element={(<Protected> <StudentPeersPage /> </Protected>)} />
+            <Route  path="/students/fees-deadlines" element={(<Protected> <StudentFeesdeadlinePage /> </Protected>)} />
 
 
             <Route  path="/school/home" element={(<Protected> <SchoolHomePage /> </Protected>)} />
@@ -147,6 +150,7 @@ function App() {
             <Route  path="/school/fees-payments" element={(<Protected> <SchoolFeesPaymentsPage /> </Protected>)} />
             <Route  path="/school/students-results" element={(<Protected> <SchoolStudentResultsPage /> </Protected>)} />
             <Route  path="/school/result-types" element={(<Protected> <SchoolResultTypesPage /> </Protected>)} />
+            <Route  path="/school/fees-deadlines" element={(<Protected> <SchoolFeesDeadlinePage /> </Protected>)} />
 
         </Routes>
       </BrowserRouter>

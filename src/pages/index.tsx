@@ -30,6 +30,7 @@ export { default as StudentsFeesPaymentPage } from './students/fees-payment/inde
 export { default as StudentSchooolBanksPage } from './students/school-banks/index';
 export { default as StudentSchooolResultsPage } from './students/school-results/index';
 export { default as StudentPeersPage } from './students/peers/index';
+export { default as StudentFeesdeadlinePage } from './students/fees-deadlines/index';
 
 // SCHOOL
 export { default as SchoolHomePage } from './school/home/index';
@@ -45,3 +46,4 @@ export { default as SchoolPayFeesPage } from  './school/school-fees/index';
 export { default as SchoolFeesPaymentsPage } from  './school/fees-payments/index';
 export { default as SchoolStudentResultsPage } from  './school/student-results/index';
 export { default as SchoolResultTypesPage } from  './school/results-type/index';
+export { default as SchoolFeesDeadlinePage } from  './school/fees-deadlines/index';

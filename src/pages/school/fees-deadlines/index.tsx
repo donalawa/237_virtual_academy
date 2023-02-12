@@ -1,32 +1,24 @@
 import React, { useState, useEffect, useContext }  from 'react';
-import './school-fees.css';
+import './fees-deadlines.css';
 
 import StudentLayout from '../../../components/StudentLayout/StudentLayout';
-
-import {  BsPencilSquare } from 'react-icons/bs';
-
-import { IoMdCloudDownload } from 'react-icons/io';
-import { AiFillEye } from 'react-icons/ai';
 
 import { toast } from 'react-toastify';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-import { deletePassExamContent } from '../../../services/passExams';
-import { getStudentSolutions, getStudentsClasses } from '../../../services/student';
+import { MdDangerous } from 'react-icons/md';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
 import moment from 'moment';
-import { DeleteModal, VideoPlayerModal } from '../../../components';
+import { CreateFeesDeadlineModal, DeleteModal, VideoPlayerModal } from '../../../components';
 import { convertDate } from '../../../utils/date';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
-import CreateBankInfoModal from '../../../components/school/CreateBankInfoModal/CreateBankInfoModal';
-import { schoolDeleteBankInfo, schoolGetBankInfos } from '../../../services/bankInfo';
 import { FaTrash } from 'react-icons/fa';
 import AcademicYearContext from '../../../contexts/AcademicYearContext';
-import { schoolDeleteDeadline } from '../../../services/instalments';
+import { schoolDeleteDeadline, schoolGetDeadlines } from '../../../services/instalments';
 
 const rows: any = [
     {
@@ -34,11 +26,15 @@ const rows: any = [
         name: 'num'
     },
     {
-        label: 'Bank Name',
+        label: 'Title',
         name: 'name'
     },
     {
-        label: 'Account Number',
+        label: 'Deadline Date',
+        name: 'name'
+    },
+    {
+        label: 'Must Have Paid',
         name: 'name'
     },
     {
@@ -60,32 +56,25 @@ const override = {
 
 function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false); 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
-    const [bankInfos, setBankInfos] = useState([]);
-    const [showVideoModal, setShowVideoModal] = useState(false);
+    const [deadlines, setDeadlines] = useState([]);
     const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
-
-    const [editData, setEditData] = useState(null);
-
-    const [videoUrl, setVideoUrl] = useState('');
-
+    
     const [loading, setLoading] = useState(false);
 
     const toggleAddModal = () => {
         setShoowAddModal(!showAddModal);
     }
 
-    const handleDeleteBankinfo = () => {
-        // HANDLE DELETING
-        schoolDeleteBankInfo(deleteId).then((res: any) => {
+    const handleDeleteDeadline  = () => {
+        schoolDeleteDeadline(deleteId).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
-                handleGetbankinfos();
+                handleGetFeesDeadlines();
             }
 
             toggleDeleteModal();
@@ -98,25 +87,24 @@ function Index() {
         })
     }
 
-    const toggleDeleteModal = () =>  {
-        setShowDeleteModal(!showDeleteModal);
-    }  
 
     const handleContentAdded = ()  => {
+        handleGetFeesDeadlines();
         toggleAddModal();
-        handleGetbankinfos();
+    }
+
+    const toggleDeleteModal = () => {
+        setShowDeleteModal(!showDeleteModal)
     }
 
 
-
-
-    const handleGetbankinfos = () => {
-        setBankInfos([]);
+    const handleGetFeesDeadlines = () => {
+        setDeadlines([]);
         setLoading(true);
-        schoolGetBankInfos().then((res: any) => {
-            console.log("STUDENT bankInfos RES: ",res);
+        schoolGetDeadlines().then((res: any) => {
+            console.log("STUDENT deadlines RES: ",res);
             setLoading(false);
-            setBankInfos(res.data.data);
+            setDeadlines(res.data.data);
         }).catch((err: any) => {
             console.log('Error: ', err);
             setLoading(false);
@@ -126,20 +114,20 @@ function Index() {
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
-        handleGetbankinfos();
+        handleGetFeesDeadlines();
     },[]);
 
     return (
-        <SchoolLayout title="School Fees" pageTitle="Fees">
+        <SchoolLayout title="Fees Deadline Dates" pageTitle="Deadline">
       <div className="section">
             <div className="parent-con">
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                       
+                        <button onClick={toggleAddModal} className="btn btn-danger btn-add school-button-delete"> Suspend Students Owing<i><MdDangerous size={25}/></i></button>
                         </div>
                 
-                        <button onClick={toggleAddModal} className="btn btn-primary btn-add school-button"> Add Bank Info <i className="fas fa-plus"></i></button>
+                        <button onClick={toggleAddModal} className="btn btn-primary btn-add school-button"> Add Deadline <i className="fas fa-plus"></i></button>
                     </div>
                     <div className="table-con">
                     <div style={{textAlign: 'center',}}>
@@ -158,13 +146,17 @@ function Index() {
                             </thead>
                         
                             <tbody>
-                                {bankInfos?.map((data: any, index: any) => <tr>
+                                {deadlines?.map((data: any, index: any) => <tr>
                                     <td className="flex-center">{index + 1}</td>
                                     <td className="flex-start">
-                                        <p>{data?.name}</p>
+                                        <p>{data?.title}</p>
                                     </td>
                                     <td className="flex-start">
-                                      {data?.account_number}
+                                      {data?.date}
+                                    </td>
+
+                                    <td>
+                                      {data?.amount_percent}%
                                     </td>
                       
                                     <td className="flex-start">
@@ -173,34 +165,15 @@ function Index() {
 
                                     <td className="flex-center">
                                         <div className="action">
-                                            <Tippy content="Edit Account"  animation="fade">
-                                            <a onClick={() => {
-                                                // handleSetVideoUrl(data.answers_file)
-                                            }} className="see"><BsPencilSquare onClick={() => null} size={14}/></a>
-                                            </Tippy>
                                             <Tippy content="Delete Info"  animation="fade">
                                             <a onClick={() => {
-                                                setDeleteId(data?._id);
+                                                setDeleteId(data._id)
                                                 toggleDeleteModal();
                                             }} className="delete"><FaTrash onClick={() => null} size={14}/></a>
                                             </Tippy>
                                         </div>
                                     </td>
-                                    {/* <td className="flex-center">
-                                        <div className="action">
-                                       {data?.answers_file.length > 2 && <>{data?.answers_file_type == 'video' && <Tippy content="View Video Solution"  animation="fade">
-                                            <a onClick={() => {
-                                                handleSetVideoUrl(data.answers_file)
-                                            }} className="see"><AiFillEye onClick={() => null} size={14}/></a>
-                                            </Tippy>}
-                                          {data?.answers_file_type == 'others' &&  <Tippy content="Download Solution File"  animation="fade">
-                                            <a target="_blank" download href={data.answers_file} className="see"><IoMdCloudDownload onClick={() => null} size={14}/></a>
-                                            </Tippy>}</>}
-                                            {data?.assessment_file?.length > 2 &&  <Tippy content="Download Assessment File"  animation="fade">
-                                            <a href={data?.assessment_file} target="_blank" download className="see orange"><IoMdCloudDownload onClick={() => null} size={14}/></a>
-                                            </Tippy>}
-                                        </div>
-                                    </td> */}
+                           
                                 </tr> )}
                             </tbody>
                         </table>
@@ -209,9 +182,8 @@ function Index() {
                 </div>
             </div>
         </div>
-
-        {showAddModal &&  <CreateBankInfoModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
-        {showDeleteModal && <DeleteModal onAccept={handleDeleteBankinfo} onCancel={toggleDeleteModal} />}
+        {showDeleteModal && <DeleteModal onAccept={handleDeleteDeadline} onCancel={toggleDeleteModal} />}
+        {showAddModal &&  <CreateFeesDeadlineModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         </SchoolLayout>
     );
 }
