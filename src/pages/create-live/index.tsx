@@ -201,6 +201,7 @@ function Index() {
                                 </div>
 
                             </div>
+                        
                         </div>
                     </div>
                 {showCreateSessionModal && <CreateSessionModal onSessionCreated={handleSessionCreated} onClose={toggleCreateSessionModal}/>}
