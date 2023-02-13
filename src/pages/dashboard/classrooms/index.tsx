@@ -133,7 +133,7 @@ function Index() {
                             <div className="data-table">
                                 <div className="top">
                                     <div className="span">
-                                        <h1>Pending {classes.length} Class Request </h1>
+                                        <h1>Classes </h1>
                                     </div>
                                     {/* <form className="search">
                                         <input type="search" name="" id="" placeholder="Find ..." />

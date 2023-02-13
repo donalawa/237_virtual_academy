@@ -22,6 +22,7 @@ const initialValues= {
 function Index() {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
+    const [loading, setIsLoading] = useState(false);
 
     const [error, setError] = useState<any>(null);
     const validationSchema = Yup.object().shape({
@@ -30,8 +31,9 @@ function Index() {
     })
 
     const handleLogin = (values: any) => {
+        setIsLoading(true);
+        setError(null);
         loginUser(values).then((res: any) => {
-            setError(null);
             if(res.ok) {
                 console.log(res);
                 storeToken(res.data.accessToken);
@@ -48,9 +50,11 @@ function Index() {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
+                setIsLoading(false);
                 
             }else {
-                console.log(res);
+                // console.log(res);
+                setIsLoading(false);
                 toast.error(`${t('login_error_text')}`, {
                     pauseOnHover: false,
                     closeOnClick: true,
@@ -58,6 +62,7 @@ function Index() {
                 setError(`${t('login_error_text')}`);
             }
         }).catch(err => {
+            setIsLoading(false);
             console.log(err);
         })
     }
@@ -82,7 +87,7 @@ function Index() {
 
                         <FormField  name="password" type="password" placeholder={t('password_label')}/>
 
-                        <Button title={t('login_text')}/>
+                      {!loading && <Button title={t('login_text')}/>}
                         </Form>
                 </form>
                 <p className="u-padding-bottom-small label-link">

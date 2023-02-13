@@ -18,7 +18,8 @@ import { convertDate } from '../../../utils/date';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
 import { FaTrash } from 'react-icons/fa';
 import AcademicYearContext from '../../../contexts/AcademicYearContext';
-import { schoolDeleteDeadline, schoolGetDeadlines } from '../../../services/instalments';
+import { feesSuspendStudents, schoolDeleteDeadline, schoolGetDeadlines } from '../../../services/instalments';
+import { schoolSuspendStudent } from '../../../services/student';
 
 const rows: any = [
     {
@@ -57,7 +58,9 @@ const override = {
 function Index() {
     const [ showAddModal, setShoowAddModal ] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
+    const [showSuspendModal, setShowSuspendeModal] = useState(false);
+
+    const [selectedId, setSelectedId] = useState(null);
     const [deadlines, setDeadlines] = useState([]);
     const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
     
@@ -68,7 +71,7 @@ function Index() {
     }
 
     const handleDeleteDeadline  = () => {
-        schoolDeleteDeadline(deleteId).then((res: any) => {
+        schoolDeleteDeadline(selectedId).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
@@ -87,6 +90,29 @@ function Index() {
         })
     }
 
+    const handleSuspendStudents  = () => {
+        // alert(selectedId);
+        // return;
+        feesSuspendStudents(selectedId).then((res: any) => {
+            if(res.ok) {
+                toast.success(res.data.message, {
+                    pauseOnHover: false,
+                    closeOnClick: true,
+                })
+            }
+
+            toggleSuspendModal();
+        }).catch((error: any)=> {
+            toggleSuspendModal();
+            toast.error("ERROR", {
+                pauseOnHover: false,
+                closeOnClick: true,
+            })
+        })
+    }
+
+
+
 
     const handleContentAdded = ()  => {
         handleGetFeesDeadlines();
@@ -96,6 +122,11 @@ function Index() {
     const toggleDeleteModal = () => {
         setShowDeleteModal(!showDeleteModal)
     }
+
+    const toggleSuspendModal = () => {
+        setShowSuspendeModal(!showSuspendModal)
+    }
+
 
 
     const handleGetFeesDeadlines = () => {
@@ -124,7 +155,7 @@ function Index() {
                 <div className="data-table">
                     <div className="top">
                         <div className="span">
-                        <button onClick={toggleAddModal} className="btn btn-danger btn-add school-button-delete"> Suspend Students Owing<i><MdDangerous size={25}/></i></button>
+                        {/* <button onClick={toggleAddModal} className="btn btn-danger btn-add school-button-delete"> Suspend Students Owing<i><MdDangerous size={25}/></i></button> */}
                         </div>
                 
                         <button onClick={toggleAddModal} className="btn btn-primary btn-add school-button"> Add Deadline <i className="fas fa-plus"></i></button>
@@ -165,12 +196,20 @@ function Index() {
 
                                     <td className="flex-center">
                                         <div className="action">
+                                        <Tippy content="Suspend Students"  animation="fade">
+                                            <a onClick={() => {
+                                                setSelectedId(data._id)
+                                                toggleSuspendModal();
+                                            }} className="delete"><MdDangerous onClick={() => null} size={14}/></a>
+                                            </Tippy>
+
                                             <Tippy content="Delete Info"  animation="fade">
                                             <a onClick={() => {
-                                                setDeleteId(data._id)
+                                                setSelectedId(data._id)
                                                 toggleDeleteModal();
                                             }} className="delete"><FaTrash onClick={() => null} size={14}/></a>
                                             </Tippy>
+                                          
                                         </div>
                                     </td>
                            
@@ -183,6 +222,7 @@ function Index() {
             </div>
         </div>
         {showDeleteModal && <DeleteModal onAccept={handleDeleteDeadline} onCancel={toggleDeleteModal} />}
+        {showSuspendModal && <DeleteModal onAccept={handleSuspendStudents} title="Suspend all students owing fees for this deadline ?" onCancel={toggleSuspendModal} />}
         {showAddModal &&  <CreateFeesDeadlineModal onContentAdded={handleContentAdded} onClose={toggleAddModal} />}
         </SchoolLayout>
     );

@@ -51,8 +51,9 @@ function Index() {
         joinSession(data).then((res: any) => {
             if(res.ok) {
                 // REDIRECT TO JOIN MEETING
+                // https://237-virtual-academy.vercel.app/
                 console.log('GOOD TO JOIN')
-                window.open(`https://237-virtual-academy.vercel.app/${meetingCode}`, '_blank');
+                window.open(`https://237-virtual-academy.vercel.app/live-session/${meetingCode}`, '_blank');
 
             }else {
                 setError(res.data.message)
@@ -62,7 +63,6 @@ function Index() {
         })
         console.log(meetingCode);
     }
-    
 
     const rows: any = [
         {

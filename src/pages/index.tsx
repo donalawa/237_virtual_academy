@@ -31,6 +31,7 @@ export { default as StudentSchooolBanksPage } from './students/school-banks/inde
 export { default as StudentSchooolResultsPage } from './students/school-results/index';
 export { default as StudentPeersPage } from './students/peers/index';
 export { default as StudentFeesdeadlinePage } from './students/fees-deadlines/index';
+export { default as StudentChatRoomPage } from './students/chat-room/index';
 
 // SCHOOL
 export { default as SchoolHomePage } from './school/home/index';

@@ -103,6 +103,7 @@ function Index() {
     }  
 
     const handleContentAdded = ()  => {
+        handleGetAnnouncement();
         toggleAddModal();
     }
 

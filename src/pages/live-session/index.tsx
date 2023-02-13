@@ -25,9 +25,6 @@ function Index() {
         });
     }
 
-    // useEffect(() => {
-    //     alert('WELCOME TO MY  SPACE')
-    // },[])
 
     return (
         <div className="myCallContainer"

@@ -19,10 +19,17 @@ const schoolDeleteDeadline= (id: any) => {
     return api.delete(`/school/dead-line/${id}`);
 }
 
+const feesSuspendStudents = (id: any) => {
+    let academicYear = getAcademicYear();
+
+    return api.post(`/school/suspend/${id}/${academicYear}`);
+}
+
 
 export {
     schoolCreateDeadline,
     schoolGetDeadlines,
     studentGetDeadlines,
-    schoolDeleteDeadline
+    schoolDeleteDeadline,
+    feesSuspendStudents
 }

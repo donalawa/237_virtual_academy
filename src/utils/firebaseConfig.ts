@@ -2,12 +2,12 @@
 import { initializeApp, getApp, getApps } from 'firebase/app'
 
 const firebaseConfig =  {
-    apiKey: "AIzaSyAOWCmZEp5yMQX9-7kQ-ux_5k26sD_2JAY",
-    authDomain: "virtual-academy-f4599.firebaseapp.com",
-    projectId: "virtual-academy-f4599",
-    storageBucket: "virtual-academy-f4599.appspot.com",
-    messagingSenderId: "920383507637",
-    appId: "1:920383507637:web:0a13e402b282e495ca02fc"
+  apiKey: "AIzaSyDzFs0-elh3y4cYmfY-DezuXRcGd-AToeY",
+  authDomain: "virtual-academy-c9a77.firebaseapp.com",
+  projectId: "virtual-academy-c9a77",
+  storageBucket: "virtual-academy-c9a77.appspot.com",
+  messagingSenderId: "717045795694",
+  appId: "1:717045795694:web:38b92252ebf6730624cf7f"
   };
 
 

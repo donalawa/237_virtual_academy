@@ -1,7 +1,10 @@
 import React from 'react';
-import './PeersCard.css'
+import './PeersCard.css';
+import { useNavigate } from 'react-router-dom';
 
 function PeersCard() {
+    const navigate = useNavigate();
+
     return (
         <div className="peers-card">
         <div className="card-image">
@@ -12,7 +15,7 @@ function PeersCard() {
                 <p className="label-text">Name: </p>
                 <p className="value-text">John Doe</p>
             </div>
-            <button className="message-peer-button">Message</button>
+            <button onClick={() => navigate(`/students/chat-room/323vvwev233dev3`)} className="message-peer-button">Message</button>
         </div>
     </div>
     );

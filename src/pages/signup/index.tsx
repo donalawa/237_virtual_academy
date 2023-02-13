@@ -41,8 +41,10 @@ const Index = () => {
 
     const handleRegister = (values : any) => {
         console.log('VALUES: ', values);
+        setIsLoading(true);
         setError(null)
         if(values.password != values.confirm_password) {
+            setIsLoading(false);
             toast.error(`${t('password_match_error')}`, {
                 pauseOnHover: false,
                 closeOnClick: true,
@@ -52,6 +54,7 @@ const Index = () => {
         }
 
         if(accountType == 'none') {
+            setIsLoading(false);
             setError('Please Select Account Type')
             toast.error(`Please Select Account Type'`, {
                 pauseOnHover: false,
@@ -75,7 +78,7 @@ const Index = () => {
             // console.log('REGISTERED USER');
             // console.log(res);
          
-            setIsLoading(true);
+          
             if(res.ok) {
                 toast.success(`${t('registered_successfully')}`, {
                     pauseOnHover: false,
