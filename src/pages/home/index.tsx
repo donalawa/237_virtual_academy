@@ -10,6 +10,7 @@ import { MdContentCopy } from 'react-icons/md';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { toast } from 'react-toastify';
 
 
 import { useTranslation } from 'react-i18next';
@@ -79,6 +80,15 @@ function Index() {
         setLang(lng);
       }
     }
+
+    const copyToClipBoard = (data: any) => {
+      navigator.clipboard.writeText(`${data}`);
+                                                          
+      toast.success("Copied To Clipboard", {
+          pauseOnHover: false,
+          closeOnClick: true,
+      })
+  }
 
     const handleSelectedSchool = (_id: any) => {
      
@@ -240,7 +250,9 @@ function Index() {
           <h1 className="home-school-sec-title">Select School To Get Code And Specialities</h1>
           <br />
           <div className="home-speciality-title">
-              <p>School Code: <span>{selectedSchoolCode}</span></p>
+              <p>School Code: <span>{selectedSchoolCode} {selectedSchoolCode != 'none' && <Tippy content="Copy Code"  animation="fade">
+                                            <a className="see" onClick={() => copyToClipBoard(selectedSchoolCode)}><MdContentCopy size={20}/></a>
+                                            </Tippy>}</span></p>
           </div>
         <div className="data-table">
                     <div className="top">
@@ -290,9 +302,7 @@ function Index() {
                                         <div className="action">
 
                                         <Tippy content="Copy Code"  animation="fade">
-                                            <a className="see" onClick={() => {
-                                                
-                                            }}><MdContentCopy size={14}/></a>
+                                            <a className="see" onClick={() => copyToClipBoard(data?.code)}><MdContentCopy size={14}/></a>
                                             </Tippy>
 {/*                                         
                                        {data.status != 'accepted' &&    <Tippy content="Activate"  animation="fade">

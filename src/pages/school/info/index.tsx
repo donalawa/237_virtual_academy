@@ -7,6 +7,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { BsInfoCircle } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -25,6 +26,14 @@ function Index() {
     const [loading, setLoading] = useState(false);
     const [schoolInfo, setSchoolInfo] = useState<any>(null)
     
+    const copyToClipBoard = (data: any) => {
+        navigator.clipboard.writeText(`${data}`);
+                                                            
+        toast.success("Copied To Clipboard", {
+            pauseOnHover: false,
+            closeOnClick: true,
+        })
+    }
     useEffect(() => {
         let data = getUser();
         setSchoolInfo(data);
@@ -65,7 +74,7 @@ function Index() {
                                         <p className="item-key">School Code: </p>
                                         <p className="item-text">{schoolInfo?.school_code}</p>
                                         <Tippy content="Copy Code" animation="fade">
-                                            <a><MdContentCopy cursor="pointer"/></a>
+                                            <a onClick={() => copyToClipBoard(schoolInfo?.school_code)}><MdContentCopy cursor="pointer"/></a>
                                         </Tippy>
                                     </div>
                                 </div>

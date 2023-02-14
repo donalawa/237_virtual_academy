@@ -6,6 +6,8 @@ import StudentLayout from '../../../components/StudentLayout/StudentLayout';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
+import { toast } from 'react-toastify';
+
 import BeatLoader from "react-spinners/BeatLoader";
 
 import { convertDate } from '../../../utils/date';
@@ -59,6 +61,15 @@ function Index() {
         })
     }
 
+    const copyToClipBoard = (data: any) => {
+        navigator.clipboard.writeText(`${data}`);
+                                                            
+        toast.success("Copied To Clipboard", {
+            pauseOnHover: false,
+            closeOnClick: true,
+        })
+    }
+
 
     useEffect(() => {
         console.log('USER EFFECT RAN')
@@ -109,7 +120,7 @@ function Index() {
                                         <a onClick={() => {
                                                
                                             }} className="see"> 
-                                            <FaCopy onClick={() => null} size={14}/>
+                                            <FaCopy onClick={() => copyToClipBoard(data?.account_number)} size={14}/>
                                             </a>
                                         </Tippy>
                                     </div>
