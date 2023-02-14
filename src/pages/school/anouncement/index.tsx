@@ -83,31 +83,23 @@ function Index() {
     }
 
     const handleGetAnnouncement = ()  => {
-
+        setLoading(true);
         schoolGetAllAnnouncement().then((res: any) => {
             if(res.ok) {
                 setClasses(res.data.data);
+                setLoading(false);
             }
+            setLoading(false);
         }).catch(err => {
+            setLoading(false);
             console.log('error: ', err);
         })
     }
-
-    const toggleVideoModal = () => {
-        setShowVideoModal(!showVideoModal);
-    }
-
-    const handleSetVideoUrl = (url: any) =>  {
-        setVideoUrl(url);
-        toggleVideoModal();
-    }  
 
     const handleContentAdded = ()  => {
         handleGetAnnouncement();
         toggleAddModal();
     }
-
-
 
 
 

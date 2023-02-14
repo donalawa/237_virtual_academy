@@ -6,6 +6,7 @@ import FormField from '../../form/components/FormField/FormField';
 import Button from '../../form/components/Button/Button';
 import ErrorMessage from '../../form/components/ErrorMessage/ErrorMessage';
 import { ImCancelCircle } from 'react-icons/im';
+import BeatLoader from "react-spinners/BeatLoader";
 
 import { toast } from 'react-toastify';
 
@@ -18,8 +19,14 @@ const initialValues= {
 }
 
 
+const override = {
+    marginTop: '10px'
+  };
+
+  
 function CreateResultType({ onClose, onContentAdded } : any) {
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Result type name is required'),
@@ -31,21 +38,25 @@ function CreateResultType({ onClose, onContentAdded } : any) {
             name: values.name,
         }   
 
+        setLoading(true);
         schoolCreateResultType(data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
+                setLoading(false);
                 onContentAdded();
             }else {
                 console.log(res)
+                setLoading(false);
                 toast.error(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
             }
         }).catch(err => {   
+            setLoading(false);
             console.log('ERROR CREATING: ', err);
             toast.error("ERROR", {
                 pauseOnHover: false,
@@ -63,6 +74,13 @@ function CreateResultType({ onClose, onContentAdded } : any) {
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
+                <div style={{textAlign: 'center', marginBottom: '10px'}}>
+                    <BeatLoader
+                        color="#623d91" 
+                        loading={loading}
+                        cssOverride={override}
+                    />
+                </div>
                 <form action="" className="auth-form">
 
                 {error && <ErrorMessage error={error} visible={true} />}
@@ -75,7 +93,7 @@ function CreateResultType({ onClose, onContentAdded } : any) {
                         <FormField  name="name" type="general" placeholder="Result Type"/>
 
                   
-                        <Button isOutLined={true} isFullWidth={false} title="CREATE"/>
+                       {!loading && <Button isOutLined={true} isFullWidth={false} title="CREATE"/>}
                         </Form>
                 </form>
                 </div>

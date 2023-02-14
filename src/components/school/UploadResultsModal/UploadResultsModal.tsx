@@ -33,6 +33,7 @@ function AssessmentScoreModal({ onClose, studentId, onContentAdded } : any) {
     const [remark, setRemark] = useState('');
     const [resultTypes, setResultTypes] = useState([]);
     const [selectedResultsType, setSelectedResultsType] = useState('none');
+    const [loading, setLoading] = useState(false);
 
 
     const [error, setError] = useState<any>(null);
@@ -59,7 +60,7 @@ function AssessmentScoreModal({ onClose, studentId, onContentAdded } : any) {
     }); 
 
     const handleSubmitStudentResults = (values: any) => {
-        console.log('ANSERS')
+        // console.log('ANSERS')
             setError(null);
             let data = {
                 ...values,
@@ -91,20 +92,23 @@ function AssessmentScoreModal({ onClose, studentId, onContentAdded } : any) {
             data.average = +data.average;
             data.total_average = +data.total_average;
 
-            console.log("VALUES: ", data);
+            // console.log("VALUES: ", data);
 
 
             // call submiting solution endpoint
+            setLoading(true);
             createStudentResults(studentId, data).then((res: any) => {
                 if(res.ok) {
                     toast.success(res.data.message, {
                         pauseOnHover: false,
                         closeOnClick: true,
                     })
+                    setLoading(false);
                     onContentAdded();
                 }else {
                     console.log(res)
                     setError(res.data.message);
+                    setLoading(false);
                     toast.error(res.data.message, {
                         pauseOnHover: false,
                         closeOnClick: true,
@@ -112,6 +116,7 @@ function AssessmentScoreModal({ onClose, studentId, onContentAdded } : any) {
                 }
             }).catch((err: any) => {   
                 console.log('ERROR SUBMITING: ', err);
+                setLoading(false);
                 toast.error("ERROR", {
                     pauseOnHover: false,
                     closeOnClick: true,
@@ -170,6 +175,13 @@ function AssessmentScoreModal({ onClose, studentId, onContentAdded } : any) {
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
+                <div style={{textAlign: 'center', marginBottom: '10px'}}>
+                <BeatLoader
+                    color="#623d91" 
+                    loading={loading}
+                    cssOverride={override}
+                />
+                </div>
                 <form action="" className="auth-form">
 
                 {error && <ErrorMessage error={error} visible={true} />}
@@ -236,7 +248,7 @@ function AssessmentScoreModal({ onClose, studentId, onContentAdded } : any) {
                         <textarea rows={8} onChange={(e: any) => setRemark(e.target.value)} value={remark} className="textarea"></textarea>
                         <br />
                         <br />
-                        <Button isOutLined={true} isFullWidth={false} title="SUBMIT RESULT"/>
+                    {!loading &&  <Button isOutLined={true} isFullWidth={false} title="SUBMIT RESULT"/>}
 
                         </Form>
                 </form>

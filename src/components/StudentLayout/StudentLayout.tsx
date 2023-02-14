@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './StudentLayout.css';
-import { getAcademicYear, removeToken, storeAcademicYear } from '../../utils/storage';
+import { getAcademicYear, removeAcademicYear, removeToken, storeAcademicYear } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {GiTimeBomb} from 'react-icons/gi';
 import { MdContentPaste, MdAssignmentTurnedIn,MdReportProblem, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
@@ -55,6 +55,7 @@ function StudentLayout({ title, children, pageTitle } : any) {
 
     const handleLogout = () => {
         removeToken();
+        removeAcademicYear();
         navigate('/');
     }
 

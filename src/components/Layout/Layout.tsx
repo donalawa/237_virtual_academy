@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './Layout.css';
-import { getAcademicYear, isStudent, removeToken, storeAcademicYear } from '../../utils/storage';
+import { getAcademicYear, isStudent, removeAcademicYear, removeToken, storeAcademicYear } from '../../utils/storage';
 import { useNavigate, NavLink } from "react-router-dom";
 import {SiGoogleclassroom} from 'react-icons/si';
 import { MdOutlineContentPaste, MdAssignmentTurnedIn, MdAssignmentLate, MdAssessment, MdDashboard } from 'react-icons/md';
@@ -49,6 +49,7 @@ function Layout({ title, children, pageTitle = '' } : any) {
 
     const handleLogout = () => {
         removeToken();
+        removeAcademicYear();
         navigate('/');
     }
 

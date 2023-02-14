@@ -34,6 +34,7 @@ function UploadPaymentReceipt({ onClose, contentAdded } : any) {
     const [error, setError] = useState<any>(null);
     const [bankInfos, setBankInfos] = useState([]);
     const [selectedBankInfo, setSelectedBankInfo] = useState('all');
+    const [loading, setLoading] = useState(false);
 
     // TIMETABLE
     const [receiptPdfUrl, setReceiptPdfUrl] = useState('');
@@ -101,15 +102,18 @@ function UploadPaymentReceipt({ onClose, contentAdded } : any) {
         // return;
 
         // console.log("FINAL CONTENT: ",data)
+        setLoading(true);
         submitStudentReceipt(data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
+                setLoading(false);
                 contentAdded();
             }else {
                 console.log(res)
+                setLoading(false);
                 setError(res.data.message);
                 toast.error(res.data.message, {
                     pauseOnHover: false,
@@ -118,6 +122,7 @@ function UploadPaymentReceipt({ onClose, contentAdded } : any) {
             }
         }).catch((err: any) => {   
             console.log('ERROR SUBMITING: ', err);
+            setLoading(false);
             toast.error("ERROR INS SUBMITING", {
                 pauseOnHover: false,
                 closeOnClick: true,
@@ -195,7 +200,7 @@ function UploadPaymentReceipt({ onClose, contentAdded } : any) {
                             }
                         </div>
                
-                        <Button isOutLined={true} isFullWidth={false} title="SUBMIT RECEIPT"/>
+                     {!loading &&  <Button isOutLined={true} isFullWidth={false} title="SUBMIT RECEIPT"/>}
 
                         </Form>
                 </form>

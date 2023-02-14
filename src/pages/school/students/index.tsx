@@ -81,7 +81,7 @@ function Index() {
     const [loading, setLoading] = useState(false);
 
     const handleGetStudents = ()  => {
-
+        setLoading(true);
         setSchoolStudents([]);
 
         schoolGetStudents().then((res: any) => {
@@ -89,8 +89,10 @@ function Index() {
                 console.log('DATA: ', res.data.data);
                 setSchoolStudents(res.data.data);
             }
+            setLoading(false)
         }).catch(err => {
             console.log('error: ', err);
+            setLoading(false)
         })
     }
 

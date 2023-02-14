@@ -19,6 +19,7 @@ import {useTranslation} from "react-i18next";
 import moment from 'moment';
 import AcademicYearContext from '../../../contexts/AcademicYearContext';
 import { BsCameraVideoFill } from 'react-icons/bs';
+import { SITE_URL } from '../../../utils/constants';
 
 const override = {
     marginTop: '20px'
@@ -53,7 +54,7 @@ function Index() {
                 // REDIRECT TO JOIN MEETING
                 // https://237-virtual-academy.vercel.app/
                 console.log('GOOD TO JOIN')
-                window.open(`https://237-virtual-academy.vercel.app/live-session/${meetingCode}`, '_blank');
+                window.open(`${SITE_URL}/live-session/${meetingCode}`, '_blank');
 
             }else {
                 setError(res.data.message)

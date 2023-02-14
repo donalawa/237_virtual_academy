@@ -6,6 +6,7 @@ import FormField from '../../form/components/FormField/FormField';
 import Button from '../../form/components/Button/Button';
 import ErrorMessage from '../../form/components/ErrorMessage/ErrorMessage';
 import { ImCancelCircle } from 'react-icons/im';
+import BeatLoader from "react-spinners/BeatLoader";
 
 import { toast } from 'react-toastify';
 
@@ -19,9 +20,15 @@ const initialValues= {
     amount_percent: null
 }
 
+const override = {
+    marginTop: '10px'
+  };
+
+
 
 function CreateFeesDeadlineModal({ onClose, onContentAdded } : any) {
     const [error, setError] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Instalment title required').label('Title'),
@@ -55,22 +62,25 @@ function CreateFeesDeadlineModal({ onClose, onContentAdded } : any) {
         }
 
 
-
+        setLoading(true);
         schoolCreateDeadline(data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
+                setLoading(false);
                 onContentAdded();
             }else {
                 console.log(res)
+                setLoading(false);
                 toast.error(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
             }
         }).catch(err => {   
+            setLoading(false);
             console.log('ERROR CREATING: ', err);
             toast.error("ERROR", {
                 pauseOnHover: false,
@@ -88,6 +98,13 @@ function CreateFeesDeadlineModal({ onClose, onContentAdded } : any) {
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
+                <div style={{textAlign: 'center', marginBottom: '10px'}}>
+                <BeatLoader
+                    color="#623d91" 
+                    loading={loading}
+                    cssOverride={override}
+                />
+                </div>
                 <form action="" className="auth-form">
 
                 {error && <ErrorMessage error={error} visible={true} />}
@@ -105,7 +122,7 @@ function CreateFeesDeadlineModal({ onClose, onContentAdded } : any) {
                         <label>% Of fees to have been paid</label>
                         <FormField  name="amount_percent" type="number" placeholder="Enter amount in %"/>
                        
-                        <Button isOutLined={true} isFullWidth={false} title="CREATE DEADLINE"/>
+                      {!loading && <Button isOutLined={true} isFullWidth={false} title="CREATE DEADLINE"/>}
                         </Form>
                 </form>
                 </div>

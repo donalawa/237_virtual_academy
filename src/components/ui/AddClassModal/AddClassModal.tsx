@@ -6,6 +6,7 @@ import FormField from '../../form/components/FormField/FormField';
 import Button from '../../form/components/Button/Button';
 import ErrorMessage from '../../form/components/ErrorMessage/ErrorMessage';
 import { ImCancelCircle } from 'react-icons/im';
+import BeatLoader from "react-spinners/BeatLoader";
 
 import { toast } from 'react-toastify';
 
@@ -17,10 +18,15 @@ const initialValues= {
     specialities: ''
 }
 
+const override = {
+    marginTop: '10px'
+  };
+
+
 
 function AddClassModal({ onClose, onClassAdded } : any) {
     const [error, setError] = useState<any>(null);
-
+    const [loading, setLoading] = useState(false);
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Class Name is required'),
@@ -29,8 +35,7 @@ function AddClassModal({ onClose, onClassAdded } : any) {
     })
 
     const handleAddClass = (values: any) => {
-        console.log('CLASS NAME: ', values);
-
+        // console.log('CLASS NAME: ', values);
         if(values.school_code.length > 2 && values.specialities.length < 2) {
             setError("If you entered school code you need to specify speciality code too");
             return;
@@ -40,16 +45,18 @@ function AddClassModal({ onClose, onClassAdded } : any) {
             ...values,
             specialities: values.specialities.split(',')
         }
-
+        setLoading(true);
         createClass(data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
+                setLoading(false);
                 onClassAdded();
             }else {
                 console.log(res)
+                setLoading(false);
                 setError(res.data.message);
                 toast.error(res.data.message, {
                     pauseOnHover: false,
@@ -58,6 +65,7 @@ function AddClassModal({ onClose, onClassAdded } : any) {
             }
         }).catch(err => {   
             console.log('ERROR CREATING: ', err);
+            setLoading(false);
             toast.error("ERROR", {
                 pauseOnHover: false,
                 closeOnClick: true,
@@ -76,6 +84,13 @@ function AddClassModal({ onClose, onClassAdded } : any) {
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
+                <div style={{textAlign: 'center', marginBottom: '10px'}}>
+                <BeatLoader
+                    color="#623d91" 
+                    loading={loading}
+                    cssOverride={override}
+                />
+                </div>
                 <form action="" className="auth-form">
 
                 {error && <ErrorMessage error={error} visible={true} />}
@@ -92,7 +107,7 @@ function AddClassModal({ onClose, onClassAdded } : any) {
                     <label>Enter Speciality Code(Optional)</label>
                     <br />
                     <FormField  name="specialities" type="general" placeholder="Speciality Code"/>
-                    <Button isOutLined={true} isFullWidth={false} title="CREATE CLASSROOM"/>
+                  {!loading &&  <Button isOutLined={true} isFullWidth={false} title="CREATE CLASSROOM"/>}
                     </Form>
                 </form>
                 </div>

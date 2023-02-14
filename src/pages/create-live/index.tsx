@@ -14,6 +14,7 @@ import { BsFillCameraVideoOffFill } from 'react-icons/bs';
 import moment from 'moment';
 
 import { CreateSessionModal, DeleteModal } from '../../components';
+import { BsCameraVideoFill } from 'react-icons/bs';
 
 import { toast } from 'react-toastify';
 import BeatLoader from "react-spinners/BeatLoader";
@@ -21,6 +22,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { getAllSessions, endSession } from '../../services/liveSession';
 import {useTranslation} from "react-i18next";
 import AcademicYearContext from '../../contexts/AcademicYearContext';
+import { SITE_URL } from '../../utils/constants';
 
 
 const override = {
@@ -99,6 +101,10 @@ function Index() {
     const handleSessionCreated = () => {
         toggleCreateSessionModal();
         handleFetchAllSessions();
+    }
+
+    const handleJoinMeeting = (meetingCode: any) => {
+        window.open(`${SITE_URL}/live-session/${meetingCode}`, '_blank');
     }
 
     const endLiveSession = () => {
@@ -187,6 +193,9 @@ function Index() {
 
                                                 <td className="flex-center">
                                                     <div className="action">
+                                                        {data?.status == 'Active' && <Tippy content="Enter Meeting"  animation="fade">
+                                                            <a onClick={() => handleJoinMeeting(data?.meeting_code)} className="see"><BsCameraVideoFill size={16} /></a>
+                                                        </Tippy>}
                                                         <Tippy content="View Participants"  animation="fade">
                                                         <a className="see"><AiFillEye onClick={() => null} size={16}/></a>
                                                         </Tippy>

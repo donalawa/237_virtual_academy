@@ -9,6 +9,7 @@ import { ImCancelCircle } from 'react-icons/im';
 import { FaCloudUploadAlt, FaTrashAlt } from  'react-icons/fa';
 import { useRef } from 'react';
 import { toast } from 'react-toastify';
+import BeatLoader from "react-spinners/BeatLoader";
 
 // import { submitAssignmentSolution } from '../../../services/student';
 import { getClasses } from '../../../services/classroom';
@@ -19,10 +20,16 @@ const initialValues= {
 
 
 
+const override = {
+    marginTop: '20px'
+  };
+
+
 function CreateSessionModal({ onClose, onSessionCreated } : any) {
     const [classes, setClasses] = useState([]);
     const [error, setError] = useState<any>(null);
     const [selectedClassroom, setSelectedClassroom] = useState<any>('all');
+    const [loading, setLoading] = useState(false);
 
     const validationSchema = Yup.object().shape({
       
@@ -61,15 +68,18 @@ function CreateSessionModal({ onClose, onSessionCreated } : any) {
             // console.log('DATA: ', data);
 
             // CREATE LIVE SESSION
+            setLoading(true);
             createSession(data).then((res: any) => {
                 if(res.ok) {
                     toast.success(res.data.message, {
                         pauseOnHover: false,
                         closeOnClick: true,
                     })
+                    setLoading(false);
                     onSessionCreated();
                 }else {
                     console.log(res)
+                    setLoading(false);
                     setError(res.data.message);
                     toast.error(res.data.message, {
                         pauseOnHover: false,
@@ -78,6 +88,7 @@ function CreateSessionModal({ onClose, onSessionCreated } : any) {
                 }
             }).catch((err: any) => {   
                 console.log('ERROR CREATING SESSION: ', err);
+                setLoading(false);
                 toast.error("ERROR", {
                     pauseOnHover: false,
                     closeOnClick: true,
@@ -100,6 +111,13 @@ function CreateSessionModal({ onClose, onSessionCreated } : any) {
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
+                <div style={{textAlign: 'center', marginBottom: '10px'}}>
+                <BeatLoader
+                    color="#623d91" 
+                    loading={loading}
+                    cssOverride={override}
+                 />
+                </div>
                 <form action="" className="auth-form">
 
                 {error && <ErrorMessage error={error} visible={true} />}
@@ -114,7 +132,7 @@ function CreateSessionModal({ onClose, onSessionCreated } : any) {
                             {classes.map((classData: any, key: any) => <option key={key} value={classData?._id}>{classData?.name}</option>)}
                         </select>
 
-                        <Button isOutLined={true} isFullWidth={false} title="CREATE SESSION"/>
+                     {!loading &&  <Button isOutLined={true} isFullWidth={false} title="CREATE SESSION"/>}
 
                         </Form>
                 </form>

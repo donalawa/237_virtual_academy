@@ -36,6 +36,7 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
     const [classes, setClasses] = useState([]);
     const [error, setError] = useState<any>(null);
     const [selectedClassroom, setSelectedClassroom] = useState('all');
+    const [loading, setLoading] = useState(false);
     // Exam Content
     let [answersFileType, setAnswersFileType] = useState('');
 
@@ -188,21 +189,25 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
 
         // console.log('ALL DATA: ', data);
         // return;
+        setLoading(true);
         updateAssessment(assessmentVals._id,data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
+                setLoading(false);
                 onContentUpdated();
             }else {
                 console.log(res)
+                setLoading(false);
                 toast.error(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
             }
         }).catch((err: any) => {   
+            setLoading(false);
             console.log('ERROR CREATING: ', err);
             toast.error("ERROR", {
                 pauseOnHover: false,
@@ -240,6 +245,13 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
+                <div style={{textAlign: 'center', marginBottom: '10px'}}>
+                    <BeatLoader
+                        color="#623d91" 
+                        loading={loading}
+                        cssOverride={override}
+                    />
+                </div>
                 <form action="" className="auth-form">
 
                 {error && <ErrorMessage error={error} visible={true} />}
@@ -333,7 +345,7 @@ function UpdateAssessmentModal({ onClose, onContentUpdated, assessmentVals } : a
                         <FormField  name="publish_answers_date" type="date" placeholder="Published Solution Date"/>
 
                
-                        <Button isOutLined={true} isFullWidth={false} title="UPDATE ASSESSMENT"/>
+                      {!loading && <Button isOutLined={true} isFullWidth={false} title="UPDATE ASSESSMENT"/>}
 
                         </Form>
                 </form>

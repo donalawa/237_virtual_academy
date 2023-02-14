@@ -55,7 +55,7 @@ const isStudent = () => {
     return user?.role == 'student' ? true : false;
 }
 
-const removeToken = async ()=> {
+const removeToken =  ()=> {
     try {
         localStorage.removeItem(key);
     } catch (error) {
@@ -63,6 +63,14 @@ const removeToken = async ()=> {
     }
 }
 
+const removeAcademicYear = () => {
+    try {
+        localStorage.removeItem('academic_year_id')
+    } catch (error) {
+        console.log('Error removing data', error)
+    }
+}
 
-export { getUser, getToken, removeToken, storeToken, isTeacher, isStudent, storeAcademicYear, getAcademicYear }
+
+export { getUser, getToken, removeAcademicYear, removeToken, storeToken, isTeacher, isStudent, storeAcademicYear, getAcademicYear }
 

@@ -39,6 +39,9 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
     const [classes, setClasses] = useState([]);
     const [error, setError] = useState<any>(null);
     const [selectedClassroom, setSelectedClassroom] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+
     // Course Content
     const [isUploadingVideo, setIsUploadingVideo] = useState(false);
     const [videoProgress, setVideoProgress] = useState<any>(0);
@@ -163,7 +166,7 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
         const storageRef = ref(storage, `videos/${Date.now()}-${videoFile.name}`);
         const uploadTask = uploadBytesResumable(storageRef, videoFile);
 
-        console.log(e.target.files[0]);   
+        // console.log(e.target.files[0]);   
     
       uploadTask.on('state_changed', (snapshot: any)=>{
           const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -189,7 +192,7 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
       const storageRef = ref(storage, `pdf-content/${Date.now()}-${pdfFile.name}`);
       const uploadTask = uploadBytesResumable(storageRef, pdfFile);
 
-      console.log(e.target.files[0]);   
+    //   console.log(e.target.files[0]);   
   
     uploadTask.on('state_changed', (snapshot: any)=>{
         const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -220,8 +223,8 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
             followup_solution_url: followUpSolutionUrl,
         }
 
-        console.log('CONTENT', data);
-
+        // console.log('CONTENT', data);
+       
         if(data.video_url.length < 2 && data.pdf_file_url.length < 2) {
             setError('Selecte Video Content Or Pdf Content');
             return;
@@ -244,15 +247,19 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
             }
         }
 
+        setLoading(true)
+
         createCourseContent(data).then((res: any) => {
             if(res.ok) {
                 toast.success(res.data.message, {
                     pauseOnHover: false,
                     closeOnClick: true,
                 })
+                setLoading(false)
                 onContentAdded();
             }else {
-                console.log(res)
+                // console.log(res)
+                setLoading(false)
                 setError(res.data.message);
                 toast.error(res.data.message, {
                     pauseOnHover: false,
@@ -261,6 +268,7 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
             }
         }).catch(err => {   
             console.log('ERROR CREATING: ', err);
+            setLoading(false)
             toast.error("ERROR", {
                 pauseOnHover: false,
                 closeOnClick: true,
@@ -283,6 +291,13 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
                     <ImCancelCircle style={{cursor: 'pointer'}} onClick={onClose} size={22} color="#fff"/>
                 </div>
                 <div className='modal-content'>
+                <div style={{textAlign: 'center', marginBottom: '10px'}}>
+                    <BeatLoader
+                        color="#623d91" 
+                        loading={loading}
+                        cssOverride={override}
+                />
+                </div>
                 <form action="" className="auth-form">
 
                 {error && <ErrorMessage error={error} visible={true} />}
@@ -431,7 +446,7 @@ function AddCourseContentModal({ onClose, onContentAdded } : any) {
 
                       
 
-                        <Button isOutLined={true} isFullWidth={false} title="CREATE CONTENT"/>
+                     {!loading &&   <Button isOutLined={true} isFullWidth={false} title="CREATE CONTENT"/>}
 
                         </Form>
                 </form>
