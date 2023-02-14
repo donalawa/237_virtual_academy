@@ -51,10 +51,10 @@ function CreateFeesDeadlineModal({ onClose, onContentAdded } : any) {
 
         today = yyyy + '-' + mm + '-' + dd;
 
-        if(data.date < today) {
-            setError('Date can not be in the past');
-            return;
-        }
+        // if(data.date < today) {
+        //     setError('Date can not be in the past');
+        //     return;
+        // }
 
         if(data.amount_percent > 100) {
             setError('Amount can not be above 100%');

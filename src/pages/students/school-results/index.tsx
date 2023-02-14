@@ -143,7 +143,7 @@ function Index() {
                                     <td className="flex-center">
                                         <div className="action">
                                         <Tippy  content="Download Result Slip"  animation="fade">
-                                        <a href={data?.result_file} onClick={() => {
+                                        <a target="_blank" href={data?.result_file} onClick={() => {
                                                
                                             }} className="see"> 
                                             <IoMdCloudDownload onClick={() => null} size={14}/>
