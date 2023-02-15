@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from 'react';
+import React,{ useContext, useEffect, useState } from 'react';
 import SchoolLayout from '../../../components/SchoolLayout/SchoolLayout';
 import './home.css';
 
@@ -13,8 +13,10 @@ import BeatLoader from "react-spinners/BeatLoader";
 import moment from 'moment';
 import { CreateAcademicYearModal, DeleteModal } from '../../../components';
 import { toast } from 'react-toastify';
-import { schoolGetAcademicYears, schoolGetAcceptedStudents, schoolGetAcceptedTeachers, schoolStopAcademicYear } from '../../../services/school';
+import { schoolGetAcademicYears, schoolGetAcceptedStudents, schoolGetAcceptedTeachers, schoolGetAllAnnouncement, schoolStopAcademicYear } from '../../../services/school';
 import { getSchoolSpecialitis } from '../../../services/specialities';
+import AcademicYearContext from '../../../contexts/AcademicYearContext';
+import { getTeachersClassReq } from '../../../services/classroom';
 
 const rows: any = [
     {
@@ -56,8 +58,9 @@ function Index() {
     const [teachers, setTeachers] = useState([]);
     const [students, setStudents] = useState([]);
     const [specialities, setSpecialities] = useState([]);
-    const [reminders, setReminders] = useState([]);
+    const [anouncements, setAnouncements] = useState([]);
     const [loading, setLoading] = useState(false);
+    const {activeAcademyYear, setActiveAcademyYear} = useContext<any>(AcademicYearContext);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [academicYears, setAcademicYears] = useState([]);
@@ -69,12 +72,19 @@ function Index() {
 
     const handleGetData = ()  => {
         schoolGetAcceptedStudents().then((res: any) => {
+         
             if(res.ok) {
                 setStudents(res?.data?.data)
             }
         })
 
-        schoolGetAcceptedTeachers().then((res: any) => {
+        schoolGetAllAnnouncement().then((res: any) => {
+            if(res.ok) {
+                setAnouncements(res?.data?.data)
+            }
+        })
+
+        getTeachersClassReq().then((res: any) => {
             if(res.ok) {
                 setTeachers(res?.data?.data)
             }
@@ -151,6 +161,9 @@ function Index() {
 
     useEffect(() => {
         handleGetData();
+    },[activeAcademyYear]);
+
+    useEffect(() => {
         handleGetAcademicYears();
     }, [])
 
@@ -172,7 +185,7 @@ function Index() {
                     </a>
                     <a className="stat-card">
                         <div className="stat-name">Total Anouncements</div>
-                        <div className="stat-value">0</div>
+                        <div className="stat-value">{ anouncements?.length }</div>
                     </a>
                 </div>
                 <br />

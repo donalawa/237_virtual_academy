@@ -2,7 +2,9 @@ import { getAcademicYear } from "../utils/storage";
 import api from "./apiClient";
 
 const schoolGetAcceptedStudents = () => {
-    return api.get('/school/students/all');
+    let academicYear = getAcademicYear();
+
+    return api.get(`/school/students/all/${academicYear}`);
 }
 
 const schoolAcceptTeachersRequest = (id: any) => {
