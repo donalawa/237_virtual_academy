@@ -144,7 +144,7 @@ function Index() {
                                         <div className="action">
                                         <a onClick={() => {
                                                
-                                            }} className="see" target="_blank" download>  <Tippy  content="Preview Timetable"  animation="fade">
+                                            }} className="see" href={data?.file_url} target="_blank" download>  <Tippy  content="Preview Timetable"  animation="fade">
                                             <IoMdCloudDownload onClick={() => null} size={14}/>
                                         </Tippy></a>
                                     </div>

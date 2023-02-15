@@ -140,7 +140,7 @@ function Index() {
                                         <div className="action">
                                         <a onClick={() => {
                                                
-                                            }} className="see">  <Tippy  content="Preview Timetable"  animation="fade">
+                                            }} className="see" href={data?.file_url} target="_blank" download>  <Tippy  content="Preview Timetable"  animation="fade">
                                             <AiFillEye onClick={() => null} size={14}/>
                                         </Tippy></a>
                                     </div>
