@@ -222,7 +222,7 @@ function Index() {
                                             <Tippy content="View Receipt"  animation="fade">
                                             <a onClick={() => {
                                                 // handleSetVideoUrl(data.answers_file)
-                                            }} className="see"><AiFillEye onClick={() => null} size={14}/></a>
+                                            }} className="see" href={data?.file_url} target="_blank" download><IoMdCloudDownload onClick={() => null} size={14}/></a>
                                             </Tippy>
                                             <Tippy content="Accept"  animation="fade">
                                             <a onClick={() => {
