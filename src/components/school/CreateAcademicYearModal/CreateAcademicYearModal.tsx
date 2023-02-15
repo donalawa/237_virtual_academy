@@ -55,15 +55,15 @@ function UploadTimeTableModal({ onClose, onContentAdded } : any) {
         today = yyyy + '-' + mm + '-' + dd;
 
 
-        if(values.start < today) {
-            setError('Academic start date needs to be between today and future dates')
-            return;
-        }
+        // if(values.start < today) {
+        //     setError('Academic start date needs to be between today and future dates')
+        //     return;
+        // }
 
-        if(values.end < today) {
-            setError('Academic end date needs to be between today and future dates')
-            return;
-        }
+        // if(values.end < today) {
+        //     setError('Academic end date needs to be between today and future dates')
+        //     return;
+        // }
 
         if(values.end <= values.start) {
             setError('Academic end date needs to be greater than start date')
