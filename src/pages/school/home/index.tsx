@@ -92,7 +92,8 @@ function Index() {
         try {
             schoolGetAcademicYears().then((res: any) => {
                 if(res.ok) {
-                    setAcademicYears(res?.data?.data?.reverse())
+                    setAcademicYears(res?.data?.data)
+                    setAcademicYears(academicYears.reverse());
                 }
             })
         } catch (error) {
